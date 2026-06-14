@@ -1,0 +1,12 @@
+module: MPU6050
+type: imu
+desc: 6 轴 IMU（I2C，入门首选；ICM-20602/42688 同接法升级）
+specs: {axes: 6, iface: "I2C ≤400k", addr: "0x68/0x69"}
+connector:
+  - {pin: VCC, dir: power, rail: logic, note: 3.3V}
+  - {pin: GND, dir: power}
+  - {pin: SDA, dir: bidir, iface: I2C_SDA, to_mcu: true, bus: true}
+  - {pin: SCL, dir: in,    iface: I2C_SCL, to_mcu: true, bus: true}
+  - {pin: INT, dir: out,   iface: GPIO, to_mcu: true, optional: true, note: 数据就绪中断}
+power_draw: {rail: logic, current_a: 0.004}
+notes: ["可与 OLED 等共享同一 I2C 总线（不同地址，SDA/SCL 引脚只占一次）"]

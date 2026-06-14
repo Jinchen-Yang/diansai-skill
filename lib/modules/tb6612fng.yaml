@@ -1,0 +1,21 @@
+module: TB6612FNG
+type: motor-driver-dual
+desc: 双 H 桥直流电机驱动（循迹/平衡车事实标配）
+specs: {vm: "2.5~13.5V", vcc: "2.7~5.5V", i_cont_a: 1.2, i_peak_a: 3.2, deadband: true}
+# 与 MCU 相连的控制脚（to_mcu）+ 电源/输出脚
+connector:
+  - {pin: PWMA, dir: in,  iface: PWM,  to_mcu: true, note: A路调速}
+  - {pin: AIN1, dir: in,  iface: GPIO, to_mcu: true, note: A路方向}
+  - {pin: AIN2, dir: in,  iface: GPIO, to_mcu: true}
+  - {pin: PWMB, dir: in,  iface: PWM,  to_mcu: true, note: B路调速}
+  - {pin: BIN1, dir: in,  iface: GPIO, to_mcu: true}
+  - {pin: BIN2, dir: in,  iface: GPIO, to_mcu: true}
+  - {pin: STBY, dir: in,  iface: GPIO, to_mcu: true, note: 使能,低电平待机}
+  - {pin: VM,   dir: power, rail: motor, note: 电机电源(电池直供)}
+  - {pin: VCC,  dir: power, rail: logic, note: 逻辑3.3/5V}
+  - {pin: GND,  dir: power}
+  - {pin: AO1,  dir: out, to: motorA}
+  - {pin: AO2,  dir: out, to: motorA}
+  - {pin: BO1,  dir: out, to: motorB}
+  - {pin: BO2,  dir: out, to: motorB}
+power_draw: {note: "驱动本身耗流小；电机电流走 VM，按电机堵转算（见 power-design）"}

@@ -1,0 +1,17 @@
+module: MSPM0G3507-min
+type: mcu-min-system
+desc: MSPM0G3507 最小系统（主控）
+specs: {core: "Cortex-M0+ 80MHz", supply: "3.3V", debug: "SWD/板载XDS110"}
+# 主控对外是"消费"各模块的接口；具体引脚分配见 contracts/pinmap.yaml + 能力表
+provides:
+  PWM: 12          # TIMA0/1 带死区
+  QEI: 2
+  ADC: 17
+  UART: 4
+  SPI: 2
+  I2C: 2
+  CAN: 1
+power: {rail: logic, v: 3.3, i_typ_a: 0.05}
+notes:
+  - 引脚能力表 contracts/mcu/MSPM0G3507.yaml（verified 待 SysConfig 核实）
+  - SWD: SWDIO/SWCLK 留给调试器；勿占用

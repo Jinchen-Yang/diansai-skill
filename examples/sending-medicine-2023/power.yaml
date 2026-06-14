@@ -1,0 +1,25 @@
+# power-design 走查产出（送药小车）。电机按堵转电流算，不用标称。
+battery: {type: 3S Li-ion, vmin: 9.0, vmax: 12.6}
+headroom: 0.30
+rails:
+  - name: VM_motor
+    source: battery-direct
+    fuse: true
+    loads:
+      - {name: encoder-motor, stall: true, stall_current_a: 2.5, qty: 2}   # 左右轮，堵转
+  - name: V5_servo
+    regulator: {part: "MP1584 buck", iout_max: 3.0}
+    loads:
+      - {name: servo MG996R, stall: true, stall_current_a: 1.0, qty: 1}
+  - name: V3V3_logic
+    regulator: {part: "AMS1117-3.3", iout_max: 1.0}
+    loads:
+      - {name: MSPM0G3507, current_a: 0.05, qty: 1}
+      - {name: MPU6050, current_a: 0.004, qty: 1}
+      - {name: 8ch-grayscale, current_a: 0.08, qty: 1}
+      - {name: OLED+按键+蜂鸣, current_a: 0.03, qty: 1}
+      - {name: encoder 编码器供电, current_a: 0.02, qty: 2}
+  - name: V5_k230
+    regulator: {part: "MP2315 buck", iout_max: 3.0}
+    loads:
+      - {name: K230, current_a: 1.2, qty: 1, note: 峰值更高，已留余量}

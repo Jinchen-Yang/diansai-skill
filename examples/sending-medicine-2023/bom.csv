@@ -1,0 +1,14 @@
+subsystem,part,model,lcsc,qty,key_spec,source,module_block,note
+主控,MSPM0G3507,MSPM0G3507,,1,M0+ 80MHz/2ADC/QEI,配件表,mspm0g3507-min,立创天猛星板
+电机驱动,TB6612FNG,TB6612FNG,C141517,1,VM≤13.5V 1.2A/3.2A峰,配件表,tb6612fng,
+电机,编码减速电机,GA25-370 12V,,2,堵转~2.5A AB编码,配件表,encoder-motor,左右轮差速
+循迹,8路模拟灰度,感为8路灰度,,1,8×ADC输出,配件表,grayscale-8ch,现场标阈值
+姿态,IMU,MPU6050,,1,6轴 I2C,配件表,mpu6050,与OLED共用I2C
+视觉,K230,CanMV-K230,,1,6TOPS UART直连,配件表,k230,GC2093摄像头
+云台,舵机,MG996R,,1,13kg·cm 50Hz,配件表,servo,独立5-6V
+稳压(逻辑),AMS1117-3.3,AMS1117-3.3,C347222,1,3.3V 1A SOT-223,需采购,,jlc查得¥0.04
+稳压(舵机5V),buck,MP1584,,1,5V 3A,配件表,,
+稳压(K230 5V),buck,MP2315,,1,5V 3A,配件表,,
+人机,OLED,SSD1306 0.96,,1,I2C,配件表,,
+人机,按键+蜂鸣,—,,3,GPIO,配件表,,
+调试,USB-TTL,CH340,,1,VOFA+串口,配件表,,

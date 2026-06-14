@@ -1,0 +1,12 @@
+module: encoder-motor
+type: actuator
+desc: 带霍尔正交编码器的减速直流电机（GA25-370 / JGB37-520 等）
+specs: {v: "12V", stall_current_a: 2.5, encoder: "AB 正交", note: "堵转电流随型号, 12V GA25 约 2~3A 量级, 选型时按实测/手册"}
+connector:
+  - {pin: M+, dir: power, to: driver, note: 接 TB6612 AO/BO}
+  - {pin: M-, dir: power, to: driver}
+  - {pin: ENC_VCC, dir: power, rail: logic, note: 编码器供电 3.3/5V}
+  - {pin: ENC_GND, dir: power}
+  - {pin: ENC_A, dir: out, iface: QEI_A, to_mcu: true}
+  - {pin: ENC_B, dir: out, iface: QEI_B, to_mcu: true}
+power_draw: {rail: motor, stall: true, stall_current_a: 2.5}

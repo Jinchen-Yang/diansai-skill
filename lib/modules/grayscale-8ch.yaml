@@ -1,0 +1,17 @@
+module: grayscale-8ch
+type: line-sensor
+desc: 8 路模拟灰度阵列（循迹，加权质心求中线）；亦可换 12/16 路 IIC 智能灰度省算力
+specs: {channels: 8, output: "模拟量 -> ADC", spacing: "8~12mm"}
+connector:
+  - {pin: VCC, dir: power, rail: logic, note: 3.3/5V}
+  - {pin: GND, dir: power}
+  - {pin: CH0, dir: out, iface: ADC, to_mcu: true}
+  - {pin: CH1, dir: out, iface: ADC, to_mcu: true}
+  - {pin: CH2, dir: out, iface: ADC, to_mcu: true}
+  - {pin: CH3, dir: out, iface: ADC, to_mcu: true}
+  - {pin: CH4, dir: out, iface: ADC, to_mcu: true}
+  - {pin: CH5, dir: out, iface: ADC, to_mcu: true}
+  - {pin: CH6, dir: out, iface: ADC, to_mcu: true}
+  - {pin: CH7, dir: out, iface: ADC, to_mcu: true}
+power_draw: {rail: logic, current_a: 0.08}
+notes: ["现场光照下必须重标阈值（见 test-checklist）"]

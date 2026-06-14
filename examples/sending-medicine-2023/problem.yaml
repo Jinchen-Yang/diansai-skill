@@ -1,0 +1,47 @@
+# read-problem 走查产出（输入: examples/sending-medicine-2023/problem.txt）
+# 演示 design/problem.yaml 的结构。实际运行时产物落在 design/problem.yaml。
+title: 智能送药小车（控制类）
+year: 代表性历年题（改写）
+category: 送药   # 对照 KB 02：循迹+数字识别+路径，典型送药类
+source: examples/sending-medicine-2023/problem.txt
+
+restrictions:               # ★ 限制条款——最先看
+  camera_allowed: true      # 允许摄像头 → K230 可上（做门牌数字识别）
+  power: 自带电源，比赛中不得外接供电
+  size_weight: 外形 ≤ 25cm×25cm
+  parts: 未指定/未禁用具体器件（候选以主办方配件表为准）
+  other:
+    - 全自主，不得人工干预
+
+required_functions:
+  - {id: F1, desc: 沿引导线自动行驶至现场指定的单个病房并停车+声光提示, level: basic, points: 基础分}
+  - {id: F2, desc: 送达后自动返回药房并停车, level: basic, points: 基础分}
+  - {id: F3, desc: 行驶平稳不冲线, level: basic, points: 基础分}
+  - {id: F4, desc: 依次送达多病房并自主规划较短路径, level: advanced, points: 发挥分}
+  - {id: F5, desc: 摄像头识别门牌数字确认到达正确病房, level: advanced, points: 发挥分}
+  - {id: F6, desc: 全程计时并显示，用时短得分高, level: advanced, points: 发挥分}
+
+scoring:
+  - {item: 基础 F1/F2/F3, points: 基础分}
+  - {item: 发挥 F4/F5/F6, points: 发挥分}
+  - {item: 超时/冲线, points: 扣分}
+
+arena:
+  desc: 白底黑线模拟病房区
+  dimensions: 未明确（待现场/官方图）
+  track: 黑色引导线
+  markings: 1~8 号病房 + 路口 + 药房起终点区
+
+timing: {run_limit: 未明确（计时计分，越快越好）, notes: 需车载显示行驶时间}
+
+constraints:
+  - 车体完全进入区域才算到达/停车
+
+ambiguities:                # 需人工/现场确认，未擅自默认
+  - {q: 赛道具体尺寸与线宽？, why: 决定灰度阵列间距与循迹 PID 整定}
+  - {q: 路口/病房标记的具体形式（数字贴纸字号、颜色）？, why: 决定 K230 识别方案与拍摄高度}
+  - {q: 是否有计时上限/单次跑动时长？, why: 影响速度策略与电量预算}
+  - {q: 指定病房如何下发（赛前抽签/现场牌）？, why: 影响交互与状态机起始}
+
+# 方案提示（交 plan-solution 决策，不在此拍板）：
+# camera_allowed=true → 可走 "灰度循迹 + K230 数字识别" 双传感；对照 KB10 送药小车技术栈组合。

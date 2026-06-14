@@ -1,0 +1,31 @@
+# pinmap 契约结构规范（interconnect skill 产出 contracts/pinmap.yaml，pinmux_check.py 校验）
+#
+# 顶层字段:
+#   mcu: <型号>               # 必须对应 contracts/mcu/<型号>.yaml
+#   assignments:              # 引脚分配列表
+#     - signal:   <网络名>     # 必填，唯一，如 motorL_pwm
+#       pin:      <引脚名>     # 必填，须存在于 MCU 能力表，且每个引脚只能出现一次
+#       function: <功能>       # 必填，须在该引脚支持的功能列表内
+#       peripheral: <实例名>   # 选填但建议，用于数量门，如 TIMA0 / TIMG0 / UART1 / I2C0 / ADC0
+#       module:   <对端模块>   # 选填，如 TB6612#1 / K230 / 8ch-grayscale
+#       net:      <对端引脚>   # 选填，对端连接器引脚名，如 AIN1
+#       note:     <备注>       # 选填
+#
+# function 合法取值（与 MCU 能力表一致）:
+#   GPIO  PWM  ADC
+#   UART_TX  UART_RX
+#   I2C_SDA  I2C_SCL
+#   SPI_SCLK  SPI_MOSI  SPI_MISO  SPI_CS
+#   QEI_A  QEI_B
+#   CAN_TX  CAN_RX
+#   SWD_IO  SWD_CLK
+#
+# 校验规则（pinmux_check.py 强制）:
+#   1. 引脚不可复用：同一 pin 出现多次 -> 冲突 FAIL。
+#      （I2C/SPI 总线由多个模块共享时，pin 仍只列一次，多模块在 module/note 说明，不重复占脚。）
+#   2. 功能合法：assignment.function 必须在 MCU 能力表 pins[pin] 内。
+#   3. 数量门：各外设族占用实例数 <= 能力表 limits。
+#        PWM/ADC 按 assignment 计数；UART/I2C/SPI/QEI/CAN 按 distinct peripheral 计数。
+#   4. 必填字段齐全；pin 存在于能力表。
+#   注：能力表 verified:false 时，PASS 仅表示"逻辑自洽"，引脚真伪须 SysConfig 核实。
+version: "0.1"

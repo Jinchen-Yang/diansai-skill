@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 固件/工具链构建产物（工程文件本身要进库，产物不进）
+firmware/**/build/
+firmware/**/Debug/
+firmware/**/Release/
+*.out
+*.o
+*.hex
+*.bin
+
+# Obsidian 本地配置（KB 内容进库，工作区配置不进）
+.obsidian/workspace*.json

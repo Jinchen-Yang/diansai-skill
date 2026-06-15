@@ -9,6 +9,7 @@
 """
 import sys, json
 
+# 公共第三方镜像（tscircuit 社区的 JLC 搜索服务），非官方 API；不可达时本工具优雅降级。
 BASE = "https://jlcsearch.tscircuit.com"
 TIMEOUT = 12
 

@@ -24,6 +24,7 @@ cc -std=c11 -Imiddleware -I../../../contracts \
 ```
 
 ## 注意
+- driver/app 层的 `TODO(SysConfig/DriverLib)` 是**有意留的 bring-up 接缝**（在 CCS+MSPM0 SDK 里填），不是 bug；可移植中间件 `pid`/`scheduler` 已主机编译验证。
 - **控制参数（PID 增益/阈值）= 占位，必须真车整定**（见 `design/test_plan.md`）。
 - K230 收帧只用 `contracts/protocol.h`（改协议改 `protocol.yaml` 重生成）。
 - **外设 init 逐项对参考手册核对**：时钟树 / PWM 频率 / ADC 采样 / 中断优先级（M0+ 仅 4 级）。

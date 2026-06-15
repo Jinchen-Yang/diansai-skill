@@ -6,7 +6,6 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/selftest-9%2F9%20passing-brightgreen" alt="selftest">
-  <img src="https://img.shields.io/badge/built%20with-Claude%20Code-d97757" alt="Claude Code">
   <img src="https://img.shields.io/badge/MCU-MSPM0%20%7C%20STM32-orange" alt="MCU">
   <img src="https://img.shields.io/badge/vision-K230%20CanMV-8957e6" alt="K230">
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT">
@@ -213,7 +212,3 @@ elec_race/
 ## 📄 License
 
 [MIT](LICENSE)。知识库内容由多源网络调研整合，赛题信息以官方当年通知为准。
-
----
-
-<p align="center"><sub>🤖 Built with <a href="https://claude.com/claude-code">Claude Code</a></sub></p>

@@ -5,7 +5,7 @@
 #    （核实 = lead/多模态任务：读数据手册。pinmux_check 在 verified:false 时只保证"逻辑自洽"。）
 mcu: MSPM0G3507
 verified: false
-source: "计数: KB 03-主控选型-MSPM0与STM32.md；逐脚复用待 SysConfig 核实"
+source: "计数: KB kb/03-主控选型-MSPM0与STM32.md；逐脚复用待 SysConfig 核实"
 
 # 外设实例/通道数量上限（数量门）
 limits:

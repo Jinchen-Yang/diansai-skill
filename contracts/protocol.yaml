@@ -1,6 +1,6 @@
 # K230 <-> 主控 UART 帧协议 —— 单一来源（Single Source of Truth）
 # 改这里之后必须跑：python tools/gen_protocol.py  （重新生成 protocol.h / protocol.py）
-# 复用知识库 07-K230视觉与主控通信.md 已约定的帧格式。
+# 复用知识库 kb/07-K230视觉与主控通信.md 已约定的帧格式。
 version: "0.1"
 
 link:

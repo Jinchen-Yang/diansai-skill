@@ -14,8 +14,8 @@
 
 > **一句话**：把当年比赛题目丢进去，AI 自动**选型、画模块接线图、出固件/视觉骨架**；你照图连线、现场整定。
 > 三人团队（硬件 / 控制 / 算法）靠 **git + 任务板**自动协同、自动交接。
-> **全程 Claude Code 驱动，不调用任何外部大模型 API。**
-> 前提需要保证 **Claude Code** 里面的API 有一个是多模态长文本的，作为核心路由节点
+> **全程由 Claude Code 驱动**：推理交给 Claude Code 背后的大模型（lead 用 Claude，队友可接 DeepSeek / GLM 等 API）；**我们写的 skill 与工具代码本身不直接调用大模型 API**，确定性工具是纯 Python。
+> 前提需要保证 **Claude Code** 里面的 API 有一个是多模态长文本的，作为核心路由节点。
 
 ---
 
@@ -206,7 +206,7 @@ elec_race/
 
 ## 🛠️ 技术栈
 
-主控 **TI MSPM0G3507**（练手/备用 STM32 F103/F407/G431）· 视觉 **嘉楠 K230 CanMV**（UART 回传）· 控制 位置/增量/串级 PID · 驱动器 Claude Code（skill + 子代理 + git，无 LLM API）。
+主控 **TI MSPM0G3507**（练手/备用 STM32 F103/F407/G431）· 视觉 **嘉楠 K230 CanMV**（UART 回传）· 控制 位置/增量/串级 PID · 驱动器 Claude Code（skill + 子代理 + git；推理走 Claude Code 背后的模型——lead 用 Claude、队友可接 DeepSeek/GLM API；工具层纯 Python、无 LLM 依赖）。
 
 依赖：Python3 + `PyYAML`/`requests`/`pdfplumber`；系统 `graphviz`（接线图）、C 编译器（固件主机测试）、`git`。
 

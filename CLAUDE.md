@@ -1,7 +1,7 @@
 # elec_race — 电控设计智能体（仓库操作规约）
 
 本仓库 = NUEDC 小车队的"设计指挥部"：既是知识库，也是一套 **Claude Code 驱动**的 skill 流水线。
-**所有推理由 Claude（你）完成，不调用任何外部大模型 API。** 脏活交给 `tools/` 下的本地 Python 脚本。
+**推理由 Claude Code 完成**（Claude Code 是运行时，背后接大模型：lead 用 Claude，队友可接 DeepSeek / GLM 等 API）。**我们不在 skill / 工具代码里直接写大模型 API 调用**——脏活交给 `tools/` 下的纯 Python 脚本（无 LLM 依赖），推理交给 Claude Code 背后的模型。
 
 完整流水线：读题 → 方案+需求 → 环境 → 选材 → 供电 → 接线图 → 固件/视觉骨架 → 测试标定。
 

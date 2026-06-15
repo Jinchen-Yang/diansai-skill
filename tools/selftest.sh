@@ -44,5 +44,17 @@ else
   echo "  ✗ vision py_compile"; fail=1
 fi
 
+step "9) 任务板 DAG 自动派活（临时板，不动真实 board/）"
+TB=/tmp/elec_board_test; rm -rf "$TB"; mkdir -p "$TB"
+ELEC_BOARD_DIR="$TB" python3 tools/board.py init >/dev/null 2>&1
+ELEC_BOARD_DIR="$TB" python3 tools/board.py done read-problem --by lead >/dev/null 2>&1
+ELEC_BOARD_DIR="$TB" python3 tools/board.py done plan-solution --by lead >/dev/null 2>&1
+if [ -f "$TB/plan-solution.yaml" ] && [ -f "$TB/vision-scaffold.yaml" ]; then
+  echo "  ✓ done→按 DAG 自动派生下游任务（plan-solution / vision-scaffold 已派给对应 lane）"
+else
+  echo "  ✗ DAG 未自动派活"; fail=1
+fi
+rm -rf "$TB"
+
 printf "\n"
 if [ "$fail" = 0 ]; then echo "✅ 全部自测通过"; else echo "❌ 有失败项"; exit 1; fi

@@ -1,0 +1,5798 @@
+# MSPM0G3507/06/05 数据手册全文文本抽取（pdfplumber，102 页）
+# 来源: doc/mcu-ti/MSPM0G3507-datasheet.pdf (TI ZHCSSC4C, 2023-02 / rev 2025-10)
+# 注: 文本层抽取，表格列对齐可能错位；关键额定须对照 PDF 原页。
+
+
+===== PAGE 0 =====
+参考文献
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+MSPM0G350x 混合信号微控制器，具备 CAN-FD 接口
+1 特性 • 两个具有死区支持和多达 12 个 PWM 通道的
+互补输出的 16 位高级计时器
+• 内核 – 两个窗口化看门狗计时器 (WWDT)
+– 具有存储器保护单元且频率高达 80MHz 的 – 具有报警和日历模式的 RTC
+Arm® 32 位 Cortex®-M0+ CPU • 增强型通信接口
+• 工作特性 – 四个 UART 接口
+– 工作温度范围：–40°C 至 125°C • 一个支持 LIN、IrDA、DALI、智能卡、
+– 宽电源电压范围：1.62V 至 3.6V Manchester
+• 存储器 • 三个接口支持待机模式下的低功耗运行
+– 具有纠错码 (ECC) 且高达 128KB 的闪存 – 两个 I2C 接口，支持 FM+ (1Mbit/s)、SMBus/
+– 具有硬件奇偶校验且高达 32KB 的 SRAM PMBus 以及从 STOP 模式唤醒
+• 高性能模拟外设 – 两个 SPI，一个 SPI 支持高达 32Mbit/s 的速率
+– 两个具有总计多达 17 个外部通道的 12 位 – 一个控制器局域网 (CAN) 接口支持 CAN 2.0 A
+4Msps 同步采样模数转换器 (ADC) 或 B 以及 CAN-FD
+• 硬件均值计算可在 250ksps 下实现 14 位有 • 时钟系统
+效分辨率 – 内部 4MHz 至 32MHz 振荡器 (SYSOSC)，精度
+– 一个具有集成输出缓冲器的 12 位 1Msps 数模转 高达 ±1.2% (SYSOSC)
+换器 (DAC) – 高达 80MHz 的锁相环 (PLL)
+– 两个零漂移、零交叉斩波运算放大器 (OPA) – 精度为 ±3% 的内部 32kHz 低频振荡器
+• 0.5µV/°C 温漂，具有斩波 (LFOSC)
+• 高达 32x 的集成可编程增益级 – 外部 4MHz 至 48MHz 晶体振荡器 (HFXT)
+– 一个通用放大器 (GPAMP) – 外部 32kHz 晶体振荡器 (LFXT)
+– 外部时钟输入
+– 三个具有 8 位基准 DAC 的高速比较器 (COMP)
+• 数据完整性和加密
+• 高速模式下传播延迟为 32ns
+– 循环冗余校验器（CRC-16、CRC-32）
+• 支持低至 1µA 的低功耗模式运行
+– 真随机数发生器 (TRNG)
+– ADC、OPA、GPAMP、COMP 和 DAC 之间的
+– 使用 128 位或 256 位密钥的 AES 加密
+可编程模拟连接
+• 灵活的 I/O 功能
+– 可配置的 1.4V 和 2.5V 内部共享基准电压
+(VREF) – 多达 60 个 GPIO
+– 集成温度传感器 • 两个 5V 容限开漏 IO
+• 经优化的低功耗模式 • 两个驱动强度为 20mA 的高驱动 IO
+– RUN：101µA/MHz (CoreMark) • 多达 5 个高速 IO
+– SLEEP：40µA/MHz • 开发支持
+– STOP：190µA/4MHz – 2 引脚串行线调试 (SWD)
+– STANDBY：具有 32KHz LFXT 的 1.5µA，具有 • 封装选项
+SRAM 的 RTC，CPU 状态，以及保留的寄存器 – 64 引脚 LQFP (PM)（0.5mm 间距）
+– SHUTDOWN：80nA，具有保留 IO 和 IO 唤醒 – 48 引脚 LQFP (PT)（0.5mm 间距）
+能力 – 48 引脚 VQFN (RGZ)（0.5mm 间距）
+• 智能数字外设 – 32 引脚 VQFN (RHB)（0.5mm 间距）
+– 7 通道 DMA 控制器 – 28 引脚 VSSOP (28DGS)（0.5mm 间距）
+– 数学加速器支持 DIV、SQRT、MAC 和 TRIG 计 • 系列成员 （另请参阅器件比较）
+算
+– MSPM0G3505：32KB 闪存、16KB RAM
+– 七个计时器，支持多达 22 个 PWM 通道
+– MSPM0G3506：64KB 闪存、32KB RAM
+• 一个 16 位通用计时器支持 QEI – MSPM0G3507：128KB 闪存、32KB RAM
+• 两个 16 位通用计时器支持 STANDBY 模式 • 开发套件与软件（另请参阅工具与软件）
+下的低功耗运行
+– LP-MSPM0G3507 LaunchPad™ 开发套件
+• 一个 32 位通用计时器
+– MSPM0 软件开发套件 (SDK)
+本资源的原文使用英文撰写。 为方便起见，TI 提供了译文；由于翻译过程中可能使用了自动化工具，TI 不保证译文的准确性。 为确认
+准确性，请务必访问 ti.com 参考最新的英文版本（控制文档）。
+English Data Sheet: SLASEX6
+
+===== PAGE 1 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+• 工厂自动化和控制
+2 应用
+• 工业运输
+• 电机控制 • 电网基础设施
+• 家用电器 • 智能抄表
+• 不间断电源和逆变器 • 通信模块
+• 电子销售点系统 • 照明
+• 医疗和保健 • 个人电子产品
+• 测试和测量
+3 说明
+MSPM0G350x 微控制器 (MCU) 属于 MSP 高度集成的超低功耗 32 位 MCU 系列，该 MCU 系列基于增强型
+Arm® Cortex®-M0+ 32 位内核平台，工作频率最高可达 80MHz。这些低成本 MCU 提供高性能模拟外设集成，支
+持 -40°C 至 125°C 的工作温度范围，并在 1.62V 至 3.6V 的电源电压下运行。
+MSPM0G350x 器件提供具有内置纠错码 (ECC) 且高达 128KB 的嵌入式闪存程序存储器以及具有硬件奇偶校验选
+项且高达 32KB 的 SRAM。这些 MCU 还包含一个存储器保护单元、7 通道 DMA、数学加速器和各种高性能模拟
+外设，例如两个 12 位 4MSPS ADC、一个可配置内部共享电压基准、一个 12 位 1Msps DAC、三个具有内置基
+准 DAC 的高速比较器、两个具有可编程增益的零漂移零交叉运算放大器和一个通用放大器。这些器件还提供智能
+数字外设，例如两个 16 位高级控制计时器、五个通用计时器（具有一个用于 QEI 接口的 16 位通用计时器、两个
+用于待机模式的 16 位通用计时器和一个 32 位通用计时器）、两个窗口式看门狗计时器以及一个具有警报和日历
+模式的 RTC。这些器件提供数据完整性和加密外设（AES、CRC、TRNG）以及增强型通信接口（四个 UART、
+两个 I2C、两个 SPI 以及 CAN 2.0/FD）。
+TI MSPM0 系列低功耗 MCU 包含具有不同模拟和数字集成度的器件，可让客户找到满足其工程需求的 MCU。
+MSPM0 MCU 平台将 Arm Cortex-M0+ 平台与超低功耗整体系统架构相结合，使系统设计人员能够在降低能耗的
+同时提高性能。
+MSPM0G350x MCU 由广泛的硬件和软件生态系统提供支持，随附参考设计和代码示例，便于您快速开始设计。
+可供购买的开发套件包括 LaunchPad™ 开发套件。TI 还提供免费的 MSP 软件开发套件 (SDK)，该套件在 TI
+Resource Explorer 中作为 Code Composer Studio™ IDE 桌面版和云版组件提供。MSPM0 MCU 还通过 MSP
+Academy 提供广泛的在线配套资料、培训，并通过 TI E2E™ 支持论坛提供在线支持。
+有关完整的模块说明，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册。
+表 3-1. 器件比较
+器件名称 封装 封装尺寸
+MSPM0G3505SPMR
+MSPM0G3506SPMR 64 LQFP 12mm × 12mm
+MSPM0G3507SPMR
+MSPM0G3505SPTR
+MSPM0G3506SPTR 48 LQFP 9mm × 9mm
+MSPM0G3507SPTR
+MSPM0G3505SRGZR
+MSPM0G3506SRGZR 48 VQFN 7mm × 7mm
+MSPM0G3507SRGZR
+MSPM0G3505SRHBR
+MSPM0G3506SRHBR 32 VQFN 5mm × 5mm
+MSPM0G3507SRHBR
+MSPM0G3505SDGSR28
+MSPM0G3506SDGSR28 28 VSSOP 7.1mm × 4.9mm
+MSPM0G3507SDGSR28
+2 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 2 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+小心
+系统级静电放电 (ESD) 保护必须符合器件级 ESD 规范，以防发生电过应力或对数据或代码存储器造
+成干扰。有关更多信息，请参阅 MSP430™ 系统级 ESD 注意事项。本应用手册中的准则适用于
+MSPM0 MCU。
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 3
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 3 =====
+4 功能方框图
+图 4-1 显示了 MSPM0G350x 功能方框图。
+CPU Subsystem
+Arm®
+Cortex®-M0+
+fmax = 80 MHz
+NVIC
+MPU SPI0
+SPI1
+SWD + MTB
+IOPORT
+)KLCM(
+suB
+BHA
+FLASH
+Up to 128KB
+SRAM
+Up to 32KB
+MOR
+LSB
+,RCB
+DMA
+7-channel
+CPU-only PD1 Peripheral Bus (MCLK)
+)KLCM(
+suB
+larehpireP
+1DP
+tIOBUSt
+GPIO
+UART3
+TRNG
+CRC
+AES
+)KLCPLU(
+suB
+larehpireP
+0DP
+ULPCLK
+CAN-FD
+TIMA0
+TIMA1
+TIMG6
+TIMG7
+WWDT0 TIMG12
+IOMUX
+WWDT1 32-bit
+FLASHCTL
+12b ADC0
+12b ADC1
+RTC EVENT ULPCLK
+VREF
+UART0
+PMCU (SYSCTL)
+UART1
+UART2
+GPAMP
+I2C0 I2C1
+TIMG0
+TIMG8
+LEGEND
+PD1, CPU access only
+PD1, CPU/DMA access
+PD1/PD0, CPU/DMA access
+PD0, CPU/DMA access
+)KLCPLU(
+suB
+larehpireP
+0DP
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+PAx, PBx
+TX, RX
+TX, RX,
+CTS, RTS
+POCI, PICO,
+SCK, CSx
+4-CH
+FAULT
+2-CH
+MATHACL
+FAULT
+2-CH
+2-CH
+2-CH
+Temperature
+Sensor
+SWCLK,
+DEBUG
+SWDIO A0_x
+A1_x
+RTC_OUT
+VREF+,
+VREF-
+TX, RX,
+CTS, RTS
+OPA0 IN+, IN-,
+OPA1 OUT
+TX, RX,
+CTS, RTS
+CKM PMU IN+, IN-,
+OUT
+SDA, SCL SYSPLL LDO
+LFOSC BOR 12b DAC0 DAC_OUT
+2-channel SYSOSC POR
+COMP0
+LFXT VBOOST COMP1 IN+, IN-,
+2-channel COMP2 OUT
+QEI/HALL HFXT
+Each COMPx includes an 8-bit reference DAC.
+LFXIN, LFXOUT VDD, VSS COMP0 and COMP1 reference DACs connect to
+HFXIN, HFXOUT VCORE, NRST OPA0 and OPA1, respectively
+ROSC
+CLK_OUT, FCC_IN
+图 4-1. MSPM0G350x 功能方框图
+4 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 4 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+内容
+1 特性...................................................................................1 8.7 存储器.......................................................................57
+2 应用...................................................................................2 8.8 闪存存储器................................................................60
+3 说明...................................................................................2 8.9 SRAM........................................................................61
+4 功能方框图.........................................................................4 8.10 GPIO.......................................................................61
+5 器件比较............................................................................6 8.11 IOMUX....................................................................61
+6 引脚配置和功能.................................................................7 8.12 ADC........................................................................61
+6.1 引脚图.........................................................................7 8.13 温度传感器..............................................................62
+8.14 VREF......................................................................62
+6.2 引脚属性....................................................................11
+8.15 COMP.....................................................................63
+6.3 信号说明....................................................................14
+8.16 DAC........................................................................64
+6.4 未使用引脚的连接.....................................................24
+8.17 OPA.........................................................................64
+7 规格.................................................................................25
+8.18 GPAMP...................................................................65
+7.1 绝对最大额定值.........................................................25 8.19 TRNG......................................................................66
+7.2 ESD 等级..................................................................25 8.20 AES.........................................................................66
+7.3 建议运行条件............................................................25 8.21 CRC........................................................................66
+7.4 热性能信息................................................................26 8.22 MATHACL...............................................................66
+7.5 电源电流特性............................................................28 8.23 UART......................................................................66
+7.6 电源时序....................................................................29 8.24 I2C..........................................................................67
+7.7 闪存特性....................................................................30 8.25 SPI..........................................................................67
+8.26 CAN-FD..................................................................68
+7.8 时序特性....................................................................31
+8.27 WWDT....................................................................68
+7.9 时钟规格....................................................................32
+8.28 RTC.........................................................................68
+7.10 数字 IO....................................................................35
+8.29 计时器 (TIMx)..........................................................69
+7.11 模拟多路复用器 VBOOST.......................................38
+8.30 器件模拟连接..........................................................71
+7.12 ADC........................................................................39
+8.31 输入/输出图.............................................................73
+7.13 典型连接图..............................................................40
+8.32 串行线调试接口.......................................................74
+7.14 温度传感器..............................................................41
+8.33 引导加载程序 (BSL)................................................74
+7.15 VREF......................................................................41
+8.34 器件出厂常量..........................................................74
+7.16 比较器 (COMP).......................................................42
+7.17 DAC........................................................................43 8.35 标识.........................................................................75
+7.18 GPAMP...................................................................44 9 应用、实施和布局............................................................76
+7.19 OPA.........................................................................45 9.1 典型应用....................................................................76
+7.20 I2C..........................................................................47 10 器件和文档支持.............................................................77
+7.21 SPI..........................................................................48 10.1 入门和后续步骤.......................................................77
+7.22 UART......................................................................50 10.2 器件命名规则..........................................................77
+7.23 TIMx........................................................................51 10.3 工具与软件..............................................................77
+7.24 TRNG......................................................................51 10.4 文档支持..................................................................78
+7.25 仿真和调试..............................................................51 10.5 支持资源..................................................................79
+8 详细说明..........................................................................52 10.6 商标.........................................................................79
+8.1 CPU..........................................................................52
+10.7 静电放电警告..........................................................79
+8.2 操作模式....................................................................52
+10.8 术语表.....................................................................79
+8.3 电源管理单元 (PMU).................................................55
+11 修订历史记录.................................................................79
+8.4 时钟模块 (CKM)........................................................55
+12 机械、封装和可订购信息...............................................81
+8.5 DMA..........................................................................55
+8.6 事件...........................................................................56
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 5
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 5 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+5 器件比较
+下表总结了本数据表中所述的每个器件的特性。
+表 5-1. 器件比较
+闪存/SRAM 数学加速 ADC/通
+器件名称(1) (4) 鉴定(2) COMP DAC OPA GPAMP UART/I2C/SPI CAN TIMA TIMG GPIO 封装 [封装尺寸] (3)
+(KB) 器 道数
+MSPM0G3505SPMR 32/16
+64 LQFP（0.5mm 帧宽）
+MSPM0G3506SPMR 64/32 S Y 2/17 3 1 2 1 4/2/2 1 2 5 60
+[12mm × 12mm]
+MSPM0G3507SPMR 128/32
+MSPM0G3505SPTR 32/16
+48 LQFP（0.5mm 帧宽）
+MSPM0G3506SPTR 64/32 S Y 2/16 3 1 2 1 4/2/2 1 2 5 44
+[9mm × 9mm]
+MSPM0G3507SPTR 128/32
+MSPM0G3505SRGZR 32/16
+48 VQFN（0.5mm 帧宽）
+MSPM0G3506SRGZR 64/32 S Y 2/16 3 1 2 1 4/2/2 1 2 5 44
+[7mm × 7mm]
+MSPM0G3507SRGZR 128/32
+MSPM0G3505SRHBR 32/16
+MSPM0G3506SRHBR 64/32 S Y 2/11 3 (5) 1 2 1 4/2/2 1 2 5 28 32 VQFN（0.5mm 帧宽）
+[5mm × 5mm]
+MSPM0G3507SRHBR 128/32
+MSPM0G3505SDGS28
+32/16
+R
+MSPM0G3506SDGS28 64/32 S Y 2/11 3 (5) 1 2 1 4/2/2 1 2 5 24 28 VSSOP（0.5mm 帧宽）
+R [7.1mm × 4.9mm]
+MSPM0G3507SDGS28
+128/32
+R
+(1) 如需所有在售产品的最新器件、封装和订购信息，请参阅节 12中的封装选项附录，或浏览 TI 网站。
+(2) 器件鉴定：
+• S = -40°C 至 125°C
+(3) 封装尺寸（长 × 宽）为标称值，并包括引脚（如适用）。要获得包含误差值的封装尺寸，请参阅节 12。
+(4) 有关器件名称的更多信息，请参阅节 10.2
+(5) 利用 COMP2 上的内部 8 位 DAC，以使用两个 IN 通道
+6 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 6 =====
+6 引脚配置和功能
+系统配置工具提供了一个图形界面，用于启用、配置和生成引脚多路复用和简化引脚设置所需的初始化代码。以
+下引脚图显示了主要外设功能、一些集成器件特性以及用于简化器件引脚排列的可用时钟信号。有关引脚功能的
+完整说明，请参阅引脚属性 和信号说明 部分。
+6.1 引脚图
+Power
+Reset
+High-Speed I/O (HSIO)
+5-V Tolerant Open-Drain I/O (ODIO)
+High-Drive I/O (HDIO)
+图 6-1. 引脚图颜色编码
+1
+2
+3
+4
+5
+6
+7
+8
+LQFP64
+46 36 26 16 06 95 85 75
+48
+47
+46
+45
+44
+43
+42
+41
+9 40
+10 39
+11 38
+12 37
+13 36
+14 35
+15 34
+16 33
+21BP
+71
+TUO_KLC
+/
+11BP
+81
+01BP
+91
+9BP
+02
+8BP
+12
+7BP
+22
+6BP
+32
+11AP
+42
+TUO_KLC
+/
+01AP
+65
+52
+TUO_KLC
+/
+TUO_CTR
+/ 9AP
+55
+62
+8AP
+45
+72
+5BP
+35
+82
+4BP
+25
+92
+3BP
+15
+03
+2BP
+05
+13
+TUO_KLC
+/ 7AP
+94
+23
+PB13 PB1
+PB14 PB0
+PB15 PA6 / HFCLK_IN / HFXOUT
+PB16 PA5 / HFXIN / FCC_IN
+PA12 / FCC_IN PA4 / LFCLK_IN / LFXOUT
+PA13 PA3 / LFXIN
+PA14 / CLK_OUT / A0_12 PA2 / ROSC
+PA15 / A1_0 VSS
+PA16 /A1_1 /FCC_IN VDD
+PA17 / A1_2 PA31 / CLK_OUT
+PA18 / A1_3 NRST
+PA19 / SWDIO PA30
+PA20 / SWCLK PA29
+PB17/A1_4 PA28
+PB18 / A1_5 PA1
+PB19 / A1_6 PA0 / FCC_IN
+-FERV
+/ 7_1A
+/
+12AP
+7_0A
+/
+TUO_KLC
+/
+22AP
+6_0A
+/
+02BP
+12BP 22BP 32BP 5_0A
+/
+42BP
++FERV
+32AP
+3_0A
+/
+42AP
+2_0A
+/
+52AP
+4_0A
+/
+52BP
+62BP 72BP 1_0A
+/
+62AP
+0_0A
+/72AP
+EROCV
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+图 6-2. 64 引脚 PM (LQFP)（顶视图）
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 7
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 7 =====
+1
+2
+3
+4
+5
+6
+LQFP48
+7
+8
+84 74 64 54 44 34 24 14
+36
+35
+34
+33
+32
+31
+30
+29
+9 28
+10 27
+11 26
+12 25
+31 41 51 61 71 81 91 02
+04
+12
+93
+22
+83
+32
+73
+42
+PB17 / A1_4
+PA20 / SWCLK
+PA19 / SWDIO
+PA18 / A1_3
+PA17 / A1_2
+PA16 / A1_1 /FCC_IN
+PA15 / A1_0
+PA14 / CLK_OUT /A0_12
+PA13
+PA12 / FCC_IN
+PB16
+PB15
+EROCV
+0_0A
+/
+TUO_CTR
+/
+72AP
+1_0A
+/
+62AP
++1NI_0APO
+/ 2_0A
+/
+52AP
+3_0A
+/
+42AP
++FERV
+/
+32AP
+5_0A
+/
+42BP
+6_0A
+/
+02BP
+7_0A
+/
+TUO_KLC
+/
+22AP
+-FERV
+/ 7_1A
+/
+12AP
+6_1A
+/
+91BP
+5_1A
+/
+81BP
+PA0 / FCC_IN
+PA1
+PA28
+NRST
+PA31 / CLK_OUT
+VDD
+VSS
+PA2 / ROSC
+PA3 / COMP1_OUT / LFXIN
+PA4 / LFCLK_IN / LFXOUT
+PA5 / HFXIN / FCC_IN
+PA6 / HFCLK_IN / HFXOUT
+TUO_KLC
+/
+7AP
+2BP 3BP 8AP TUO_KLC
+/
+TUO_CTR
+/
+9AP
+TUO_KLC
+/
+01AP
+11AP 6BP 7BP 8BP 9BP 41BP
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+图 6-3. 48 引脚 PT (LQFP)（顶视图）
+8 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 8 =====
+1
+2
+3
+4
+5
+6
+7
+8
+84 74 64 54 44 34 24 14
+36
+35
+34
+33
+32
+31
+30
+29
+9 28
+10 27
+11 26
+12 25
+EROCV
+31
+0_0A
+/
+TUO_CTR
+/
+72AP
+41
+1_0A
+/
+62AP
+51
+2_0A
+/
+52AP
+61
+3_0A
+/
+42AP
+71 81
+5_0A
+/
+42BP
+91
+6_0A
+/
+02BP
+02
+7_0A/
+TUO_KLC
+/
+22AP
+04
+12
+-FERV
+/
+7_1A
+/
+12AP
+93
+22
+6_1A
+/
+91BP
+83
+32
+5_1A
+/
+81BP
+73
+42
+PA0 / FCC_IN
+PA1
+PA28
+NRST
+PA31 / CLK_OUT
+VDD
+VSS
+PA2 / ROSC
+PA3 / LFXIN
+PA4 / LFCLK_IN / LFXOUT
+PA5 / HFXIN / FCC_IN
+PA6 / HFCLK_IN / HFXOUT
+TUO_KLC
+/
+7AP
+2BP 3BP 8AP TUO_KLC
+/
+TUO_CTR
+/
+9AP
+TUO_KLC
+/
+01AP
+11AP 6BP 7BP 8BP 9BP 41BP
+PB17 / A1_4
+PA20 / SWCLK
+PA19 / SWDIO
+PA18 / A1_3
+PA17 / A1_2
+PA16 / A1_1 /FCC_IN
+VQFN48
+PA15 / A1_0
+PA14 / CLK_OUT / A0_12
+PA13
+PA12 / FCC_IN
+PB16
+PB15
+Thermal pad
++FERV
+/
+32AP
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+图 6-4. 48 引脚 RGZ (VQFN)（顶视图）
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 9
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 9 =====
+1 24
+2 23
+3 22
+4 21
+VQFN32
+5 20
+6 19
+7 18
+8 17
+Thermal pad
+23
+9
+13
+01
+03
+11
+92
+21
+82
+31
+72
+41
+62
+51
+52
+61
+NRST
+VDD
+VSS
+EROCV
+PA0 / FCC_IN
+PA1
+PA2 / ROSC
+PA3 / LFXIN
+PA4 / LFCLK_IN / LFXOUT
+NI_CCF
+/
+NIXFH
+/
+5AP
+TUOXFH
+/
+NI_KLCFH
+/ 6AP
+TUO_KLC
+/
+7AP
+8AP TUO_KLC
+/
+TUO_CTR
+/ 9AP
+TUO_KLC
+/
+01AP
+11AP NI_CCF
+/
+21AP
+PA20 / SWCLK
+PA19 / SWDIO
+PA18 / A1_3
+PA17 / A1_2
+PA16 / A1_1/ FCC_IN
+PA15 / A1_0
+PA14 / CLK_OUT / A0_12
+PA13
+0_0A
+/
+TUO_CTR
+/ 72AP
+1_0A
+/ 62AP
+2_0A
+/ 52AP
+3_0A
+/ 42AP
++FERV
+/ 32AP
+7_0A
+/ 22AP
+-FERV
+/
+7_1A
+/ 12AP
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+图 6-5. 32 引脚 RHB (VQFN)（顶视图）
+PA26 / A0_1 1 28 PA25 / A0_2
+PA27 / RTC_OUT / A0_0 2 27 PA24 / A0_3
+VCORE 3 26 PA23 / VREF+
+PA0 4 25 PA22 / CLK_OUT / A0_7
+PA1 5 24 PA21 / A1_7 / VREF-
+NRST 6 23 PA20 / SWCLK
+VDD 7 22 PA19 / SWDIO
+VSSOP28
+VSS 8 21 PA18 / A1_3
+PA2 / ROSC 9 20 PA17 / A1_2
+PA3 / LFXIN 10 19 PA16 / A1_1 / FCC_IN
+PA4 / LFCLK_IN / LFXOUT 11 18 PA15 / A1_0
+PA5 / HFXIN / FCC_IN 12 17 PA14 / CLK_OUT / A0_12
+PA6 / HFCLK_IN / HFXOUT 13 16 PA11
+PA9 / RTC_OUT / CLK_OUT 14 15 PA10 / CLK_OUT
+图 6-6. 28 引脚 DGS28 (VSSOP)（顶视图）
+备注
+有关每个封装选项的完整引脚配置和功能说明，请参阅引脚属性和信号说明。
+10 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 10 =====
+6.2 引脚属性
+下表介绍了每个器件封装中每个引脚上可用的功能。
+备注
+器件上的每个数字 I/O 均映射到一个特定的引脚控制管理寄存器 (PINCMx)，此寄存器让用户能够使用
+PINCM.PF 控制位来配置所需的引脚功能。
+表 6-1. 按 IO 类型分类的数字 IO 功能
+IO 结构 反转控制 驱动强度控制 迟滞控制 上拉电阻器 下拉电阻器 唤醒逻辑
+标准驱动 Y Y Y
+带唤醒功能的标准驱动(2) Y Y Y Y
+高驱动 Y Y Y Y Y
+高速 Y Y Y Y
+5V 容限开漏 Y Y Y Y
+表 6-2. 引脚属性
+信号名称 引脚编号
+引脚名
+PINCMx IO 结构
+称 模拟 数字 [引脚功能] (1) PFQL
+46
+NFQV、PFQL
+84
+NFQV
+23
+POSSV
+82
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+不适用 VDD 40 6 4 7 电源
+不适用 VSS 41 7 5 8 电源
+不适用 VCORE 32 48 32 3 电源
+不适用 NRST 38 4 3 6 复位
+UART0_TX [2] / I2C0_SDA [3] / TIMA0_C0 [4] / TIMA_FAL1 5V 容限开
+1 PA0 33 1 1 4
+[5] / TIMG8_C1 [6] / FCC_IN [7] /（默认 BSL I2C_SDA） 漏
+UART0_RX [2] / I2C0_SCL [3] / TIMA0_C1 [4] / TIMA_FAL2
+5V 容限开
+2 PA1 [5] / TIMG8_IDX [6] / TIMG8_C0 [7] /（默认 BSL 34 2 2 5
+漏
+I2C_SCL）
+TIMG8_C1 [2] / SPI0_CS0 [3] / TIMG7_C1 [4] / SPI1_CS0
+7 PA2 ROSC 42 8 6 9 标准
+[5]
+TIMG8_C0 [2] / SPI0_CS1 [3] / UART2_CTS [4] /
+8 PA3 LFXIN TIMA0_C2 [5] / COMP1_OUT [6] / TIMG7_C0 [7] / 43 9 7 10 标准
+TIMA0_C1 [8] / I2C1_SDA [9]
+TIMG8_C1 [2] / SPI0_POCI [3] / UART2_RTS [4] /
+9 PA4 LFXOUT TIMA0_C3 [5] / LFCLK_IN [6] / TIMG7_C1 [7] / TIMA0_C1N 44 10 8 11 标准
+[8] / I2C1_SCL [9]
+TIMG8_C0 [2] / SPI0_PICO [3] / TIMA_FAL1 [4] /
+10 PA5 HFXIN 45 11 9 12 标准
+TIMG0_C0 [5] / TIMG6_C0 [6] / FCC_IN [7]
+TIMG8_C1 [2] / SPI0_SCK [3] / TIMA_FAL0 [4] / TIMG0_C1
+11 PA6 HFXOUT 46 12 10 13 标准
+[5] / HFCLK_IN [6] / TIMG6_C1 [ 7] / TIMA0_C2N [8]
+COMP0_OUT [2] / CLK_OUT [3] / TIMG8_C0 [4] /
+14 PA7 TIMA0_C2 [5] / TIMG8_IDX [6] / TIMG7_C1 [7] / TIMA0_C1 49 13 11 – 标准
+[8]
+UART1_TX [2] / SPI0_CS0 [3] / UART0_RTS [4] /
+19 PA8 54 16 12 – 标准
+TIMA0_C0 [5] / TIMA1_C0N [6]
+UART1_RX [2] / SPI0_PICO [3] / UART0_CTS [4] /
+20 PA9 TIMA0_C1 [5] / RTC_OUT [6] / TIMA0_C0N [7] / 55 17 13 14 高速
+TIMA1_C1N [8] / CLK_OUT [9]
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 11
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 11 =====
+表 6-2. 引脚属性 （续）
+信号名称 引脚编号
+引脚名
+PINCMx IO 结构
+称 模拟 数字 [引脚功能] (1) PFQL
+46
+NFQV、PFQL
+84
+NFQV
+23
+POSSV
+82
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+UART0_TX [2] / SPI0_POCI [3] / I2C0_SDA [4] / TIMA1_C0
+21 PA10 [5] / TIMG12_C0 [6] / TIMA0_C2 [7] / I2C1_SDA [8] / 56 18 14 15 高驱动
+CLK_OUT [9]/（默认 BSL UART_TX）
+UART0_RX [2] / SPI0_SCK [3] / I2C0_SCL [4] / TIMA1_C1
+22 PA11 [5] / COMP0_OUT [6]/ TIMA0_C2N [7] / I2C1_SCL [8]/（默 57 19 15 16 高驱动
+认 BSL UART_RX）
+UART3_CTS [2] / SPI0_SCK [3] / TIMG0_C0 [4] / CAN_TX
+34 PA12 5 27 16 – 高速
+[5] / TIMA0_C3 [6] / FCC_IN [7]
+UART3_RTS [2] / SPI0_POCI [3] / UART3_RX [4] /
+35 PA13 COMP0_IN2- 6 28 17 – 高速
+TIMG0_C1 [5] / CAN_RX [6] / TIMA0_C3N [7]
+UART0_CTS [2] / SPI0_PICO [3] / UART3_TX [4] /
+36 PA14 COMP0_IN2+ / A0_12 7 29 18 17 高速
+TIMG12_C0 [5] / CLK_OUT [6]
+A1_0 / DAC_OUT /
+OPA0_IN2+ /
+UART0_RTS [2] / SPI1_CS2 [3] / I2C1_SCL [4] / TIMA1_C0
+37 PA15 OPA1_IN2+/ 8 30 19 18 标准
+[5] / TIMG8_IDX [6] / TIMA1_C0N [7] / TIMA0_C2 [8]
+COMP0_IN3+ /
+COMP1_IN3+
+COMP2_OUT [2] / SPI1_POCI [3] / I2C1_SDA [4] /
+38 PA16 A1_1/OPA1_OUT TIMA1_C1 [5] / TIMA1_C1N [6] / TIMA0_C2N [7] / FCC_IN 9 31 20 19 标准
+[8]
+具有唤醒功
+A1_2 / OPA1_IN1- / UART1_TX [2] / SPI1_SCK [3] / I2C1_SCL [4] / TIMA0_C3
+39 PA17 10 32 21 20 能的标准配
+COMP0_IN1- [5] / TIMG7_C0 [6] / TIMA1_C0 [7]
+置(2)
+A1_3 / OPA1_IN1+ / UART1_RX [2] / SPI1_PICO [3] / I2C1_SDA [4] / 具有唤醒功
+40 PA18 COMP0_IN1+ / TIMA0_C3N [5] / TIMG7_C1 [6] / TIMA1_C1 [7]/默认 11 33 22 21 能的标准配
+GPAMP_IN- BSL_Invoke 置(2)
+41 PA19 SWDIO [2] 12 34 23 22 高速
+42 PA20 SWCLK [2] 13 35 24 23 标准
+A1_7 / COMP2_IN1- / UART2_TX [2] / TIMG8_C0 [3] / UART1_CTS [4] /
+46 PA21 17 39 25 24 标准
+VREF- TIMA0_C0 [5] / TIMG6_C0 [6]
+UART2_RX [2] / TIMG8_C1 [3] / UART1_RTS [4] /
+A0_7 / GPAMP_OUT /
+47 PA22 TIMA0_C1 [5] / CLK_OUT [6] / TIMA0_C0N [7] / TIMG6_C1 18 40 26 25 标准
+OPA0_OUT
+[8]
+UART2_TX [2] / SPI0_CS3 [3] / TIMA0_C3 [4] / TIMG0_C0
+53 PA23 COMP1_IN1- / VREF+ 24 43 27 26 标准
+[5] / UART3_CTS [6] / TIMG7_C0 [7]/ TIMG8_C0 [8]
+UART2_RX [2] / SPI0_CS2 [3] / TIMA0_C3N [4] /
+54 PA24 A0_3 / OPA0_IN1- TIMG0_C1 [5] / UART3_RTS [6] / TIMG7_C1 [7] / 25 44 28 27 标准
+TIMA1_C1 [8]
+UART3_RX [2] / SPI1_CS3 [3] / TIMG12_C1 [4] /
+55 PA25 A0_2 / OPA0_IN1+ 26 45 29 28 标准
+TIMA0_C3 [5] / TIMA0_C1N [6]
+A0_1 / COMP0_IN0+ /
+UART3_TX [2] / SPI1_CS0 [3] / TIMG8_C0 [4] /
+59 PA26 OPA0_IN0+ / 30 46 30 1 标准
+TIMA_FAL0 [5] / CAN_TX [6] / TIMG7_C0 [7]
+GPAMP_IN+
+A0_0 / COMP0_IN0- / RTC_OUT [2] / SPI1_CS1 [3] / TIMG8_C1 [4] / TIMA_FAL2
+60 PA27 31 47 31 2 标准
+OPA0_IN0- [5] / CAN_RX [6] / TIMG7_C1 [7]
+UART0_TX [2] / I2C0_SDA [3] / TIMA0_C3 [4] / TIMA_FAL0
+3 PA28 35 3 – – 高驱动
+[5] / TIMG7_C0 [6] / TIMA1_C0 [ 7]
+I2C1_SCL [2] / UART2_RTS [3] / TIMG8_C0 [4] /
+4 PA29 36 – – – 标准
+TIMG6_C0 [5]
+12 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 12 =====
+表 6-2. 引脚属性 （续）
+信号名称 引脚编号
+引脚名
+PINCMx IO 结构
+称 模拟 数字 [引脚功能] (1) PFQL
+46
+NFQV、PFQL
+84
+NFQV
+23
+POSSV
+82
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+I2C1_SDA [2] / UART2_CTS [3] / TIMG8_C1 [4] /
+5 PA30 37 – – – 标准
+TIMG6_C1 [5]
+UART0_RX [2] / I2C0_SCL [3] / TIMA0_C3N [4] /
+6 PA31 TIMG12_C1 [5] / CLK_OUT [6]/ TIMG7_C1 [7] / TIMA1_C1 39 5 – – 高驱动
+[8]
+UART0_TX [2] / SPI1_CS2 [3] / TIMA1_C0 [4] / TIMA0_C2
+12 PB0 47 – – – 标准
+[5]
+UART0_RX [2] / SPI1_CS3 [3] / TIMA1_C1 [4] /
+13 PB1 48 – – – 标准
+TIMA0_C2N [5]
+UART3_TX [2] / UART2_CTS [3] / I2C1_SCL [4] /
+15 PB2 TIMA0_C3 [5] / UART1_CTS [6] / TIMG6_C0 [ 7] / 50 14 – – 标准
+TIMA1_C0 [8]
+UART3_RX [2] / UART2_RTS [3] / I2C1_SDA [4] /
+16 PB3 TIMA0_C3N[5] / UART1_RTS [6] / TIMG6_C1 [7] / 51 15 – – 标准
+TIMA1_C1 [8]
+UART1_TX [2] / UART3_CTS [3] / TIMA1_C0 [4] /
+17 PB4 52 – – – 标准
+TIMA0_C2 [5] / TIMA1_C0N [6]
+UART1_RX [2] / UART3_RTS [3] / TIMA1_C1 [4] /
+18 PB5 53 – – – 标准
+TIMA0_C2N [5] / TIMA1_C1N [6]
+UART1_TX [2] / SPI1_CS0 [3] / SPI0_CS1 [4] / TIMG8_C0
+23 PB6 58 20 – – 标准
+[5] / UART2_CTS [6] / TIMG6_C0 [7] / TIMA1_C0N [8]
+UART1_RX [2] / SPI1_POCI [3] / SPI0_CS2 [4] /
+24 PB7 TIMG8_C1 [5] / UART2_RTS [6] / TIMG6_C1 [7] / 59 21 – – 标准
+TIMA1_C1N [8]
+UART1_CTS [2] / SPI1_PICO [3] / TIMA0_C0 [4] /
+25 PB8 60 22 – – 标准
+COMP1_OUT [5]
+UART1_RTS [2] / SPI1_SCK [3] / TIMA0_C1 [4] /
+26 PB9 61 23 – – 标准
+TIMA0_C0N [5]
+TIMG0_C0 [2] / TIMG8_C0 [3] / COMP1_OUT [4] /
+27 PB10 62 – – – 标准
+TIMG6_C0 [5]
+TIMG0_C1 [2] / TIMG8_C1 [3] / CLK_OUT [4] / TIMG6_C1
+28 PB11 63 – – – 标准
+[5]
+UART3_TX [2] / TIMA0_C2 [3] / TIMA_FAL1 [4] /
+29 PB12 64 – – – 标准
+TIMA0_C1 [5]
+UART3_RX [2] / TIMA0_C3 [3] / TIMG12_C0 [4] /
+30 PB13 1 – – – 标准
+TIMA0_C1N [5]
+SPI1_CS3 [2] / SPI1_POCI [3] / SPI0_CS3 [4] /
+31 PB14 2 24 – – 标准
+TIMG12_C1 [5] / TIMG8_IDX [6] / TIMA0_C0 [7]
+UART2_TX [2] / SPI1_PICO [3] / UART3_CTS [4] /
+32 PB15 3 25 – – 标准
+TIMG8_C0 [5] / TIMG7_C0 [6]
+UART2_RX [2] / SPI1_SCK [3] / UART3_RTS [4] /
+33 PB16 4 26 – – 标准
+TIMG8_C1 [5] / TIMG7_C1 [6]
+UART2_TX [2] / SPI0_PICO [3] / SPI1_CS1 [4] / TIMA1_C0
+43 PB17 A1_4 / COMP1_IN2- 14 36 – – 标准
+[5] / TIMA0_C2 [6]
+UART2_RX [2] / SPI0_SCK [3] / SPI1_CS2 [4] / TIMA1_C1
+44 PB18 A1_5 / COMP1_IN2+ 15 37 – – 标准
+[5] / TIMA0_C2N [6]
+A1_6 / COMP2_IN1+ / COMP2_OUT [2] / SPI0_POCI [3] / TIMG8_C1 [4] /
+45 PB19 16 38 – – 标准
+OPA1_IN0+ UART0_CTS [5] / TIMG7_C1 [6]
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 13
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 13 =====
+表 6-2. 引脚属性 （续）
+信号名称 引脚编号
+引脚名
+PINCMx IO 结构
+称 模拟 数字 [引脚功能] (1) PFQL
+46
+NFQV、PFQL
+84
+NFQV
+23
+POSSV
+82
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+SPI0_CS2 [2] / SPI1_CS0 [3] / TIMA0_C2 [4] / TIMG12_C0
+48 PB20 A0_6 / OPA1_IN0- 19 41 – – 标准
+[5] / TIMA_FAL1 [6] / TIMA0_C1 [7] / TIMA1_C1N [8]
+49 PB21 COMP2_IN0+ SPI1_POCI [2] / TIMG8_C0 [3] 20 – – – 标准
+50 PB22 COMP2_IN0- SPI1_PICO [2] / TIMG8_C1 [3] 21 – – – 标准
+51 PB23 SPI1_SCK [2] / COMP0_OUT [3] / TIMA_FAL0 [4] 22 – – – 标准
+SPI0_CS3 [2] / SPI0_CS1 [3] / TIMA0_C3 [4] / TIMG12_C1
+52 PB24 A0_5 / COMP1_IN1+ 23 42 – – 标准
+[5] / TIMA0_C1N [6] / TIMA1_C0N [7]
+56 PB25 A0_4 UART0_CTS [2] / SPI0_CS0 [3] / TIMA_FAL2 [4] 27 – – – 标准
+UART0_RTS [2] / SPI0_CS1 [3] / TIMA0_C3 [4] /
+57 PB26 COMP1_IN0+ 28 – – – 标准
+TIMG6_C0 [5] / TIMA1_C0 [6]
+COMP2_OUT [2] / SPI1_CS1 [3] / TIMA0_C3N [4] /
+58 PB27 COMP1_IN0- 29 – – – 标准
+TIMG6_C1 [5] / TIMA1_C1 [6]
+(1) 对于模拟功能，应将 IOMUX 中的 PINCM.PF 和 PINCM.PC 设置为 0（例如，OPA 输入或输出以及 COMP 输入）。器件上的每个数字
+I/O 均映射到一个特定的引脚控制管理寄存器 (PINCMx)，此寄存器让用户能够使用 PINCM.PF 控制位来配置所需的引脚功能。
+(2) 具有唤醒功能的标准配置允许 I/O 将器件从 SHUTDOWN 最低功耗模式中唤醒。所有 I/O 均可配置为从较高的低功耗模式唤醒 MCU。
+有关详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的 GPIO 快速唤醒。
+6.3 信号说明
+在多个器件引脚上提供了许多 MSPM0 信号。以下列表说明了列标题：
+1. 信号名称：可连接至其中一个指定引脚的信号的名称。
+2. 引脚类型：信号方向和信号类型：
+• I = 输入
+• O = 输出
+• IO = 输入、输出或同时输入和输出
+• ID = 具有开漏行为的输入
+• OD = 具有开漏行为的输出
+• IOD = 具有开漏行为的输入、输出或同时输入和输出
+• A = 模拟
+• PWR = 电源功能
+3. 说明：信号说明。
+4. 引脚：关联的引脚编号。
+有关引脚多路复用方案的其他信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“IOMUX”一
+章。
+备注
+IOMUX 仅支持同时将一个 IOMUX 管理的数字功能连接到引脚。但是可以在引脚上启用 IOMUX 管理的
+数字功能的同时在引脚上启用非 IOMUX 管理的信号（例如模拟输入和 WAKE 输入）。在这种情况
+下，设计人员必须确认每个引脚上启用的功能之间不存在争用。
+14 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 14 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+表 6-3. 信号说明
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+ADC A0_0 31 47 31 2 I ADC0 模拟输入 0
+A0_1 30 46 30 1 I ADC0 模拟输入 1
+A0_2 26 45 29 28 I ADC0 模拟输入 2
+A0_3 25 44 28 27 I ADC0 模拟输入 3
+A0_4 27 – – – I ADC0 模拟输入 4
+A0_5 23 42 – – I ADC0 模拟输入 5
+A0_6 19 41 – – I ADC0 模拟输入 6
+A0_7 18 40 26 25 I ADC0 模拟输入 7
+A0_12 7 29 18 17 I ADC0 模拟输入 12
+A1_0 8 30 19 18 I ADC1 模拟输入 0
+A1_1 9 31 20 19 I ADC1 模拟输入 1
+A1_2 10 32 21 20 I ADC1 模拟输入 2
+A1_3 11 33 22 21 I ADC1 模拟输入 3
+A1_4 14 36 – – I ADC1 模拟输入 4
+A1_5 15 37 – – I ADC1 模拟输入 5
+A1_6 16 38 – – I ADC1 模拟输入 6
+A1_7 17 39 25 24 I ADC1 模拟输入 7
+BSL BSL_invoke 11 33 22 21 I 用于调用引导加载程序的输入引脚
+BSL (I2C) BSLSCL 34 2 2 5 I/O 默认 I2C BSL 时钟
+BSLSDA 33 1 1 4 I/O 默认 I2C BSL 数据
+BSL (UART) BSLRX 57 19 15 16 I 默认 UART BSL 接收
+BSLTX 56 18 14 15 O 默认 UART BSL 发送
+CAN CAN_TX 5 27 16 1 O CAN-FD 发送数据
+30 46 30
+CAN_RX 6 28 17 2 I CAN-FD 接收数据
+31 47 31
+时钟 CLK_OUT 7 5 11 14 O 可配置时钟输出
+18 13 13 15
+39 17 14 17
+49 18 18 25
+55 29 26
+56 40
+63
+HFCLK_IN 46 12 10 13 I 数字高频时钟输入
+HFXIN 45 11 9 12 I 高频晶体振荡器 HFXT 的输入
+HFXOUT 46 12 10 13 O 高频晶体振荡器 HFXT 的输出
+LFCLK_IN 44 10 8 11 I 数字低频时钟输入
+LFXIN 43 9 7 10 I 低频晶体振荡器 LFXT 的输入
+LFXOUT 44 10 8 11 O 低频晶体振荡器 LFXT 的输出
+ROSC 42 8 6 9 I 用于提高振荡器精度的外部电阻
+比较器 COMP0_IN0- 31 47 31 2 I 比较器 0 反相输入 0
+COMP0_IN0+ 30 46 30 1 I 比较器 0 同相输入 0
+COMP0_IN1- 10 32 21 20 I 比较器 0 反相输入 1
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 15
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 15 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+表 6-3. 信号说明 （续）
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+COMP0_IN1+ 11 33 22 21 I 比较器 0 同相输入 1
+COMP0_IN2- 6 28 17 – I 比较器 0 反相输入 2
+COMP0_IN2+ 7 29 18 17 I 比较器 0 同相输入 2
+COMP0_IN3+ 8 30 19 18 I 比较器 0 同相输入 3
+COMP0_OUT 22 13 11 16 O 比较器 0 输出
+49 19 15
+57
+COMP1_IN0- 29 – – – I 比较器 1 反相输入 0
+COMP1_IN0+ 28 – – – I 比较器 1 同相输入 0
+COMP1_IN1- 24 43 27 26 I 比较器 1 反相输入 1
+COMP1_IN1+ 23 42 – – I 比较器 1 同相输入 1
+COMP1_IN2- 14 36 – – I 比较器 1 反相输入 2
+COMP1_IN2+ 15 37 – – I 比较器 1 同相输入 2
+COMP1_IN3+ 8 30 19 18 I 比较器 1 同相输入 3
+COMP1_OUT 43 9 7 10 O 比较器 1 输出
+60 22
+62
+COMP2_IN0- 21 – – – I 比较器 2 反相输入 0
+COMP2_IN0+ 20 – – – I 比较器 2 同相输入 0
+COMP2_IN1- 17 39 25 24 I 比较器 2 反相输入 1
+COMP2_IN1+ 16 38 – – I 比较器 2 同相输入 1
+COMP2_OUT 9 31 20 19 O 比较器 2 输出
+16 38
+29
+DAC DAC_OUT 8 30 19 18 O 数模转换器 (DAC) 输出
+调试 SWCLK 13 35 24 23 I 串行线调试输入时钟
+SWDIO 12 34 23 22 I/O 串行线调试数据输入/输出
+FCC FCC_IN 5 1 1 4 I 频率时钟计数器输入
+9 11 9 12
+33 27 16 19
+45 31 20
+通用放大器 GPAMP_IN+ 30 46 30 1 I GPAMP 同相端子输入
+GPAMP_IN- 11 33 22 21 I GPAMP 反相端子输入
+GPAMP_OUT 18 40 26 25 O GPAMP 输出
+GPIO PA0 33 1 1 4 I/O 可从关断状态唤醒的通用数字 I/O
+PA1 34 2 2 5 I/O 可从关断状态唤醒的通用数字 I/O
+PA2 42 8 6 9 I/O 通用数字 I/O
+PA3 43 9 7 10 I/O 通用数字 I/O
+PA4 44 10 8 11 I/O 通用数字 I/O
+PA5 45 11 9 12 I/O 通用数字 I/O
+PA6 46 12 10 13 I/O 通用数字 I/O
+PA7 49 13 11 – I/O 通用数字 I/O
+PA8 54 16 12 – I/O 通用数字 I/O
+16 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 16 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+表 6-3. 信号说明 （续）
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+PA9 55 17 13 14 I/O 通用数字 I/O
+PA10 56 18 14 15 I/O 可从关断状态唤醒的通用数字 I/O
+PA11 57 19 15 16 I/O 可从关断状态唤醒的通用数字 I/O
+PA12 5 27 16 – I/O 通用数字 I/O
+PA13 6 28 17 – I/O 通用数字 I/O
+PA14 7 29 18 17 I/O 通用数字 I/O
+PA15 8 30 19 18 I/O 通用数字 I/O
+PA16 9 31 20 19 I/O 通用数字 I/O
+PA17 10 32 21 20 I/O 可从关断状态唤醒的通用数字 I/O
+PA18 11 33 22 21 I/O 可从关断状态唤醒的通用数字 I/O
+PA19 12 34 23 22 I/O 通用数字 I/O
+PA20 13 35 24 23 I/O 通用数字 I/O
+PA21 17 39 25 24 I/O 通用数字 I/O
+PA22 18 40 26 25 I/O 通用数字 I/O
+PA23 24 43 27 26 I/O 通用数字 I/O
+PA24 25 44 28 27 I/O 通用数字 I/O
+PA25 26 45 29 28 I/O 通用数字 I/O
+PA26 30 46 30 1 I/O 通用数字 I/O
+PA27 31 47 31 2 I/O 通用数字 I/O
+PA28 35 3 – – I/O 可从关断状态唤醒的通用数字 I/O
+PA29 36 – – – I/O 通用数字 I/O
+PA30 37 – – – I/O 通用数字 I/O
+PA31 39 5 – – I/O 可从关断状态唤醒的通用数字 I/O
+PB0 47 – – – I/O 通用数字 I/O
+PB1 48 – – – I/O 通用数字 I/O
+PB2 50 14 – – I/O 通用数字 I/O
+PB3 51 15 – – I/O 通用数字 I/O
+PB4 52 – – – I/O 通用数字 I/O
+PB5 53 – – – I/O 通用数字 I/O
+PB6 58 20 – – I/O 通用数字 I/O
+PB7 59 21 – – I/O 通用数字 I/O
+PB8 60 22 – – I/O 通用数字 I/O
+PB9 61 23 – – I/O 通用数字 I/O
+PB10 62 – – – I/O 通用数字 I/O
+PB11 63 – – – I/O 通用数字 I/O
+PB12 64 – – – I/O 通用数字 I/O
+PB13 1 – – – I/O 通用数字 I/O
+PB14 2 24 – – I/O 通用数字 I/O
+PB15 3 25 – – I/O 通用数字 I/O
+PB16 4 26 – – I/O 通用数字 I/O
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 17
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 17 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+表 6-3. 信号说明 （续）
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+PB17 14 36 – – I/O 通用数字 I/O
+PB18 15 37 – – I/O 通用数字 I/O
+PB19 16 38 – – I/O 通用数字 I/O
+PB20 19 41 – – I/O 通用数字 I/O
+PB21 20 – – – I/O 通用数字 I/O
+PB22 21 – – – I/O 通用数字 I/O
+PB23 22 – – – I/O 通用数字 I/O
+PB24 23 42 – – I/O 通用数字 I/O
+PB25 27 – – – I/O 通用数字 I/O
+PB26 28 – – – I/O 通用数字 I/O
+PB27 29 – – – I/O 通用数字 I/O
+I2C I2C0_SCL 34 2 2 5 I/O I2C0 串行时钟
+39 5 15 16
+57 19
+I2C0_SDA 33 1 1 4 I/O I2C0 串行数据
+35 3 14 15
+56 18
+I2C1_SCL 8 10 8 11 I/O I2C1 串行时钟
+10 14 15 16
+36 19 19 18
+44 30 21 20
+50 32
+57
+I2C1_SDA 9 9 7 10 I/O I2C1 串行数据
+11 15 14 15
+37 18 20 19
+43 31 22 21
+51 33
+56
+具有斩波功能 OPA0_IN0+ 30 46 30 1 I OPA0 同相端子输入 0
+的运算放大器
+（零漂移运算
+放大器）
+OPA0_IN1+ 26 45 29 28 I OPA0 同相端子输入 1
+OPA0_IN2+ 8 30 19 18 I OPA0 同相端子输入 2
+OPA0_IN0- 31 47 31 2 I OPA0 反相端子输入 0
+OPA0_IN1- 25 44 28 27 I OPA0 反相端子输入 1
+OPA0_OUT 18 40 26 25 O OPA0 输出
+OPA1_IN0+ 16 38 – – I OPA1 同相端子输入 0
+OPA1_IN1+ 11 33 22 21 I OPA1 同相端子输入 1
+OPA1_IN2+ 8 30 19 18 I OPA1 同相端子输入 2
+OPA1_IN0- 19 41 – – I OPA1 反相端子输入 0
+OPA1_IN1- 10 32 21 20 I OPA1 反相端子输入 1
+OPA1_OUT 9 31 20 19 O OPA1 输出
+18 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 18 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+表 6-3. 信号说明 （续）
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+电源 VSS 41 7 5 8 P 接地电源
+VDD 40 6 4 7 P 电源
+VCORE 32 48 32 3 P 稳压内核电源输出
+QFN 焊盘 – Pad Pad – P QFN 封装外露散热焊盘TI 建议连接至 V 。
+SS
+RTC RTC_OUT 31 17 13 2 O RTC 时钟输出
+55 47 31 14
+SPI SPI0_CS0 27 8 6 9 I/O SPI0 芯片选择 0
+42 16 12
+54
+SPI0_CS1 23 9 7 10 I/O SPI0 芯片选择 1
+28 20
+43 42
+58
+SPI0_CS2 19 21 28 27 I/O SPI0 芯片选择 2
+25 41
+59 44
+SPI0_CS3 2 24 27 26 I/O SPI0 芯片选择 3
+23 42
+24 43
+SPI0_SCK 5 12 10 13 I/O SPI0 时钟信号输入 – SPI 外设模式
+15 19 15 16 时钟信号输出 – SPI 控制器模式
+46 27 16
+57 37
+SPI0_POCI 6 10 8 11 I/O SPI0 控制器输入/外设输出
+16 18 14 15
+44 28 17
+56 38
+SPI0_PICO 7 11 9 12 I/O SPI0 控制器输出/外设输入
+14 17 13 14
+45 29 18 17
+55 36
+SPI1_CS0 19 8 6 1 I/O SPI1 芯片选择 0
+30 20 30 9
+42 41
+58 46
+SPI1_CS1 14 36 31 2 I/O SPI1 芯片选择 1
+29 47
+31
+SPI1_CS2 8 30 19 18 I/O SPI1 芯片选择 2
+15 37
+47
+SPI1_CS3 2 24 29 28 I/O SPI1 芯片选择 3
+26 45
+48
+SPI1_SCK 4 23 21 20 I/O SPI1 时钟信号输入 – SPI 外设模式
+10 26 时钟信号输出 – SPI 控制器模式
+22 32
+61
+SPI1_POCI 2 21 20 19 I/O SPI1 控制器输入/外设输出
+9 24
+20 31
+59
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 19
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 19 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+表 6-3. 信号说明 （续）
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+SPI1_PICO 3 22 22 21 I/O SPI1 控制器输出/外设输入
+11 25
+21 33
+60
+系统 NRST 38 4 3 6 I 复位输入低电平有效
+计时器 TIMG0_C0 5 11 9 12 I/O 通用计时器 0 CCR0 捕捉输入/比较输出
+24 27 16 26
+45 43 27
+62
+TIMG0_C1 6 12 10 13 I/O 通用计时器 0 CCR1 捕捉输入/比较输出
+25 28 17 27
+46 44 28
+63
+TIMG6_C0 17 11 9 12 I/O 通用计时器 6 CCR0 捕捉输入/比较输出
+28 14 25 24
+36 20
+45 39
+50
+58
+62
+TIMG6_C1 18 12 10 13 I/O 通用计时器 6 CCR1 捕捉输入/比较输出
+29 15 26 25
+37 21
+46 40
+51
+59
+63
+TIMG7_C0 3 3 7 1 I/O 通用计时器 7 CCR1 捕捉输入/比较输出
+10 9 21 10
+24 25 27 20
+30 32 30 26
+35 43
+43 46
+TIMG7_C1 4 5 6 2 I/O 通用计时器 7 CCR1 捕捉输入/比较输出
+11 8 8 9
+16 10 11 11
+25 13 22 21
+31 26 28 27
+39 33 31
+42 38
+44 44
+49 47
+TIMG8_C0 3 2 2 1 I/O 通用计时器 8 CCR0 捕捉输入/比较输出
+17 9 7 5
+20 11 9 10
+24 13 11 12
+30 20 25 24
+34 25 27 26
+36 39 30
+43 43
+45 46
+49
+58
+62
+20 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 20 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+表 6-3. 信号说明 （续）
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+TIMG8_C1 4 1 1 2 I/O 通用计时器 8 CCR1 捕捉输入/比较输出
+16 8 6 4
+18 10 8 9
+21 12 10 11
+31 21 26 13
+33 26 31 25
+37 38
+42 40
+44 47
+46
+59
+63
+TIMG8_IDX 2 2 2 5 I 通用计时器 8 正交编码器索引脉冲输入
+8 13 11 18
+34 24 19
+49 30
+TIMG12_C0 1 18 14 15 I/O 32 位通用计时器 0 CCR0 捕捉输入/比较输出
+7 29 18 17
+19 41
+56
+TIMG12_C1 2 5 29 28 I/O 32 位通用计时器 0 CCR1 捕捉输入/比较输出
+23 24
+26 42
+39 45
+TIMA0_C0 2 1 1 4 I/O 高级控制计时器 0 CCR0 捕捉输入/比较输出
+17 16 12 24
+33 22 25
+54 24
+60 39
+TIMA0_C0N 18 17 13 14 I/O 高级控制计时器 0 CCR0 比较输出（反相）
+55 23 26 25
+61 40
+TIMA0_C1 18 2 2 5 I/O 高级控制计时器 0 CCR1 捕捉输入/比较输出
+34 9 7 10
+43 17 11 14
+49 23 13 25
+55 40 26
+61 41
+64
+TIMA0_C1N 1 10 8 11 I/O 高级控制计时器 0 CCR1 比较输出（反相）
+19 17 13 14
+23 41 29 28
+26 42
+44 45
+55
+TIMA0_C2 8 9 7 10 I/O 高级控制计时器 0 CCR2 捕捉输入/比较输出
+14 13 11 15
+19 18 14 18
+43 30 19
+47 36
+49 41
+52
+56
+64
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 21
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 21 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+表 6-3. 信号说明 （续）
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+TIMA0_C2N 9 12 10 13 I/O 高级控制计时器 0 CCR2 比较输出（反相）
+15 19 15 16
+46 31 20 19
+48 37
+53
+57
+TIMA0_C3 1 3 8 11 I/O 高级控制计时器 0 CCR3 捕捉输入/比较输出
+5 10 16 20
+10 14 21 26
+23 27 27 28
+24 32 29
+26 42
+28 43
+35 45
+44
+50
+TIMA0_C3N 6 5 17 21 I/O 高级控制计时器 0 CCR3 比较输出（反相）
+11 15 22 27
+25 28 28
+29 33
+39 44
+51
+TIMA1_C0 8 3 14 15 I/O 高级控制计时器 1 CCR0 捕捉输入/比较输出
+10 14 19 18
+14 18 21 20
+28 30
+35 32
+47 36
+50
+52
+56
+TIMA1_C0N 8 16 12 18 I/O 高级控制计时器 0 CCR3 比较输出（反相）
+23 20 19
+52 30
+54 42
+58
+TIMA1_C1 9 5 15 16 I/O 高级控制计时器 1 CCR1 捕捉输入/比较输出
+11 15 20 19
+15 19 22 21
+25 31 28 27
+29 33
+39 37
+48 44
+51
+53
+57
+TIMA1_C1N 9 17 13 14 I/O 高级控制计时器 1 CCR1 比较输出（反相）
+19 21 20 19
+53 31
+55 41
+59
+TIMA_FAL0 22 3 10 1 I 高级控制计时器 0 故障处理输入
+30 12 30 13
+35 46
+46
+22 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 22 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+表 6-3. 信号说明 （续）
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+TIMA_FAL1 19 1 1 4 I 高级控制计时器 1 故障处理输入
+33 11 9 12
+45 41
+64
+TIMA_FAL2 27 2 2 2 I 高级控制计时器 2 故障处理输入
+31 47 31 5
+34
+UART UART0_TX 33 1 1 4 O UART0 发送数据
+35 3 14 15
+47 18
+56
+UART0_RX 34 2 2 5 I UART0 接收数据
+39 5 15 16
+48 19
+57
+UART0_CTS 7 17 13 14 I UART0“允许发送”流控制输入
+16 29 18 17
+27 38
+55
+UART0_RTS 8 16 12 18 O UART0“请求发送”流控制输出
+28 30 19
+54
+UART1_TX 10 16 12 20 O UART1 发送数据
+52 20 21
+54 32
+58
+UART1_RX 11 17 13 14 I UART1 接收数据
+53 21 22 21
+55 33
+59
+UART1_CTS 17 14 25 24 I UART1“允许发送”流控制输入
+50 22
+60 39
+UART1_RTS 18 15 26 25 O UART1“请求发送”流控制输出
+51 23
+61 40
+UART2_TX 3 25 25 24 O UART2 发送数据
+14 36 27 26
+17 39
+24 43
+UART2_RX 4 26 26 25 I UART2 接收数据
+15 37 28 27
+18 40
+25 44
+UART2_CTS 37 9 7 10 I UART2“允许发送”流控制输入
+43 14
+50 20
+58
+UART2_RTS 36 10 8 11 O UART2“请求发送”流控制输出
+44 15
+51 21
+59
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 23
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 23 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+表 6-3. 信号说明 （续）
+功能 信号名称 引脚编号(1) 引脚类型(2) 说明
+64 PM 48 32 28
+PT、 RHB DGS28
+RGZ
+UART3_TX 7 14 18 1 O UART3 发送数据
+30 29 30 17
+50 46
+64
+UART3_RX 1 15 17 28 I UART3 接收数据
+6 28 29
+26 45
+51
+UART3_CTS 3 25 16 26 I UART3“允许发送”流控制输入
+5 27 27
+24 43
+52
+UART3_RTS 4 26 17 27 O UART3“请求发送”流控制输出
+6 28 28
+25 44
+53
+电压基准(3) VREF+ 24 43 27 26 I/O 电压基准 (VREF) 电源 - 外部基准输入/内部基准输出
+VREF- 17 39 25 24 I/O 电压基准 (VREF) 接地电源 - 外部基准输入/内部基准输出
+(1) – = 不适用
+(2) I = 输入，O = 输出，I/O = 输入或输出，P = 电源
+(3) 当使用 VREF± 为 ADC 等模拟外设提供外部电压基准时，必须在 VREF+ 与 VREF-/GND 之间放置一个去耦电容，该电容基于外部基准
+源
+6.4 未使用引脚的连接
+表 6-4 列出了未使用引脚的正确端接方式。
+表 6-4. 未使用引脚的连接
+引脚(1) 电势 注释
+将相应的引脚功能设置为 GPIO (PINCMx.PF = 0x1) 并通过启用内部上拉或下拉电阻将未使
+PAx 和 PBx 开路
+用的引脚配置为输出低电平或输入。
+NRST 是低电平有效复位信号。将该引脚上拉至 VCC，否则器件无法启动。有关更多信息，
+NRST VCC
+请参阅节 9.1。
+(1) 任何具有第二功能（与通用 I/O 共用）的未使用引脚都必须遵循“PAx 和 PBx”未使用引脚连接指南。
+24 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 24 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7 规格
+7.1 绝对最大额定值
+在自然通风条件下的工作温度范围内测得（除非另有说明）(1)
+最小值 最大值 单位
+VDD 电源电压 在 VDD 引脚处 -0.3 4.1 V
+V I 输入电压 施加到任何 5V 容限开漏引脚 -0.3 5.5 V
+V + 0.3
+DD
+V I 输入电压 施加到任何常见容限引脚 -0.3 （最大值为 V
+4.1）
+-40℃ ≤ T ≤ 130℃
+I
+流入 VDD 引脚的电流（拉 j 80 mA
+VDD 电流） (4)
+-40℃ ≤ T≤ 90℃ 100 mA
+j
+-40℃ ≤ T≤ 130℃
+I
+流出 VSS 引脚的电流（灌 j 80 mA
+VSS 电流） (4)
+-40℃ ≤ T≤ 90℃ 100 mA
+j
+SDIO 引脚的电流 SDIO 引脚灌入或拉出的电流 6 mA
+HSIO 引脚的电流 HSIO 引脚灌入或拉出的电流 6 mA
+I
+IO
+HDIO 引脚的电流 HDIO 引脚灌入或拉出的电流 20 mA
+ODIO 引脚的电流 ODIO 引脚灌入的电流 20 mA
+I D 受支持的二极管电流(3) 任一器件引脚上的二极管电流 -2 +2 mA
+T A 环境温度 环境温度 -40 125 °C
+T J 结温 结温 -40 130 °C
+T 贮存温度(2) 贮存温度(2) -40 150 °C
+stg
+(1) 超出“绝对最大额定值”运行可能会对器件造成永久损坏。“绝对最大额定值”并不表示器件在这些条件下或在“建议运行条件”以外
+的任何其他条件下能够正常运行。如果超出“建议运行条件”但在“绝对最大额定值”范围内使用，器件可能不会完全正常运行，这可
+能影响器件的可靠性、功能和性能并缩短器件寿命。
+(2) 电路板焊接期间可以采用较高的温度，根据现行的 JEDEC J-STD-020 规范，峰值回流焊温度不得超过器件装运包装盒或卷盘上标注的
+界定值。
+(3) PA21 具有用于测试目的的内部连接，该引脚上不允许注入电流。
+(4) 对于在 VDD = 1.62V 下运行的应用，需要 I_VDD/I_VSS<=20mA 来确保器件正常工作
+7.2 ESD 等级
+值 单位
+人体放电模型 (HBM)，符合 ANSI/ESDA/JEDEC
+±2000
+JS-001 标准，所有引脚(1)
+V (ESD) 静电放电 V
+充电器件模型 (CDM)，符合 JEDEC 规范
+±500
+JESD22-C101，所有引脚(2)
+(1) JEDEC 文档 JEP155 指出：500V HBM 可通过标准 ESD 控制流程实现安全生产。
+(2) JEDEC 文档 JEP157 指出：250V CDM 能够在标准 ESD 控制流程下安全生产。
+7.3 建议运行条件
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+最小值 标称值 最大值 单位
+VDD 电源电压 1.62 3.6 V
+VCORE VCORE 引脚上的电压(2) 1.35 V
+C VDD VDD 和 VSS 之间连接的电容器 (1) 10 uF
+C VCORE VCORE 和 VSS 之间连接的电容器 (1) (2) 470 nF
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 25
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 25 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.3 建议运行条件 （续）
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+最小值 标称值 最大值 单位
+T
+A
+环境温度，S 版本 -40 125 °C
+T
+J
+最大结温，S 版本 130 °C
+具有 2 个闪存等待状态的 MCLK、CPUCLK 频率 (3) 80
+f MCLK（PD1 总线时
+具有 1 个闪存等待状态的 MCLK、CPUCLK 频率 (3) 48 MHz
+钟）
+具有 0 个闪存等待状态的 MCLK、CPUCLK 频率 (3) 24
+f ULPCLK（PD0 总线时
+ULPCLK 频率 40 MHz
+钟）
+(1) 分别在 VDD/VSS 和 VCORE/VSS 之间连接 C 和 C 并尽可能靠近器件引脚。 C 和 C 需要一个至少具有该额定值和
+VDD VCORE VDD VCORE
+±20% 或更高容差的低 ESR 电容器。
+(2) VCORE 引脚只能连接到 C 。 请勿向 VCORE 引脚提供任何电压或施加任何外部负载。
+VCORE
+(3) 等待状态由系统控制器 (SYSCTL) 自动管理，无需由应用软件进行配置，除非 MCLK 来自高速时钟源（HFCLK 或 SYSPLL 提供的
+HSCLK）。
+7.4 热性能信息
+热指标(1) 封装 值 单位
+RθJA 结至环境热阻 61.8 °C/W
+RθJC(top) 结至外壳（顶部）热阻 22.0 °C/W
+RθJB 结至电路板热阻 33.0 °C/W
+LQFP-64 (PM)
+Ψ 结至顶部特征参数 1.7 °C/W
+JT
+Ψ 结至电路板特征参数 32.7 °C/W
+JB
+RθJC(bot) 结至外壳（底部）热阻 不适用 °C/W
+RθJA 结至环境热阻 30.1 °C/W
+RθJC(top) 结至外壳（顶部）热阻 20.7 °C/W
+RθJB 结至电路板热阻 12.5 °C/W
+VQFN-48 (RGZ)
+Ψ 结至顶部特征参数 0.3 °C/W
+JT
+Ψ 结至电路板特征参数 12.4 °C/W
+JB
+RθJC(bot) 结至外壳（底部）热阻 4.2 °C/W
+RθJA 结至环境热阻 69.2 °C/W
+RθJC(top) 结至外壳（顶部）热阻 27.4 °C/W
+RθJB 结至电路板热阻 32.6 °C/W
+LQFP-48 (PT)
+Ψ 结至顶部特征参数 2.6 °C/W
+JT
+Ψ 结至电路板特征参数 32.3 °C/W
+JB
+RθJC(bot) 结至外壳（底部）热阻 不适用 °C/W
+RθJA 结至环境热阻 32.1 °C/W
+RθJC(top) 结至外壳（顶部）热阻 23.6 °C/W
+RθJB 结至电路板热阻 13.0 °C/W
+VQFN-32 (RHB)
+Ψ 结至顶部特征参数 0.3 °C/W
+JT
+Ψ 结至电路板特征参数 13.0 °C/W
+JB
+RθJC(bot) 结至外壳（底部）热阻 3.3 °C/W
+26 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 26 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.4 热性能信息 （续）
+热指标(1) 封装 值 单位
+RθJA 结至环境热阻 78.9 °C/W
+RθJC(top) 结至外壳（顶部）热阻 38.6 °C/W
+RθJB 结至电路板热阻 41.3 °C/W
+VSSOP-28 (DGS28)
+Ψ 结至顶部特征参数 3.4 °C/W
+JT
+Ψ 结至电路板特征参数 41.0 °C/W
+JB
+RθJC(bot) 结至外壳（底部）热阻 不适用 °C/W
+(1) 有关新旧热指标的更多信息，请参阅半导体和 IC 封装热指标应用报告。
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 27
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 27 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.5 电源电流特性
+7.5.1 运行/睡眠模式
+VDD=3.3V。 所有输入都连接至 0V 或 VDD。输出不供应或吸收任何电流。 所有外设均禁用。
+-40°C 25°C 85°C 105°C 125°C
+参数 MCLK 典型 最大 典型 最大 典型 最大 典型 最大 典型 最大 单位
+值 值 值 值 值 值 值 值 值 值
+RUN 模式
+MCLK=SYSPLL， 80MHz 8 8.1 8.2 8.4 8.7
+SYSPLLREF=SYSOSC，
+CoreMark，从闪存执行 48MHz 5 4.9 5.3 5.2 5.8
+MCLK=SYSOSC、CoreMark，从闪 32MHz 3.5 3.6 3.8 3.9 4.2
+存执行 4MHz 0.7 0.7 0.8 1.0 1.4
+IDD mA
+RUN
+MCLK=SYSPLL， 80MHz 6.2 6.3 6.5 6.6 7
+SYSPLLREF=SYSOSC，
+CoreMark，从 SRAM 执行 48MHz 3.9 4 4.2 4.6 5.0
+MCLK=SYSOSC、CoreMark，从 32MHz 2.6 2.7 2.8 3.0 3.4
+SRAM 执行 4MHz 0.6 0.6 0.8 0.9 1.2
+MCLK=SYSPLL，
+SYSPLLREF=SYSOSC， 80MHz 100 101 103 105 109
+IDD RUN， CoreMark，从闪存执行
+uA/MHz
+每 MHz MCLK=SYSPLL，
+SYSPLLREF=SYSOSC，While(1)， 80MHz 54 63 55 66 57 70 58 78 64 85
+从闪存执行
+SLEEP 模式
+MCLK=SYSPLL， 80MHz 3127 3280 3189 3400 3334 3893 3474 4402 3800 5509 uA
+SYSPLLREF=SYSOSC，CPU 暂停 48MHz 2134 2416 2183 2500 2325 2885 2465 3404 2785 4400 uA
+IDD
+SLEEP
+MCLK=SYSOSC，CPU 暂停 32MHz 1436 1525 1473 1593 1608 2113 1745 2626 2094 3731 uA
+MCLK=SYSOSC，CPU 暂停 4MHz 463 530 487 620 662 1220 738 1640 1640 2834 uA
+MCLK=SYSPLL，
+IDD
+SLEEP SYSPLLREF=SYSOSC，CPU 80MHz 39 40 42 43 48 uA/MHz
+，每 MHz
+暂停
+7.5.2 停止/待机模式
+VDD=3.3V。所有输入都连接至 0V 或 VDD。 输出不供应或吸收任何电流。 所有未注明的外设均被禁用。
+-40°C 25°C 85°C 105°C 125°C
+参数 ULPCLK 典型 最大 典型 最大 典型 最大 典型 最大 典型 最大 单位
+值 值 值 值 值 值 值 值 值 值
+STOP 模式
+SYSOSC=32MHz，
+IDD
+STOP0
+USE4MHZSTOP=0， 352 444 360 450 364 474 370 504 381 577
+DISABLESTOP=0
+4MHz
+SYSOSC=4MHz，
+IDD STOP1 USE4MHZSTOP=1， 184 205 190 210 195 250 200 260 213 300 uA
+DISABLESTOP=0
+SYSOSC 关闭，
+IDD STOP2 DISABLESTOP=1， 32kHz 45 64 47 67 54 90 59 130 71 170
+ULPCLK=LFCLK
+STANDBY 模式
+28 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 28 =====
+7.5.2 停止/待机模式 （续）
+VDD=3.3V。所有输入都连接至 0V 或 VDD。 输出不供应或吸收任何电流。 所有未注明的外设均被禁用。
+-40°C 25°C 85°C 105°C 125°C
+参数 ULPCLK 典型 最大 典型 最大 典型 最大 典型 最大 典型 最大 单位
+值 值 值 值 值 值 值 值 值 值
+LFCLK=LFXT，
+IDD 2 7 2 7 5 40 9 75 20 105
+STBY0 STOPCLKSTBY=0，RTC 已启用
+LFCLK=LFOSC，
+1.4 6 1.5 7 4 40 8 70 16 100
+STOPCLKSTBY=1，RTC 已启用
+32kHz uA
+LFCLK=LFXT，
+IDD 1.4 3 1.5 4 4 40 8 70 16 100
+STBY1 STOPCLKSTBY=1，RTC 已启用
+LFCLK = LFXT，STOPCLKSTBY =
+1.4 3 1.5 4 4 40 8 70 16 100
+1，GPIOA 已启用
+7.5.3 关断模式
+所有输入都连接至 0V 或 VDD。输出不供应或吸收任何电流。内核稳压器关断。
+-40°C 25°C 85°C 105°C 125°C
+参数 VDD 典型 最大 典型 最大 典型 最大 典型 最大 典型 最大 单位
+值 值 值 值 值 值 值 值 值 值
+IDD SHDN SHUTDOWN 模式下的电源电流 3.3V 40 80 730 1730 4800 nA
+7.6 电源时序
+7.6.1 电源斜坡
+图 7-1 显示了上电和下电期间 POR-、POR+、BOR0- 和 BOR0+ 之间的关系。
+POR BOR Running BOR Running POR BOR Running
+)DDV(
+egatloV
+ylppuS
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+No reset
+asserted
+BOR0+
+BOR0-
+BOR BOR BOR BOR BOR
+released asserted released asserted released
+POR+
+POR-
+POR POR POR
+released asserted released
+POR/BOR levels are met Time (t)
+for specified |dVDD/dt|
+图 7-1. 下电上电 POR 和 BOR 条件
+7.6.1.1 POR 和 BOR
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+上升 0.1
+V/us
+dVDD/dt VDD（电源电压）压摆率 下降(1) 0.01
+下降，待机 0.1 V/ms
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 29
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 29 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.6.1.1 POR 和 BOR （续）
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+V POR+ 上升 0.95 1.30 1.59 V
+上电复位电压电平
+V POR- 下降 0.9 1.25 1.54 V
+V HYS, POR POR 迟滞 30 58 74 mV
+-40℃ ≤ T ≤ 25℃ 冷
+a 1.50 1.56 1.63
+V 启动，上升
+BOR0+,
+COLD 25℃ ≤ T a ≤ 125℃ 冷 1.51 1.58 1.65
+欠压复位电压电平 0（默认电平）
+启动，上升
+V
+V 上升(1) 1.56 1.59 1.62
+BOR0+
+V
+BOR0-
+下降 (1) 1.55 1.58 1.61
+V BOR0, STBY 待机模式 1.51 1.56 1.61
+V 上升(1) 2.13 2.17 2.21
+BOR1+
+V
+BOR1-
+欠压复位电压电平 1 下降 (1) 2.10 2.14 2.18 V
+V BOR1, STBY 待机模式 2.06 2.13 2.20
+V 上升(1) 2.73 2.77 2.82
+BOR2+
+V
+BOR2-
+欠压复位电压电平 2 下降 (1) 2.7 2.74 2.79 V
+V BOR2, STBY 待机模式 2.62 2.71 2.8
+V 上升(1) 2.88 2.96 3.04
+BOR3+
+V
+BOR3-
+欠压复位电压电平 3 下降 (1) 2.85 2.93 3.01 V
+V BOR3, STBY 待机模式 2.82 2.92 3.02
+0 级 15 21
+V HYS,BOR 欠压复位迟滞 mV
+级别 1-3 34 40
+RUN/SLEEP/STOP 模
+5 us
+T PD, BOR BOR 传播延迟 式
+待机模式 100 us
+(1) 器件在运行、睡眠或停止模式下工作。
+7.7 闪存特性
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+电源
+VDD PGM/ERASE 编程及擦除电源电压 1.62 3.6 V
+IDD ERASE 擦除操作期间从 VDD 获得的电源电流 电源电流差值 10 mA
+IDD PGM 编程操作期间从 VDD 获得的电源电流 电源电流差值 10 mA
+耐久性
+NWEC(HI_ENDU 针对闪存存储器的选定 32 个扇区的擦
+100 k 个周期
+RANCE) 除/编程周期耐久性 (1)
+NWEC
+擦除/编程周期耐久性（闪存存储器不
+(NORMAL_ENDU 10 k 个周期
+用于 HI_ENDURANCE）(1)
+RANCE)
+NE (MAX) 发生故障前的总擦除操作 (2) 802 K 擦除操作
+NW (MAX) 在扇区擦除之前每个字线的写入操作 (3) 83 写入操作
+保持
+t RET_85 闪存存储器数据保留 -40°C <= T j <= 85°C 60 年
+30 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 30 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.7 闪存特性 （续）
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+t RET_105 闪存存储器数据保留 -40°C <= T j <= 105°C 11.4 年
+编程和擦除时序
+t
+PROG (WORD, 64)
+闪存字的编程时间 (4) (6) 50 275 µs
+t PROG (SEC, 64) 1kB 扇区的编程时间(5) (6) 6.4 ms
+t ERASE (SEC) 扇区擦除时间 2
+≤
+5
+2
+°C
+k 个擦除/编程周期，T
+j
+≥
+4 20 ms
+t ERASE (SEC) 扇区擦除时间
+≤
+≥
+1
+2
+0
+5
+k
+° C
+个擦除/编程周期，T
+j 20 150 ms
+t ERASE (SEC) 扇区擦除时间 <10k 个擦除/编程周期 20 200 ms
+t ERASE (BANK) 组擦除时间 <10k 个擦除/编程周期 22 220 ms
+(1) 主闪存存储体或数据存储体中多达 32 个由应用选择的扇区可用作高耐久性扇区。这使得应用能够频繁更新闪存数据，例如 EEPROM 仿
+真。
+(2) 发生故障前闪存支持的累计擦除操作总数。一次扇区擦除或组擦除操作被视为一次擦除操作。
+(3) 必须擦除字线之前、每个字线允许的最大写入操作数。如果需要对同一个字线执行额外的写入操作，则一旦达到每个字线的最大写入操
+作数，就需要执行扇区擦除。
+(4) 编程时间定义为从触发编程命令到在闪存控制器中设置命令完成中断标志所需的时间。
+(5) 扇区编程时间定义为从第一个字编程命令被触发到最后一个字编程命令完成并且在闪存控制器中设置中断标志所需的时间。 该时间包括
+在扇区编程期间软件将每个闪存字（在第一个闪存字之后）加载到闪存控制器所需的时间。
+(6) 闪存字大小为 64 个数据位（8 个字节）。在具有 ECC 的器件上，总闪存字大小为 72 位（64 个数据位加 8 个 ECC 位）。
+7.8 时序特性
+VDD=3.3V，T =25℃（除非另有说明）
+a
+参数 测试条件 最小值 典型值 最大值 单位
+唤醒时间
+t
+WAKE, 从 SLEEP0 到运行的唤醒时间 (1) 1.3 us
+SLEEP0
+t
+WAKE, 从 SLEEP1 到运行的唤醒时间 (1) 1.5 us
+SLEEP1
+t
+WAKE, 从 SLEEP2 到运行的唤醒时间 (1) 2.1 us
+SLEEP2
+t
+WAKE, 从 STANDBY0 到运行的唤醒时间 (1) 15.2 us
+STANDBY0
+t
+WAKE, 从 STANDBY1 到运行的唤醒时间 (1) 15.2 us
+STANDBY1
+t 从 STOP0 到运行的唤醒时间
+WAKE, 12.1 us
+STOP0 （SYSOSC 启用）(1)
+t 从 STOP1 到运行的唤醒时间
+WAKE, 13.5
+STOP1 （SYSOSC 启用）(1)
+us
+t 从 STOP2 到运行的唤醒时间
+WAKE, 12.9
+STOP2 （SYSOSC 禁用）(1)
+t 快速启动启用 240
+WAKEUP, 从关断到运行的唤醒时间 (2) us
+SHDN 快速启动禁用 252
+异步快速时钟请求时序
+t 从异步请求的边沿到第一个 32MHz
+DELAY, 模式为 SLEEP1 0.33 us
+SLEEP1 MCLK 边沿的延迟时间
+t 从异步请求的边沿到第一个 32MHz
+DELAY, 模式为 SLEEP2 0.93 us
+SLEEP2 MCLK 边沿的延迟时间
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 31
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 31 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.8 时序特性 （续）
+VDD=3.3V，T =25℃（除非另有说明）
+a
+参数 测试条件 最小值 典型值 最大值 单位
+t 从异步请求的边沿到第一个 32MHz
+DELAY, 模式为 STANDBY0 3.2 us
+STANDBY0 MCLK 边沿的延迟时间
+t 从异步请求的边沿到第一个 32MHz
+DELAY, 模式为 STANDBY1 3.2 us
+STANDBY1 MCLK 边沿的延迟时间
+t 从异步请求的边沿到第一个 32MHz
+DELAY, 模式为 STOP0 0.1 us
+STOP0 MCLK 边沿的延迟时间
+t 从异步请求的边沿到第一个 32MHz
+DELAY, 模式为 STOP1 2.4 us
+STOP1 MCLK 边沿的延迟时间
+t 从异步请求的边沿到第一个 32MHz
+DELAY, 模式为 STOP2 0.9 us
+STOP2 MCLK 边沿的延迟时间
+启动时序
+t 快速启动启用 260
+START, 器件从复位/上电开始的冷启动时间 (3) us
+RESET 快速启动禁用 308
+NRST 时序
+t RST, NRST 引脚上用于生成 BOOTRST 的 ULPCLK≥4MHz 1.5 us
+BOOTRST 脉冲长度 ULPCLK=32kHz 80
+NRST 引脚上用于生成 POR 的脉冲长
+t 1 s
+RST, POR 度
+(1) 唤醒时间是指从外部唤醒信号（GPIO 唤醒事件）的边沿到执行用户程序第一条指令所需的时间，其中干扰滤波器禁用
+(FILTEREN=0x0) 且快速唤醒启用 (FASTWAKEONLY=1)。
+(2) 唤醒时间是指从外部唤醒信号（IOMUX 唤醒事件）的边沿到执行用户程序第一条指令的时间。
+(3) 启动时间是指从 VDD 超过 VBOR0-（冷启动）到执行用户程序第一条指令所需的时间。
+7.9 时钟规格
+7.9.1 系统振荡器 (SYSOSC)
+在自然通风条件下的工作温度范围内测得（除非另有说明）。测试条件表明设备可在所列条件下长期运行。
+参数 测试条件 最小值 典型值 最大值 单位
+SYSOSCCFG.FREQ=00 (BASE) 32
+出厂修整的 SYSOSC 频率
+SYSOSCCFG.FREQ=01 4
+f SYSOSC SYSOSCCFG.FREQ=10， 24 MHz
+SYSOSCTRIMUSER.FREQ=10
+用户修整的 SYSOSC 频率
+SYSOSCCFG.FREQ=10，
+16
+SYSOSCTRIMUSER.FREQ=01
+SETUSEFCL=1，T
+a
+= 25℃ -0.60 0.68
+启用频率校正环路 (FCL) 并假设使用理想 SETUSEFCL=1，-40°C ≤ T
+a
+≤ 85°C -0.80 0.93
+f SYSOSC ROSC 电阻器时的 SYSOSC 频率精度 (1) %
+(2) SETUSEFCL=1，-40 ℃ ≤ T a ≤ 105 ℃ -0.80 1.1
+SETUSEFCL=1，-40 ℃ ≤ T
+a
+≤ 125 ℃ -0.80 1.3
+SETUSEFCL=1，T
+a
+= 25℃，±0.1%
+-0.7 0.78
+±25ppm R
+OSC
+启用频率校正环路 (FCL) 且 R 电阻器
+SETUSEFCL=1，-40℃ ≤ T
+a
+≤ 85℃，
+-1.1 1.2
+OSC ±0.1% ±25ppm R
+OSC
+f SYSOSC 置于 R OSC 引脚时的 SYSOSC 精度，适用 %
+于经过出厂修整的频率 (1) (5) (6) SETUSEFCL=1，-40℃ ≤ T a ≤ 105℃， -1.1 1.4
+±0.1% ±25ppm R
+OSC
+SETUSEFCL=1，-40℃ ≤ T
+a
+≤ 125℃，
+-1.1 1.7
+±0.1% ±25ppm R
+OSC
+32 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 32 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.9.1 系统振荡器 (SYSOSC) （续）
+在自然通风条件下的工作温度范围内测得（除非另有说明）。测试条件表明设备可在所列条件下长期运行。
+参数 测试条件 最小值 典型值 最大值 单位
+使用内部 ROSC 电阻器且启用频率校正环 SETUSEFCL=1，T
+a
+= 25℃ 0 1.0
+f SYSOSC 路 (FCL)，频率为 32MHz 时的 SYSOSC
+频率精度(4) (5) (6) SETUSEFCL=1，-40℃ ≤ T a ≤ 125℃ -2.1 1.6 %
+使用内部 ROSC 电阻器且启用频率校正环 SETUSEFCL=1，T
+a
+= 25℃ -1.2 1.7
+f SYSOSC 路 (FCL)，频率为 4MHz 时的 SYSOSC
+频率精度(4) (5) (6) SETUSEFCL=1，-40℃ ≤ T a ≤ 125℃ -2.3 1.8 %
+SETUSEFCL=0，
+禁用频率校正环路 (FCL) 后的 SYSOSC
+f
+SYSOSC 精度，32MHz (5) (6)
+SYSOSCCFG.FREQ=00，-40℃ ≤ T
+a
+≤ -2.6 1.8
+125℃
+%
+禁用频率校正环路 (FCL) 后的 SYSOSC SETUSEFCL=0，
+f SYSOSC 精度，适用于经过出厂调整的频率，4MHz SYSOSCCFG.FREQ=01，-40℃ ≤ T a ≤ -2.8 2.1
+(5) (6) 125℃
+在 ROSC 引脚和 VSS 之间安装外部电阻
+f SYSOSC 器 (1) SETUSEFCL=1 100 kΩ
+VDD>=1.8V，SETUSEFCL=1，±0.1%
+f
+SYSOSC
+达到目标精度的稳定时间 (3)
+25ppm R (1)
+30 us
+OSC
+(1) SYSOSC 频率校正环路 (FCL) 通过外部基准电阻 (R
+OSC
+) 实现高 SYSOSC 精度，当使用 FCL 时，该电阻必须连接在器件 ROSC 引脚
+和 VSS 之间。 所示精度为采用 ±0.1% ±25ppm R
+OSC
+时；也可以使用宽松容差电阻（SYSOSC 精度会有所降低）。 有关计算各种
+R
+OSC
+精度所对应的 SYSOSC 精度的详细信息，请参阅技术参考手册的“SYSOSC”一节。 如果未启用 FCL，则无需填充 R
+OSC
+。
+(2) 仅表示器件精度。 必须将所用 ROSC 电阻器的容差和温度漂移与此规格结合使用，以确定最终精度。 ±0.1% ±25ppm R
+OSC
+的性能作
+为基准点提供。
+(3) SYSOSC 被唤醒（例如，退出低功耗模式时）并且 FCL 已启用时，SYSOSC 最初将下冲目标频率 f SYSOSC，额外的误差最高为
+f settle,SYSOSC，时间为 t settle,SYSOSC，之后可达到目标精度。
+(4) 使用 FCL 时，SYSOSC 频率校正环路 (FCL) 可通过内部基准电阻器实现高 SYSOSC 精度。有关计算 SYSOSC 精度的详细信息，请参
+阅技术参考手册的“SYSOSC”部分。
+(5) SYSOSC 精度是在默认通电状态下测量的，MCLK = SYSOSC，CPU 正在运行 while(1) 循环，SYSPLL 被禁用。
+(6) 使用外部 1ms 脉冲作为测量触发器，通过内部 FCC 计数器测量 SYSOSC。
+7.9.2 SYSOSC 典型频率精度
+7.9.2.1 低频振荡器 (LFOSC)
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+LFOSC 频率 32768 Hz
+f LFOSC -40℃ ≤ T a ≤ 125℃ -5 5 %
+LFOSC 精度
+-40℃ ≤ T ≤ 85℃ -3 3 %
+a
+I LFOSC LFOSC 电流消耗 300 nA
+t
+start, LFOSC 启动时间 1 ms
+LFOSC
+7.9.3 系统锁相环 (SYSPLL)
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+f SYSPLLREF SYSPLL 基准频率范围(2) 4 48 MHz
+f VCO VCO 输出频率 80 400 MHz
+SYSPLLCLK0、SYSPLLCLK1 2.5 200
+f SYSPLL SYSPLL 输出频率范围(1) MHz
+SYSPLLCLK2X 10 400
+DC PLL SYSPLL 输出占空比 f SYSPLLREF =32MHz，f VCO =160MHz 45 55 %
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 33
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 33 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.9.3 系统锁相环 (SYSPLL) （续）
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+SYSPLL RMS 周期间抖动 60
+Jitter
+SYSPLL
+f
+SYSPLLREF
+=32MHz，f
+VCO
+=80MHz ps
+SYSPLL RMS 周期抖动 45
+I SYSPLL SYSPLL 电流消耗 f SYSPLLREF =32MHz，f VCO =160MHz 316 uA
+f 32MHz、PDIV=3、
+t start, SYSPLL SYSPLL 启动时间 Q S D YS IV PL = L 3 R 9 E 、 F f 160Mhz、±0.5% 精度 14 24 us
+VCO
+(1) SYSPLL 可以支持比器件时钟系统所支持更高的输出频率。 在配置 SYSPLL 输出频率时，请确保不违反器件最大频率规格。
+(2) 请参阅技术参考手册的表 2-6 中的 SYSPLL 调优参数。
+7.9.4 低频晶体/时钟
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+低频晶体振荡器 (LFXT)
+f LFXT LFXT 频率 32768 Hz
+DC LFXT LFXT 占空比 30 70 %
+OA LFXT LFXT 晶体振荡容差 419 kΩ
+C 集成的有效负载电容(1) 1 pF
+L, eff
+t start, LFXT LFXT 启动时间 1000 ms
+I LFXT LFXT 电流消耗 XT1DRIVE=0，LOWCAP=1 200 nA
+低频数字时钟输入 (LFCLK_IN)
+f LFIN LFCLK_IN 频率 (2) SETUSEEXLF=1 29491 32768 36045 Hz
+DC LFIN LFCLK_IN 占空比 (2) SETUSEEXLF=1 40 60 %
+LFCLK 监测器
+f FAULTLF LFCLK 监视器故障频率(3) MONITOR=1 2800 4200 8400 Hz
+(1) 这包括寄生接合和封装电容（每个引脚约为 2pF），计算公式为 C
+LFXIN
+×C
+LFXOUT
+/(C
+LFXIN
++C
+LFXOUT
+)，其中 C
+LFXIN
+和 C
+LFXOUT
+分别是
+LFXIN 和 LFXOUT 上的总电容。
+(2) 数字时钟输入 (LFCLK_IN) 接受逻辑电平方波时钟。
+(3) LFCLK 监视器可用于监视 LFXT 或 LFCLK_IN。 它将始终在低于 MIN 故障频率时发生故障，并且永远不会在高于 MAX 故障频率时发
+生故障。
+7.9.5 高频晶体/时钟
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+高频晶体振荡器 (HFXT)
+HFXTRSEL=00 4 8
+HFXTRSEL=01 8.01 16
+f HFXT HFXT 频率 MHz
+HFXTRSEL=10 16.01 32
+HFXTRSEL=11 32.01 48
+HFXTRSEL=00 40 65
+HFXTRSEL=01 40 60
+DC HFXT HFXT 占空比 %
+HFXTRSEL=10 40 60
+HFXTRSEL=11 40 60
+OA HFXT HFXT 晶体振荡容差 HFXTRSEL=00（4MHz 至 8MHz 范围） 2 kΩ
+C 集成的有效负载电容(1) 1 pF
+L, eff
+34 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 34 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.9.5 高频晶体/时钟 （续）
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+t start, HFXT HFXT 启动时间(2) HFXTRSEL=11，32MHz 晶体 0.5 ms
+f
+HFXT
+=4MHz，R
+m
+=300Ω，C
+L
+=12pF 75
+I HFXT HFXT 电流消耗(2) f HFXT =48MHz，R m =30Ω，C L =12pF， 600 uA
+C
+m
+=6.26fF，L
+m
+=1.76mH
+高频数字时钟输入 (HFCLK_IN)
+f HFIN HFCLK_IN 频率 (3) USEEXTHFCLK=1 4 48 MHz
+DC HFIN HFCLK_IN 占空比 (3) USEEXTHFCLK=1 40 60 %
+(1) 这包括寄生接合和封装电容（每个引脚约为 2pF），计算公式为 C
+HFXIN
+×C
+HFXOUT
+/(C
+HFXIN
++C
+HFXOUT
+)，其中 C
+HFXIN
+和 C
+HFXOUT
+分别是
+HFXIN 和 HFXOUT 上的总电容。
+(2) HFXT 启动时间 (t ) 是指从启用 HFXT 到典型晶体稳定振荡的时间。 启动时间取决于晶体频率和晶体规格。 请参阅 MSPM0 G
+start, HFXT
+系列 80MHz 微控制器技术参考手册的“HFXT”部分。电流消耗随 RSEL 增大而增加，而启动时间随 RSEL 增大而减小。
+(3) 数字时钟输入 (HFCLK_IN) 接受逻辑电平方波时钟。
+7.10 数字 IO
+7.10.1 电气特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+VDD ≥ 1.62V 0.7*VDD 5.5 V
+ODIO (1)
+VDD ≥ 2.7V 2 5.5 V
+V IH 高电平输入电压
+除 ODIO 和复位
+VDD ≥ 1.62V 0.7*VDD VDD+0.3 V
+以外的所有 I/O
+VDD ≥ 1.62V -0.3 0.3*VDD V
+ODIO
+VDD ≥ 2.7V -0.3 0.8 V
+V IL 低电平输入电压
+除 ODIO 和复位
+VDD ≥ 1.62V -0.3 0.3*VDD V
+以外的所有 I/O
+ODIO 0.05*VDD V
+V HYS 迟滞 除 ODIO 以外的
+0.1*VDD V
+所有 I/O
+I
+高阻态漏电流（除 PM 之外
+SDIO(2) (3)
+1.62V ≤ VDD ≤ 3.6V，-40℃ ≤ T
+a 50(4) nA
+lkg 的所有封装） ≤ 125℃
+1.62V ≤ VDD ≤ 3.6V，-40℃ ≤ T
+a 50(4) nA
+≤ 85℃
+I
+lkg
+高阻态漏电流（PM 封装） SDIO(2) (3)
+1
+≤
+.6
+1
+2
+0
+V
+5
+≤
+℃
+VDD ≤ 3.6V，-40℃ ≤ T
+a 200(4) nA
+1.62V ≤ VDD ≤ 3.6V，-40℃ ≤ T
+a 400(4) nA
+≤ 125℃
+除 ODIO 以外的
+R PU 上拉电阻 所有 I/O 40 kΩ
+R PD 下拉电阻 40 kΩ
+C I 输入电容 5 pF
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 35
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 35 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.10.1 电气特性 （续）
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+VDD ≥ 2.7V，|I
+IO
+|
+,max
+= 6mA
+VDD ≥ 1.71V，|I
+IO
+|
+,max
+= 2mA
+VDD-0.4
+VDD ≥ 1.62V，|I
+IO
+|
+,max
+= 1.5mA
+-40°C ≤ T ≤ 25°C
+a
+SDIO
+VDD ≥ 2.7V，|I
+IO
+|
+,max
+= 6mA
+VDD ≥ 1.71V，|I
+IO
+|
+,max
+= 2mA
+VDD-0.45
+VDD ≥ 1.62V，|I
+IO
+|
+,max
+= 1.5mA
+-40°C ≤ T ≤ 125°C
+a
+VDD ≥ 2.7V，DRV = 1，|I
+IO
+|
+,max
+=
+6mA
+VDD ≥ 1.71V，DRV = 1，|I
+IO
+|
+,max
+=
+3mA VDD-0.4
+VDD ≥ 1.62V，DRV = 1，|I
+IO
+|
+,max
+=
+2mA
+-40°C ≤ T ≤ 25°C
+a
+VDD ≥ 2.7V，DRV = 1，|I
+IO
+|
+,max
+=
+6mA
+VDD ≥ 1.71V，DRV = 1，|I
+IO
+|
+,max
+=
+3mA VDD-0.45
+VDD ≥ 1.62V，DRV = 1，|I
+IO
+|
+,max
+=
+2mA
+V OH 高电平输出电压 HSIO -40°C ≤ T a ≤ 125°C V
+VDD ≥ 2.7V，DRV = 0，|I
+IO
+|
+,max
+=
+4mA
+VDD ≥ 1.71V，DRV = 0，|I
+IO
+|
+,max
+=
+2mA VDD-0.4
+VDD ≥ 1.62V，DRV = 0，|I
+IO
+|
+,max
+=
+1.5mA
+-40°C ≤ T ≤ 25°C
+a
+VDD ≥ 2.7V，DRV = 0，|I
+IO
+|
+,max
+=
+4mA
+VDD ≥ 1.71V，DRV = 0，|I
+IO
+|
+,max
+=
+VDD-0.45
+2mA
+VDD ≥ 1.62V，|I
+IO
+|
+,max
+= 1.5mA
+-40°C ≤ T ≤ 125°C
+a
+VDD≥2.7V，DRV=1(5)，|
+I | =20mA
+IO,max VDD-0.4
+VDD≥1.71V，DRV=1(5)，|
+I | =10mA
+IO,max
+HDIO
+VDD ≥ 2.7V，DRV = 0，|I
+IO
+|
+,max
+=
+6mA
+VDD-0.4
+VDD ≥ 1.71V，DRV = 0，|I
+IO
+|
+,max
+=
+2mA
+36 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 36 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.10.1 电气特性 （续）
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+VDD ≥ 2.7V，|I
+IO
+|
+,max
+= 6mA
+VDD ≥ 1.71V，|I
+IO
+|
+,max
+= 2mA
+0.4
+VDD ≥ 1.62V，|I
+IO
+|
+,max
+= 1.5mA
+-40°C ≤ T ≤ 25°C
+a
+SDIO
+VDD ≥ 2.7V，|I
+IO
+|
+,max
+= 6mA
+VDD ≥ 1.71V，|I
+IO
+|
+,max
+= 2mA
+0.45
+VDD ≥ 1.62V，|I
+IO
+|
+,max
+= 1.5mA
+-40°C ≤ T ≤ 125°C
+a
+VDD ≥ 2.7V，DRV = 1，|I
+IO
+|
+,max
+=
+6mA
+VDD ≥ 1.71V，DRV = 1，|I
+IO
+|
+,max
+=
+3mA 0.4
+VDD ≥ 1.62V，DRV = 1，|I
+IO
+|
+,max
+=
+2mA
+-40°C ≤ T ≤ 25°C
+a
+VDD ≥ 2.7V，DRV = 1，|I
+IO
+|
+,max
+=
+6mA
+VDD ≥ 1.71V，DRV = 1，|I
+IO
+|
+,max
+=
+3mA 0.45
+VDD ≥ 1.62V，DRV = 1，|I
+IO
+|
+,max
+=
+2mA
+-40°C ≤ T ≤ 125°C
+a
+HSIO
+VDD ≥ 2.7V，DRV = 0，|I
+IO
+|
+,max
+=
+4mA
+V OL 低电平输出电压
+V
+2m
+DD
+A
+≥ 1.71V，DRV = 0，|I
+IO
+|
+,max
+=
+0.4 V
+VDD ≥ 1.62V，DRV = 0，|I
+IO
+|
+,max
+=
+1.5mA
+-40°C ≤ T ≤ 25°C
+a
+VDD ≥ 2.7V，DRV = 0，|I
+IO
+|
+,max
+=
+4mA
+VDD ≥ 1.71V，DRV = 0，|I
+IO
+|
+,max
+=
+2mA 0.45
+VDD ≥ 1.62V，DRV = 0，|I
+IO
+|
+,max
+=
+1.5mA
+-40°C ≤ T ≤ 125°C
+a
+VDD≥2.7V，DRV=1(5)，|
+I | =20mA
+IO,max 0.4
+VDD≥1.71V，DRV=1(5)，|
+I | =10mA
+IO,max
+HDIO
+VDD ≥ 2.7V，DRV = 0，|I
+IO
+|
+,max
+=
+6mA
+0.4
+VDD ≥ 1.71V，DRV = 0，|I
+IO
+|
+,max
+=
+2mA
+VDD ≥ 2.7V，I
+OL,max
+= 8mA
+VDD ≥ 1.71V，I
+OL,max
+= 4mA 0.4
+-40°C ≤ T ≤ 25°C
+a
+ODIO
+VDD ≥ 2.7V，I
+OL,max
+= 8mA
+VDD ≥ 1.71V，I
+OL,max
+= 4mA 0.45
+-40°C ≤ T ≤ 125°C
+a
+(1) I/O 类型：ODIO = 5V 容限开漏，SDIO = 标准驱动，HSIO = 高速，HDIO = 高驱动
+(2) 除非另有说明，否则漏电流是在将 VSS 或 VDD 施加到相应引脚的情况下测量的。
+(3) 数字端口引脚的漏电流单独测量。为输入选择端口引脚，而且上拉/下拉电阻器被禁用。
+(4) 此值适用于 SDIO 不与任何模拟输入进行多路复用的情况。如果 SDIO 与模拟输入进行多路复用，则漏电流会更高。
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 37
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 37 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+(5) 当在 DRV=1 高驱动强度配置下运行 HDIO 时，需要一个串联电阻器来限制信号转换率
+7.10.2 开关特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+VDD ≥ 1.71V，C
+L
+= 20pF 16
+SDIO
+VDD ≥ 2.7V，CL= 20pF 32
+VDD ≥ 1.71V，DRV = 0，CL= 20pF 16
+VDD ≥ 1.71V，DRV = 1，CL= 20pF 24
+HSIO
+VDD ≥ 2.7V，DRV = 0，CL= 20pF 32
+f max 端口输出频率(1) VDD ≥ 2.7V，DRV = 1，CL= 20pF 40 MHz
+VDD ≥ 2.7V，DRV = 1(2)，CL= 20pF 20
+VDD ≥ 2.7V，DRV = 0，CL= 20pF 20
+HDIO
+VDD ≥ 1.71V，DRV = 1(2)，CL= 20pF 16
+VDD ≥ 1.71V，DRV = 0，CL= 20pF 16
+ODIO VDD ≥ 1.71V，FM+，CL= 20pF - 100pF 1
+VDD ≥ 2.7V，CL= 20pF 3.5
+SDIO
+VDD ≥ 1.71V，C
+L
+= 20pF 6.6
+VDD ≥ 2.7V，DRV = 1，CL= 20pF 1.8
+VDD ≥ 2.7V，DRV = 0，CL= 20pF 5.9
+HSIO
+VDD ≥ 1.71V，DRV = 1，CL= 20pF 3.7
+t r，t
+f
+输出上升/下降时间 ns
+VDD ≥ 1.71V，DRV = 0，CL= 20pF 12.6
+VDD ≥ 2.7V，DRV = 1，CL= 20pF 1.7
+VDD ≥ 2.7V，DRV = 0，CL= 20pF 3.8
+HDIO
+VDD ≥ 1.71V，DRV = 1，CL= 20pF 3.1
+VDD ≥ 1.71V，DRV = 0，CL= 20pF 8.2
+t f 输出下降时间 ODIO VDD ≥ 1.71V，FM+，CL= 20pF-100pF 20*VDD/5.5 120 ns
+(1) I/O 类型：ODIO = 5V 容限开漏，SDIO = 标准驱动，HSIO = 高速，HDIO = 高驱动
+(2) 当在 DRV=1 高驱动强度配置下运行 HDIO 时，需要一个串联电阻器来限制信号转换率
+7.11 模拟多路复用器 VBOOST
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+MCLK/ULPCLK 是
+0.8
+LFCLK
+I VBST VBOOST 电流加法器 MCLK/ULPCLK 不是 uA
+LFCLK，SYSOSC 频率 10.6
+是 4MHz
+t START,VBST VBOOST 启动时间 12 20 us
+38 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 38 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.12 ADC
+7.12.1 电气特性
+在推荐的电源电压和自然通风条件下的工作温度范围内（除非另有说明），所有典型值均在温度为 25°C 时测得，并且所有精
+度参数均使用 12 位分辨率模式测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+Vin(ADC) 模拟输入电压范围(1) 适用于所有 ADC 模拟输入引脚 0 VDD V
+来自 VDD 的 VR+ VDD V
+VR+ ADC 正基准电压 来自外部基准引脚的 VR+ (VREF+) 1.4 VDD V
+来自内部基准的 VR+ (VREF) VREF V
+VR- ADC 负基准电压 0 V
+RES = 0x0（12 位模式） 4
+FS ADC 采样频率 RES = 0x1（10 位模式） 4 Msps
+RES = 0x2（8 位模式），SCOMP = 2 5.3
+流入 VDD 端子的
+I(ADC)
+工作电源电流
+FS = 4MSPS，VR+ = VDD 1.75(2) mA
+CS/H ADC 采样保持电容 3.3 pF
+Rin ADC 输入电阻 0.5 kΩ
+f_in = 10KHz，外部基准 (3) 10.9 11.1
+f_in = 10KHz，外部基准 (3)，硬件均值计算已启用，16 个样本
+12.3 12.5
+和 2 位移位
+ENOB 有效位数 位
+f_in = 10KHz，内部基准，VR+ = VREF = 2.5V (VRSEL = 1h)
+9.9 10.8
+(5)
+f_in = 10KHz，内部基准，VR+ = VREF = 2.5V (VRSEL = 2h) 9.2
+f_in = 10KHz，外部基准 (3) 68
+f_in = 10KHz，外部基准 (3)，硬件均值计算已启用，16 个样本
+78
+和 2 位移位
+SNR 信噪比 dB
+f_in = 10KHz，内部基准，VR+ = VREF = 2.5V (VRSEL = 1h)
+66
+(5)
+f_in = 10KHz，内部基准，VR+ = VREF = 2.5V (VRSEL = 2h) 57
+外部基准电压(3)，VDD = VDD(min) 至 VDD(max) 62
+PSRRDC 电源抑制比（直流） VDD = VDD(min) 至 VDD(max)
+53
+dB
+内部基准，VR+ = VREF = 2.5V
+外部基准(3)，1kHz 时 ΔVDD = 0.1V 61
+PSRRAC 电源抑制比（交流） 1kHz 时 ΔVDD = 0.1V dB
+52
+内部基准，VR+ = VREF = 2.5V
+Twakeup ADC 唤醒时间 假设内部基准处于运行状态 5 us
+VSupplyMon 电源监测器分压器 (VDD/3) 精度 ADC 输入通道：电源监测器 (4) (6) -1.5 1.5 %
+ISupplyMon 电源监测器分压器电流消耗 ADC 输入通道：电源监测器 10 uA
+(1) 模拟输入电压范围必须位于所选的 ADC 基准电压范围 V
+R+
+至 V
+R-
+内，才能获得有效的转换结果。
+(2) 内部基准 (VREF) 电源电流不包括在电流消耗参数 I 中。
+(ADC)
+(3) 所有外部基准规格都是在 V = VREF+ = VDD = 3.3V、V = VREF- = VSS = 0V 且 VREF+ 引脚上有外部 1μF 电容的条件下测得
+R+ R-
+(4) 模拟电源监测器。通道 15 上的模拟输入断开连接，并在内部连接到分压器 VDD/3。
+(5) 请注意，为了使用内部基准 VREF 实现该 ENOB，需要将 MEMCTL 寄存器中的 VRSEL 位设置为外部基准模式。这样会将 REFN 设置
+为 VREF- 并将 REFP 设置为 VREF+。在该配置中，VREF- 和 VREF+ 引脚上不能进行外部连接。REFN 引脚应连接到器件地。
+(6) 使用外部基准 (VREFSEL = 1) 时的特征值
+7.12.2 开关特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+fADCCLK ADC 时钟频率 4 48 MHz
+tADC trigger 软件触发最小宽度 3 ADCCLK 周期
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 39
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 39 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.12.2 开关特性 （续）
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+tSample 无 OPA 时的采样时间 (1) 12 位模式，RS = 50ΩΩ，Cpext = 10pF 62.5 ns
+GBW = 0x1，PGA 增益= x1 0.22
+GBW = 0x1，PGA 增益= x2 0.48
+GBW = 0x1，PGA 增益= x4 0.55
+tSample_PGA 使用 OPA 时的采样时间 (1) 12 位模式 µs
+GBW = 0x1，PGA 增益= x8 0.85
+GBW = 0x1，PGA 增益= x16 1.6
+GBW = 0x1，PGA 增益= x32 2.6
+tSample_DAC DAC 作为输入时的采样时间(2) 0.5 µs
+tSample_GPAMP 使用 GPAMP 时的采样时间 3 µs
+tSample_SupplyMon 使用电源监测器 (VDD/3) 时的采样时间 5 µs
+(1) 仅适用于具有 OPA 的器件
+(2) 仅适用于具有 DAC 的器件
+7.12.3 线性参数
+在推荐的电源电压和自然通风条件下的工作温度范围内（除非另有说明），所有典型值均在温度为 25°C 时测得，并且所有线
+性参数均使用 12 位分辨率模式测得（除非另有说明）(1)
+参数 测试条件 最小值 典型值 最大值 单位
+EI 积分线性误差 (INL) 外部基准(2) -2 2 LSB
+微分线性误差 (DNL)
+ED
+保证无丢码
+外部基准(2) -1 1 LSB
+EO 偏移误差 内部或外部基准 (2) (3) -5 5 mV
+EG 增益误差 外部基准(2) -4 4 LSB
+(1) 总体未调整误差 (TUE) 可以通过以下公式使用 E
+I
+、E
+O
+和 E
+G
+来计算得出：TUE = √( E
+I
+2 + |E
+O
+|2 + E
+G
+2 )
+注意：您必须将所有误差转换为相同的单位，通常为 LSB，以上公式才能进行准确计算
+(2) 所有外部基准规格都是在 V = VREF+ = VDD、V = VSS = 0V 且 VREF+ 引脚上有外部 1μF 电容的条件下测得。
+R+ R-
+(3) 请注意，为了使用内部基准 VREF 实现该偏移误差，需要将 MEMCTL 寄存器中的 VRSEL 位设置为外部基准模式。这样会将 REFN 设
+置为 VREF- 并将 REFP 设置为 VREF+。在该配置中，VREF- 和 VREF+ 引脚上不能进行外部连接。
+7.13 典型连接图
+Device
+Boundary
+ADC Model
+Rpar S1 Rin
+12-bit SAR
+Vin
+Converter
+CS/H
+Cpar CI
+图 7-2. ADC 输入网络
+1. 请参阅 ADC 电气特性以了解 R 和 C 的值
+in S/H
+2. 请参阅数字 IO 电气特性以了解 C 的值
+I
+3. C 和 R 表示外部 ADC 输入电路的寄生电容和电阻
+par par
+使用以下公式来求解 ADC 转换所需的最小采样时间 (T)：
+40 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 40 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+1. Tau = (R + R ) × C + R × (C + C)
+par in S/H par par I
+2. K= ln(2n/趋稳误差) – ln((C + C)/C )
+par I S/H
+3. T（最小采样时间）= K × Tau
+7.14 温度传感器
+在自然通风条件下的工作温度范围内测得（除非另有说明）(1)
+参数 测试条件 最小值 典型值 最大值 单位
+ADC 和 VREF 配置：RES=0（12 位模
+TS TRIM 出厂调整温度 (2) 式），VRSEL=0h (VDD=3.3V)，ADC 27 30 33 ℃
+t =12.5uS
+sample
+TS c 温度系数 -40℃ ≤ T j ≤ 130℃ -2.1 -1.8 -1.7 mV/℃
+ADC 和 VREF 配置：RES=0（12 位模
+t SET, TS 温度传感器稳定时间 (3) 式），VRSEL=0h (VDD=3.3V)，ADC 通 12.5 us
+道=11
+(1) 通过将相对温度精度与修整精度相结合，并考虑任何模数转换误差，可以计算出有效绝对温度精度。
+(2) 通过用户校准可以实现更高的绝对精度。请参阅“详细说明”部分中的“温度传感器”。
+(3) 这是测量温度传感器时所需的最短 ADC 采样时间。
+7.15 VREF
+7.15.1 电压特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+BUFCONFIG = 1 1.62
+VDD min VREF 运行所需的最小电源电压 V
+BUFCONFIG = 0 2.7
+BUFCONFIG = 1 1.38 1.4 1.42
+VREF 电压基准输出电压 V
+BUFCONFIG = 0 2.46 2.5 2.54
+7.15.2 电气特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+I VREF VREF 工作电源电流 BUFCONFIG = {0, 1}，无负载 189 330 µA
+I Drive VREF 输出驱动强度 (1) VREF+ 器件引脚上支持的驱动强度 100 µA
+I SC VREF 短路电流 100 mA
+VREF（带隙 + VRBUF）的温度系
+TC BUFCONFIG = {1} 80 ppm/°C
+VREF 数(2)
+VREF（带隙 + VRBUF）的温度系
+TC BUFCONFIG = {0} 80 ppm/°C
+VREF 数(2)
+TC drift 长期 VREF 漂移 时间 = 1000 小时，BUFCONFIG = {0, 1}，T = 25℃ 300 ppm
+VDD = 1.7V 至 VDDmax，BUFCONFIG = 1 57 63
+PSRR DC VREF 电源抑制比（直流） dB
+VDD = 2.7V 至 VDDmax，BUFCONFIG = 0 49 53
+VREF 输出端的 RMS 噪声（0.1Hz BUFCONFIG = 1 500
+V µVrms
+noise 至 100MHz） BUFCONFIG = 0 900
+VREF+ 引脚上推荐的 VREF 去耦电
+C 0.7 1 1.15 µF
+VREF 容器 (3) (4) (5)
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 41
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 41 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.15.2 电气特性 （续）
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+T startup VREF 启动时间 200
+BUFCONFIG = {0, 1}，VDD = 2.8V，C
+VREF
+= 1µF µS
+T refresh VREF 外部电容器刷新时间 31.25
+(1) 无论器件中使用何种外设，均支持指定的 MAX 输出驱动强度。
+(2) VREF 输出的温度系数是 TC 与内部带隙基准的温度系数之和。
+VRBUF
+(3) 使用内部电压基准 VREF 时，需要去耦电容器 (C
+VREF
+)，并且应将 VREF+ 引脚连接到 VREF-/GND。当使用 VREF+/- 引脚为外部基准
+供电时，应根据外部基准源选择去耦电容值。
+(4) 最好使用封装尺寸为 0805 或更小的陶瓷电容器。可接受高达 ±20% 的容差。
+(5) VREF 模块应仅在连接 C
+VREF
+时启用，否则不应启用。
+7.16 比较器 (COMP)
+7.16.1 比较器电气特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+比较器电气特性
+Vcm 共模输入范围 0 VDD V
+Voffset 输入偏移电压 -20 20 mV
+HYST=00h 0.4
+HYST=01h 10
+Vhys 直流输入迟滞 mV
+HYST=02h 20
+HYST=03h 30
+传播延迟，响应时间 输出滤波器关闭，过驱 = 100mV，高速模式 32 50 ns
+tPD_ls
+输出滤波器关闭，过驱 = 100mV，低功耗模式 1.2 4 µs
+达到传播延迟规格所需的启动时间，高速模式（仅限比
+10 µs
+较器）
+ten 比较器使能时间
+达到传播延迟规格所需的启动时间，低功耗模式（仅限
+10 µs
+比较器）
+Vcm = VDD/2，100mV 过驱，DAC 输出作为电压基
+130 200 µA
+准，VDD 作为 DAC 的基准，高速模式
+Vcm = VDD/2，100mV 过驱，DAC 输出作为电压基
+比较器电流消耗 准，VDD 作为 DAC 的基准，低功耗模式 0.85 2.7 µA
+Vcm = VDD/2，100mV 过驱，仅比较器。高速模式 120 180 µA
+Icomp
+Vcm = VDD/2，100mV 过驱，仅比较器，低功耗模式 0.7 2.1 µA
+Vcm = VDD/2，100mV 过驱，DAC 输出作为电压基
+低功耗模式下的比较器 准，内部 VREF 作为 DAC 的基准，低功耗模式。
+3.5 µA
++VREF 电流消耗 VREF 寄存器 SHCYCLE = 0xC0、HCYCLE = 0xC0、
+SHMODE = 1
+8 位 DAC 电气特性
+Vdac DAC 输出范围 0 VDD V
+给定代码的 8 位 DAC 输出电 VIN ×
+Vdac-code
+压
+VIN = 8 位 DAC 的基准电压，代码 n = 0 至 255
+(n+1) / 256
+V
+INL 8 位 DAC 的积分非线性 -1 1 LSB
+DNL 8 位 DAC 的微分非线性 -1 1 LSB
+增益误差 8 位 DAC 的增益误差 基准电压 = VDD -2 2 FSR 百分比
+偏移误差 8 位 DAC 的失调电压误差 -5 5 mV
+静态模式下的 8 位 DAC 稳定
+tdac_settle
+时间
+DACCODE0 = 0 → 255，DAC 输出精确到 1LSB 1.5 µs
+42 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 42 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.17 DAC
+7.17.1 DAC_电源规格
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+VREF 基准电压 VDD，外部、内部（1.4V，2.5V） 1.4 VDD V
+IDAC 来自 VDD 的 DAC 电流消耗 VREF= VDD，空载，DAC 代码 = 0x800 400 µA
+7.17.2 DAC 输出规格
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+VO 输出电压范围 空载，Vref = VDD，DATA = 0x0 20 mV
+VO 输出电压范围 空载，Vref = VDD，DATA = 0xFFF VDD-0.05 VDD-0.01 VDD V
+VO 输出电压范围 Rload = 3.3kΩ，Vref = VDD，DATA = 0x0 0.13 V
+VO 输出电压范围 Rload = 3.3kΩ，Vref = VDD，DATA = 0xFFF VDD-0.13 VDD-0.1 VDD V
+CL(DAC) 负载电容 100 pF
+IL(DAC) 负载电流 -1 1 mA
+ROUT(DAC) 输出电阻 Rload = 3.3kΩ，Vref = VDD，V_o = 0.3V 至 VDD-0.3V 1.2 10 Ω
+7.17.3 DAC 动态规格
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+SR 压摆率 DATA = 0x80 → 0xF7F → 0x80，Vref = 外部基准 5.5 V/µs
+GE 短时脉冲波干扰能量 DATA = 0x800 → 0x7FF → 0x800，Vref = 外部基准 1.2 nV-s
+PSRR_DC 电源抑制比（直流） ΔVDD = 100mV，DATA = 0xFFF，Vref = 外部基准 79.5 dB
+PSRR_AC 电源抑制比（交流） ΔVDD = 100mV（100kHz 时），DATA = 0xFFF，Vref = 外部基准 25.7 dB
+SNR 信噪比 Vref = 外部基准，4kHz 输入和 1Msps 采样率(1) 80.9 dB
+THD 总谐波失真 Vref = 外部基准，4kHz 输入和 1Msps 采样率(1) 71.5 dB
+SINAD 信噪比和失真 Vref = 外部基准，4kHz 输入和 1Msps 采样率(1) 71.1 dB
+ENOB 有效位数 Vref = 外部基准，4kHz 输入和 1Msps 采样率(1) 11.5 位
+(1) 在 DAC 输出引脚上连接一个具有 300Hz 至 4kHz 通带的低通滤波器。
+7.17.4 DAC 线性度规格
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+分辨率 12 位
+DNL 微分非线性 -1 1 LSB
+INL 积分非线性 Vref = 内部、外部或 VDD 基准(1) -4 4 LSB
+EG 增益误差 -2 -0.5 2 %FSR
+EO 偏移误差 Vref = 内部、外部或 VDD 基准，经过校准 (1) -2 0.5 2 mV
+EO 偏移误差 Vref = 内部、外部或 VDD 基准，无需校准 (1) -20 20 mV
+tcal 偏移校准时间 1.3 ms
+(1) DAC 有效输出范围为 0.3 至 VDD-0.3
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 43
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 43 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.17.5 DAC 时序规格
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+从关断状态启动所需的时间（VREF 就
+tON,12b
+绪）
+DATA = 0xFFF，误差 < ±2LSB，Vref = 内部基准 4.5 6.9 µs
+DATA = 0x1EC->0xFFF->0x1EC，误差 < ±2LSB，Vref = 内部
+tS(FS) 满量程稳定时间
+基准
+0.8 1 µs
+7.18 GPAMP
+7.18.1 电气特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+RRI = 0x0 -0.1 VDD-1
+VDD-0.
+RRI = 0x1 1
+V CM 共模电压范围 2 V
+VDD-0.
+RRI = 0x2 -0.1
+2
+I
+O
+= 0mA，RRI = 0x0 97
+I q 每个运算放大器的静态电流 µA
+I
+O
+= 0mA，RRI = 0x1 或 0x2 93
+GBW 增益带宽积 C L = 200pF 0.32 MHz
+V OS 输入偏移电压 同 25 相 ℃ ， ， 单 VD 位 D 增 = 益 3. ， 3V T A = C C H H O O P P = = 0 0 x x 0 1 ±0 ± . 0 0 . 8 2 ±0 ± . 9 4 mV
+CHOP = 0x0 7.7
+dV OS /dT 输入失调电压温漂 同相，单位增益 µV/°C
+CHOP = 0x1 0.34
+0.1V<V in <VDD-0.3V，VDD T A = 25°C ±40
+= 3.3V，CHOP=0x0 T = 125°C ±4000
+A
+I bias SoC 上多路复用 I/O 引脚的输入偏置 pA
+0.1V <V in < VDD-0.3V， T A = 25°C ±200
+VDD = 3.3V，CHOP = 0x1 T = 125°C ±4000
+A
+CHOP = 0x0 48 77
+CMRR DC 共模抑制比（直流） 在共模电压范围内 dB
+CHOP = 0x1 56 105
+e f = 1kHz 43
+n
+输入电压噪声密度 同相，单位增益 nV/√Hz
+e f = 10kHz 19
+n
+R
+in
+输入电阻 (1) 0.65 kΩ
+共模 4
+C in 输入电容 pF
+差分 2
+A OL 开环电压增益（直流） R L = 350 kΩ，0.3V < Vo < VDD-0.3V 82 90 107 dB
+PM 相位裕度 C
+L
+= 200pF，R
+L
+= 350kΩ 69 70 72 度
+SR 压摆率 同相，单位增益，C
+L
+= 40pF 0.32 V/µs
+THDN 总谐波失真 + 噪声 0.012 %
+I Load 输出负载电流 4 mA
+C Load 输出负载电容 200 pF
+(1) R 这里指的是 GPAMP 中多路复用器的输入电阻。
+in
+44 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 44 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.18.2 开关特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+最小 典型
+参数 测试条件 最大值 单位
+值 值
+ENABLE = 0x0 至 0x1，带隙基准开
+t EN GPAMP 启用时间 启，0.1% 同相，单位增益 12 20 µs
+ULPCLK 周
+t disable GPAMP 禁用时间 4 期
+t SETTLE GPAMP 稳定时间
+C
+0. L 3 V
+=
+，
+20
+0
+0
+.1
+p
+%
+F，
+，
+V
+E
+s
+N
+te
+A
+p
+B
+=
+L E
+0 .
+=
+3 V
+0 x
+至
+1
+VDD -
+同相，单位增益 9 µs
+7.19 OPA
+7.19.1 电气特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+最小
+参数 测试条件 典型值 最大值 单位
+值
+RRI = 0x0 -0.1 VDD-1.1
+V CM 共模电压范围 V
+RRI = 0x1 -0.1 VDD-0.3
+V O 相对于电源轨范围的电压输出摆幅 R L = 10kΩ 连接至 VDD/2 20 68 mV
+GBW = 0x0 94
+I
+O
+= 0mA，RRI = 0x0
+GBW = 0x1 319
+I q 每个运算放大器的静态电流 µA
+GBW = 0x0 116 134
+I
+O
+= 0mA，RRI = 0x1
+GBW = 0x1 401 500
+I
+BCS
+烧毁电流拉电流 2 µA
+GBW = 0x0 1.5
+GBW 增益带宽积 同相，单位增益，C
+L
+= 40pF MHz
+GBW = 0x1 6
+同相，单位增益，VDD = CHOP = 0x0 ±0.4 ±2
+3.3V，T A = 25°C CHOP = 0x1 或 0x2 ±0.3
+V OS 输入偏移电压 mV
+同相，单位增益，VDD = CHOP = 0x0 ±1.5 ±3.5
+3.3V CHOP = 0x1 或 0x2 ±0.1 ±0.5
+同相，单位增益，CHOP = GBW = 0x0 8.5
+dV OS /dT 输入失调电压温漂 0x0 GBW = 0x1 6 µV/°C
+CHOP = 0x1 或 0x2 0.5
+CHOP = 0x0 74 86
+PSRR
+DC
+电源抑制比（直流） 同相，单位增益 dB
+CHOP = 0x1 或 0x2 74 86
+I bias 输入偏置电流
+0
+3
+.
+.
+1
+3
+V
+V
+<
+，
+V
+C in H
+<V
+O
+D
+P
+D
+=0
+-0
+x
+.
+0
+3V，VDD =
+T A = 25°C ±50 pA
+封
+I
+B 装 IAS ) (PM 输入偏置电流
+0
+3
+.
+.
+1
+3
+V
+V
+<
+，
+V
+C in H
+<V
+O
+D
+P
+D
+=0
+-0
+x
+.
+0
+3V，VDD =
+T A = 125°C ±0.35 ±400 nA
+P
+I B
+M
+IA
+之
+S
+外
+(除
+的 输入偏置电流
+0
+3
+.
+.
+1
+3
+V
+V
+<
+，
+V
+C in H
+<V
+O
+D
+P
+D
+=0
+-0
+x
+.
+0
+3V，VDD =
+T A = 125°C ±0.35 ±100 nA
+所有封装)
+I bias 输入偏置电流
+0
+3
+.
+.
+1
+3
+V
+V
+<
+，
+V
+C in H
+<V
+O
+D
+P
+D
+=0
+-0
+x
+.
+1
+3V，VDD =
+T A = 25°C ±0.4 nA
+封
+I
+B 装 IAS ) (PM 输入偏置电流
+0
+3
+.
+.
+1
+3
+V
+V
+<
+，
+V
+C in H
+<V
+O
+D
+P
+D
+=0
+-0
+x
+.
+1
+3V，VDD =
+T A = 125°C ±0.4 ±400 nA
+P
+I B
+M
+IA
+之
+S
+外
+(除
+的 输入偏置电流
+0
+3
+.
+.
+1
+3
+V
+V
+<
+，
+V
+C in H
+<V
+O
+D
+P
+D
+=0
+-0
+x
+.
+1
+3V，VDD =
+T A = 125°C ±0.4 ±104 nA
+所有封装)
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 45
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 45 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.19.1 电气特性 （续）
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+最小
+参数 测试条件 典型值 最大值 单位
+值
+RRI = 0x0： CHOP = 0x0 89
+0V<V <VDD-1.1V
+CMRR
+DC
+共模抑制比（直流）
+RRI =
+C
+0
+M
+x1： CHOP = 0x1 或 0x2 73 102
+dB
+0V<V <VDD-0.3V
+CM
+GBW = 0x0，同相，单位增 f = 1kHz 240
+输入电压噪声密度 nV/√Hz
+益，CHOP = 0x0 f = 10kHz 88
+e n 以输入为基准的集成电压噪声
+f = 0.1Hz 至 10Hz，GBW = CHOP = 0x0 75
+µVpp
+0x0，同相，单位增益 CHOP = 0x1 或 0x2 2
+f = 0.1Hz 至 10MHz，GBW = 0x0，CHOP = 0x0，同
+以输出为基准的集成电压噪声 1.5 mVpp
+相，单位增益
+R
+in
+输入电阻(1) 2.6 kΩ
+C in 输入电容 共模 3 pF
+A OL 开环电压增益（直流） R L = 20kΩ 至 GND，0.3V<Vo<VDD-0.3V 105 dB
+GBW = 0x0 57
+PM 相位裕度 C L = 40pF 度
+GBW = 0x1 50
+GBW = 0x0 1.3
+SR 压摆率 同相，单位增益，C
+L
+= 40pF V/µs
+GBW = 0x1 4.9
+同相，单位增益，GBW = 0x0，f = 1.5kHz，积分带宽
+0.0034
+= 100kHz
+THDN 总谐波失真 + 噪声 %
+同相，单位增益，GBW = 0x1，f = 6kHz，积分带宽=
+0.004
+100kHz
+GBW = 0x0 ±9
+I Load 输出负载电流 mA
+GBW = 0x1 ±30
+C Load 输出负载电容 40 pF
+(1) R 这里指的是 OPA 中多路复用器的输入电阻。
+in
+7.19.2 开关特性
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+ENABLE = 0x0 至 0x1，带隙基准开启，0.1%， GBW = 0x0 7.3 12
+t EN OPA 启用时间 同相，单位增益 GBW = 0x1 4.4 6 µs
+ULPCLK 周
+t disable OPA 禁用时间 4 期
+GAIN = 0x0 125
+GAIN = 0x1 62.5
+GAIN = 0x2 31.25
+f CHOP OPA 斩波频率 CHOP = 0x1 kHz
+GAIN = 0x3 15.625
+GAIN = 0x4 7.8
+GAIN = 0x5 3.9
+t SETTLE OPA 稳定时间 C EN L A = B 4 L 0 E p F = ， 0 V x1 s ， tep 同 = 相 0 ， .3V 单 至 位 增 VD 益 D ， -0 V .3 D V D ， > 0 = . 1 1 . % 8V ， G G B B W W = = 0 0 x x 0 1 2 1 . . 5 3 9 5 µs
+46 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 46 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.19.3 PGA 模式
+在推荐的电源电压范围及自然通风条件下的工作温度范围内（除非另外注明）
+参数 测试条件 最小值 典型值 最大值 单位
+-0.05
+缓冲模式(1) +0.05
+-0.6 +0.6
+GAIN = 0x1 (
+同相增益误差 GAIN = 0x2 ( -0.8 +0.8
+GAIN = 0x3 ( -1 +1
+G GAIN = 0x4 ( -1.5 +1.5 %
+GAIN = 0x5 ( -3.2 +2
+GAIN = 0x1 ( -0.8 +0.8
+GAIN = 0x2 ( -1.0 +1.0
+反相增益误差 GAIN = 0x3 ( -1.2 1.2
+GAIN = 0x4 ( -1.5 1.5
+GAIN = 0x5 -3.3 2.1
+R1 64
+GAIN = 0x1
+R2（反馈电阻器） 64
+R1 32
+GAIN = 0x2
+R2（反馈电阻器） 96
+R1 16
+R PGA 可编程增益级电阻 GAIN = 0x3 kΩ
+R2（反馈电阻器） 112
+R1 8
+GAIN = 0x4
+R2（反馈电阻器） 120
+R1 4
+GAIN = 0x5
+R2（反馈电阻器） 124
+G/dV 增益电源漂移 0.02 1 %/V
+G/dT 增益温漂 0.002 0.02 %/C
+f = 3kHz，R
+L
+= 1.5kΩ 至 VDD/2，GBW = 0x1，GAIN = 0x1 75
+THD 总谐波失真 f = 188Hz，R
+L
+= 1.5kΩ 至 VDD/2，GBW = 0x1，GAIN =
+55
+dB
+0x5
+(1) OPA 在缓冲模式下以单位增益运行，无需放大即可提供阻抗匹配和信号缓冲。
+7.20 I2C
+7.20.1 I2C 特性
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+标准模式 快速模式 快速模式 +
+参数 测试条件 单位
+最小值 最大值 最小值 最大值 最小值 最大值
+f I2C I2C 输入时钟频率 2 32 8 32 20 32 MHz
+f SCL SCL 时钟频率 0.025 0.1 0.4 1 MHz
+t
+HD，STA
+保持时间（重复）启动 4 0.6 0.26 us
+t LOW SCL 时钟的低电平周期 4.7 1.3 0.5 us
+t HIGH SCL 时钟的高电平周期 4 0.6 0.26 us
+t SU,STA 一个针对重复启动的建立时间 4.7 0.6 0.26 us
+t HD，DAT 数据保持时间 0 0 0 ns
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 47
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 47 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.20.1 I2C 特性 （续）
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+标准模式 快速模式 快速模式 +
+参数 测试条件 单位
+最小值 最大值 最小值 最大值 最小值 最大值
+t SU，DAT 数据设置时间 250 100 50 ns
+t SU，STO 停止的建立时间 4 0.6 0.26 us
+停止与启动状态之间的总线空闲
+t 4.7 1.3 0.5 us
+BUF 时间
+t VD;DAT 数据有效时间 3.45 0.9 0.45 us
+t VD;ACK 数据有效确认时间 3.45 0.9 0.45 us
+7.20.2 I2C 滤波器
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+AGFSELx = 0 6 ns
+由输入滤波器进行抑制的尖峰的脉冲持续 AGFSELx = 1 14 35 ns
+f
+SP 时间 AGFSELx = 2 22 60 ns
+AGFSELx = 3 35 90 ns
+7.20.2.1 I2C 时序图
+tHD,STA tSU,STA tHD,STA tBUF
+SDA
+ttLOWt ttHIGHt tSP
+SCL
+tHD,DAT
+tVD,DAT tSU,DAT tSU,STO
+图 7-3. I2C 时序图
+7.21 SPI
+7.21.1 SPI
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+SPI
+时钟最大速度 >= 32MHz
+f SPI SPI 时钟频率 1.62V < VDD < 3.6V 16(4) MHz
+控制器或外设模式
+时钟最大速度 >= 48MHz
+f SPI SPI 时钟频率 1.62V < VDD < 2.7V 24(4) MHz
+具有高速 IO 的外设或控制器模式
+时钟最大速度 >= 64MHz
+f SPI SPI 时钟频率 2.7V < VDD < 3.6V 32(4) MHz
+具有高速 IO 的外设或控制器模式
+DC SCK SCK 占空比 40 50 60 %
+控制器
+48 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 48 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.21.1 SPI （续）
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+(tSPI/2) - (tSPI/2) +
+t SCLK_H/L SCLK 高电平或低电平时间 1 tSPI/2 1 ns
+1 个 SPI
+t CS.LEAD CS 提前时间，CS 有效至时钟 SPH=0 时钟
+1/2 个
+t CS.LEAD CS 提前时间，CS 有效至时钟 SPH=1 SPI 时钟
+CS 滞后时间，最后一个时钟到 CS 1/2 个
+t SPH=0
+CS.LEAD 无效 SPI 时钟
+CS 滞后时间，最后一个时钟到 CS 1 个 SPI
+t SPH=1
+CS.LAG 无效 时钟
+CS 访问时间，CS 有效到 PICO 数 1/2 个
+t
+CS.ACC 据输出 SPI 时钟
+CS 禁用时间，CS 无效到 PICO 高 1 个 SPI
+t
+CS.DIS 阻抗 时钟
+t SU.CI POCI 输入数据设置时间(1) 2.7 < VDD < 3.6V，延迟采样已启用 1 ns
+t SU.CI POCI 输入数据设置时间(1) 1.62 < VDD < 2.7V，延迟采样已启用 1 ns
+t SU.CI POCI 输入数据设置时间(1) 2.7 < VDD < 3.6V，无延迟采样 29 ns
+t SU.CI POCI 输入数据设置时间(1) 1.62 < VDD < 2.7V，无延迟采样 37 ns
+t HD.CI POCI 输入数据保持时间 延迟采样已启用 24 ns
+t HD.CI POCI 输入数据保持时间 无延迟采样 0 ns
+t VALID.CO PICO 输出数据有效时间(2) 10 ns
+t HD.CO PICO 输出数据保持时间(3) 6 ns
+外设
+t CS.LEAD CS 提前时间，CS 有效至时钟 11 ns
+CS 滞后时间，最后一个时钟到 CS
+t 1 ns
+CS.LAG 无效
+CS 访问时间，CS 有效到 POCI 数
+t 26 ns
+CS.ACC 据输出
+CS 禁用时间，CS 无效到 POCI 高
+t 26 ns
+CS.DIS 阻抗
+t SU.PI PICO 输入数据设置时间 7 ns
+t HD.PI PICO 输入数据保持时间 0 ns
+t VALID.PO POCI 输出数据有效时间(2) 2.7V < VDD < 3.6V 25 ns
+t VALID.PO POCI 输出数据有效时间(2) 1.62V < VDD < 2.7V 31 ns
+t HD.PO POCI 输出数据保持时间(3) 5 ns
+(1) 启用延迟采样功能后，POCI 输入数据设置时间可得到完全补偿。
+(2) 指定输出更改 SCLK 时钟边沿后将下一个有效数据驱动到输出所需的时间。
+(3) 指定输出更改 SCLK 脉冲边沿后输出上数据保持有效的时长。
+(4) fSPIclk = 1/2tLO/HI，其中 tLO/HI = max(tVALID,CO + tSU,PI, tSU,CI + tVALID,PO)。
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 49
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 49 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+7.21.2 SPI 时序图
+CS CS
+(inverted) (inverted)
+tCS, LEAD tCS, LEAD
+CS CS
+1 / fSPI
+tCS, LAG
+1 / fSPI
+tCS, LAG
+SCLK SCLK
+(SPO = 0) (SPO = 0)
+tSCLK_H/L tSCLK_H/L
+tSCLK_H/L tSCLK_H/L
+SCLK SCLK
+(SPO = 1) (SPO = 1)
+tSU,CI tSU,CI
+tHD,CI tCS, ACC tHD,CI
+POCI POCI
+tCS, ACC t t H V D A , L C ID O ,CO tCS, DIS t t H V D A , L C ID O ,CO tCS, DIS
+PICO PICO
+Controller Mode, SPH = 0 Controller Mode, SPH = 1
+图 7-4. SPI 时序图 - 控制器模式
+CS CS
+(inverted) (inverted)
+tCS, LEAD tCS, LEAD
+CS CS
+1 / fSPI
+tCS, LAG 1 / fSPI tCS, LAG
+SCLK SCLK
+(SPO = 0) (SPO = 0)
+tSCLK_H/L tSCLK_H/L
+tSCLK_H/L tSCLK_H/L
+SCLK SCLK
+(SPO = 1) (SPO = 1)
+tSU,PI tSU,PI
+tHD,PI tHD,PI
+PICO PICO
+tCS, ACC t t H V D A , L P I O D,PO tCS, DIS tCS, ACC t t H V D A , L P I O D,PO tCS, DIS
+POCI POCI
+Peripheral Mode, SPH = 0 Peripheral Mode, SPH = 1
+图 7-5. SPI 时序图 - 外设模式
+7.22 UART
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+f UART UART 输入时钟频率 电源域 1 中的 UART 80 MHz
+f UART UART 输入时钟频率 电源域 0 中的 UART 40 MHz
+BITCLK 时钟频率（等于波特
+f BITCLK 率，单位为 MBaud） 电源域 1 中的 UART 10 MHz
+BITCLK 时钟频率（等于波特
+f BITCLK 率，单位为 MBaud） 电源域 0 中的 UART 5 MHz
+50 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 50 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+7.22 UART （续）
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+AGFSELx = 0 6 ns
+由输入滤波器进行抑制的尖峰的 AGFSELx = 1 14 35 ns
+t
+SP 脉冲持续时间(1) AGFSELx = 2 22 60 ns
+AGFSELx = 3 35 90 ns
+(1) 对 UART 接收输入 (RX) 上短于 UART 接收抗尖峰脉冲时间的脉冲进行了抑制。因此，所选的抗尖峰脉冲时间会限制最大可用波特率。
+为了确保正确地识别脉冲，其持续时间应超过抗尖峰脉冲时间的最大规格值。
+7.23 TIMx
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+电源域 1 中的 TIMx，f
+TIMxCLK
+= 80MHz 12.5 ns
+t res 计时器分辨率时间 电源域 0 中的 TIMx，f TIMxCLK = 40MHz 25 ns
+1 t
+TIMxCLK
+7.24 TRNG
+7.24.1 TRNG 电气特性
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+TRNG IACT TRNG 有效电流 TRNG 时钟 = 20MHz 115 µA
+7.24.2 TRNG 开关特性
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+TRNGCLK F TRNG 输入时钟频率 9.5 10 25 MHz
+TRNG STARTUP TRNG 启动时间 520 µs
+TRNG LAT32 生成 32 个随机位的延迟 抽取率 = 4，TRNG 时钟 = 20MHz 6.4 µs
+TRNG LAT256 生成 256 个随机位的延迟 抽取率 = 4，TRNG 时钟 = 20MHz 51.2 µs
+7.25 仿真和调试
+7.25.1 SWD 时序
+在自然通风条件下的工作温度范围内测得（除非另有说明）
+参数 测试条件 最小值 典型值 最大值 单位
+f SWD SWD 频率 10 MHz
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 51
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 51 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+8 详细说明
+以下各节介绍了构成此数据表中器件的所有元件。这些器件中集成的外设由软件通过存储器映射寄存器 (MMR) 进
+行配置。有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的相应章节。
+8.1 CPU
+CPU 子系统 (MCPUSS) 实现了 Arm Cortex-M0+ CPU、指令预取和高速缓存、系统计时器、存储器保护单元以
+及中断管理功能。Arm Cortex-M0+ 是一款成本优化的 32 位 CPU，可为嵌入式应用提供高性能和低功耗。CPU
+子系统的主要特性包括：
+• 支持 32MHz 时钟频率的 Arm Cortex-M0+ CPU
+– 带有单周期 32×32 乘法指令的 Armv6-M Thumb 指令集（小端字节序）
+– 通过 Arm 单周期 IO 端口对 GPIO 寄存器进行单周期访问
+• 用于改进顺序代码执行的预取逻辑和具有 四个 64 位高速缓存行的指令缓存
+• 具有 24 位递减计数器和自动重新加载功能的系统计时器 (SysTick)
+• 具有八个可编程区域的存储器保护单元 (MPU)
+• 具有四个可编程优先级和尾链的嵌套矢量中断控制器 (NVIC)
+• 用于扩展总中断源的中断组，具有用于实现低中断延迟的跳转索引
+8.2 操作模式
+MSPM0G MCU 提供五种主要工作模式（电源模式），可根据应用要求优化器件功耗。这些模式按照功耗从高到
+低排列如下：运行、睡眠、停止、待机和关断。CPU 会在运行模式中执行代码。外设中断事件可将器件从睡眠、
+停止或待机模式唤醒至运行模式。关断模式会完全禁用内部内核稳压器，以更大限度地降低功耗，并且只能通过
+NRST、SWD 或某些 IO 上的逻辑电平匹配来实现唤醒。运行、睡眠、停止和待机模式还包括多个可配置的策略
+选项（例如，RUN.x），用于平衡性能与功耗。
+为了进一步平衡性能和功耗，MSPM0G 器件实现了两个电源域：PD1（用于 CPU、存储器和高性能外设）和
+PD0（用于低速、低功耗外设）。在运行和睡眠模式下，PD1 始终通电，但在所有其他模式下会禁用。PD0 在运
+行、睡眠、停止和待机模式下始终通电。PD1 和 PD0 在关断模式下都会禁用。
+8.2.1 不同工作模式下的功能 (MSPM0G350x)
+表 8-1 提供了每种工作模式下支持的功能。
+功能键：
+• EN：该功能会在指定的模式下启用。
+• DIS：该功能会在指定的模式下被禁用（时钟或电源门控），但该功能的配置会保留。
+• OPT：该功能在指定的模式下是可选的，如果配置为启用，则保持启用状态。
+• NS：该功能在指定的模式下不会自动禁用，但不受支持。
+• OFF：该功能在指定的模式下会完全断电，不会保留任何配置信息。从关闭状态唤醒时，所有模块寄存器必须
+由应用软件重新配置为所需的设置。
+52 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 52 =====
+表 8-1. 不同工作模式下支持的功能
+RUN SLEEP STOP STANDBY
+工作模式 0NUR 1NUR 2NUR 0PEELS 1PEELS 2PEELS 0POTS 1POTS 2POTS
+0YBDNATS 1YBDNATS
+断关
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+SYSOS
+EN DIS EN DIS OPT(1) EN DIS DIS 关闭
+C
+LFOSC
+振荡器 或 LFXT EN（LFOSC 或 LFXT） 关闭
+HFXT OPT DIS OPT DIS DIS DIS 关闭
+SYSPLL OPT DIS(4) OPT DIS(4) DIS(4) DIS(4) 关闭
+80M
+CPUCLK 32KHz DIS 关闭
+Hz
+MCLK 至 80M
+32KHz 80MHz 32KHz DIS 关闭
+PD1 Hz
+ULPCLK 40M 32KH
+32KHz 40MHz 32KHz 4MHz(1) 4MHz 32KHz DIS 关闭
+至 PD0 Hz z
+ULPCLK
+至 40M 32KHz 40MHz 32KHz 4MHz(1) 4MHz 32KH 32KHz 32KHz(2) 关闭
+Hz z
+TIMG0/8
+RTCCLK 32KHz 关闭
+时钟 MFCLK OPT DIS OPT DIS OPT DIS DIS 关闭
+MFPCLK OPT DIS OPT DIS OPT DIS DIS 关闭
+LFCLK
+32KHz DIS 关闭
+到 PD0/1
+LFCLK
+到 32KHz 32KHz(2) 关闭
+TIMG0/8
+LFCLK
+OPT 关闭
+监测器
+MCLK 监
+OPT DIS 关闭
+测器
+POR 监
+EN
+测器
+BOR 监
+PMU EN 关闭
+测器
+内核稳压
+全驱动 减速驱动 低驱动 关闭
+器
+CPU EN DIS 关闭
+DMA OPT DIS（支持的触发器） 关闭
+核心功能
+闪存 EN DIS 关闭
+SRAM EN DIS 关闭
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 53
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 53 =====
+表 8-1. 不同工作模式下支持的功能 （续）
+RUN SLEEP STOP STANDBY
+工作模式 0NUR 1NUR 2NUR 0PEELS 1PEELS 2PEELS 0POTS 1POTS 2POTS
+0YBDNATS 1YBDNATS
+断关
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+MATHA
+OPT 关闭 关闭
+CL
+UART3 OPT DIS 关闭
+SPI0/1 OPT DIS 关闭
+MCAN0 OPT 关闭 OPT 关闭 关闭 关闭
+PD1 外
+设 TIMA0/1 OPT 关闭 关闭
+TIMG6/7
+OPT 关闭 关闭
+/12
+AES OPT 关闭 关闭
+CRC OPT DIS 关闭
+TRNG OPT 关闭 关闭
+GPIOA/ OPT OPT(2) 关闭
+B(3)
+UART0/1 OPT OPT(2) 关闭
+/2
+PD0 外 I2C0/1 OPT OPT(2) 关闭
+设
+TIMG0/8 OPT OPT(2) 关闭
+WWDT0/
+OPT DIS 关闭
+1
+RTC OPT 关闭
+VREF OPT 关闭
+ADC0/1
+(3)
+OPT NS（支持的触发器） 关闭
+COMP0/
+1/2 OPT OPT (ULP) OPT OPT (ULP) OPT OPT (ULP) 关闭
+模拟
+OPA0/1 OPT NS OPT NS OPT NS 关闭
+DAC0 OPT NS 关闭
+GPAMP OPT NS 关闭
+TEMP 传
+OPT 关闭 关闭
+感器
+具有唤醒功
+IOMUX 和 IO 唤醒 EN
+能的 DIS
+IOMUX、
+唤醒源 不适用 任何 IRQ PD0 IRQ NRST、
+SWD
+(1) 如果从 RUN1 进入 STOP0（SYSOSC 启用，但 MCLK 来自 LFCLK），则 SYSOSC 保持启用状态，就像它在 RUN1 中一样，
+ULPCLK 保持在 32KHz，就像它在 RUN1 中一样。如果从 RUN2 进入 STOP0（SYSOSC 禁用并且 MCLK 来自 LFCLK），则
+SYSOSC 保持禁用状态，就像它在 RUN2 中一样，ULPCLK 保持在 32KHz，就像它在 RUN2 中一样。
+(2) 在待机模式中使用 STANDBY1 策略时，只有特定外设（TIMG0、TIMG8 和 RTC）会设有时钟。其他 PD0 外设可在发生外部活动时生
+成异步快速时钟请求，但不会主动配备时钟。
+(3) 对于 ADCx 和 GPIO 端口 A 和 B，数字逻辑位于 PD0 中，寄存器接口位于 PD1 中。这些外设支持在 PD1 处于活动状态时进行快速单
+周期寄存器访问，并且还在低至 PD0 仍处于活动状态的待机模式下进行基本操作。
+(4) SYSPLL 不会自动禁用，需要通过 SYSCTL 寄存器中的 HSCLKEN.SYSPLLEN 字段手动禁用来降低功耗。
+54 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 54 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+8.3 电源管理单元 (PMU)
+电源管理单元 (PMU) 为器件生成内部稳压内核电源，并对外部电源 (VDD) 进行监控。PMU 还包含 PMU 本身以
+及模拟外设所使用的带隙电压基准。PMU 的主要特性包括：
+• 上电复位 (POR) 电源监测器
+• 欠压复位 (BOR) 电源监测器，具有使用三个可设定阈值的预警功能
+• 支持运行、睡眠、停止和待机工作模式的内核稳压器，可在性能与功耗之间实现动态平衡
+• 受奇偶校验保护的修整，可在电源管理修整损坏时立即生成上电复位 (POR)
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“PMU”一章。
+8.4 时钟模块 (CKM)
+时钟模块提供以下振荡器：
+• LFOSC：内部低频振荡器 (32kHz)
+• SYSOSC：内部高频振荡器（采用出厂调整时为 4MHz 或 32MHz，采用用户调整时为 16MHz 或 24MHz）
+• LFXT/LFCKIN：低频外部晶体振荡器或数字时钟输入 (32kHz)
+• HFXT/HFCKIN：高频外部晶体振荡器或数字时钟输入（4MHz 至 48MHz）
+• SYSPLL：具有 3 个输出的系统锁相环（32MHz 至 80MHz）
+以下时钟由时钟模块分配，供处理器、总线和外设使用：
+• MCLK：PD1 外设的主系统时钟，源自 SYSOSC、LFCLK 或 HSCLK，在运行和睡眠模式下有效
+• CPUCLK：处理器的时钟（源自 MCLK），在运行模式下有效
+• ULPCLK：PD0 外设的超低功耗时钟，在运行、睡眠、停止和待机模式下有效
+• MFCLK：外设的 4MHz 固定中频时钟，在运行、睡眠和停止模式下可用
+• MFPCLK：4MHz 固定中频精密时钟，在运行、睡眠和停止模式下可用
+• LFCLK：外设或 MCLK 的 32kHz 固定低频时钟，在运行、睡眠、停止和待机模式下有效
+• ADCCLK：ADC 时钟，在运行、睡眠和停止模式下可用
+• CLK_OUT：用于在外部输出时钟，在运行、睡眠、停止和待机模式下可用
+• HFCLK：源自 HFXT 或 HFCLK_IN 的高频时钟，在运行和睡眠模式下可用
+• HSCLK：源自 HFCLK 或 SYSPLL 的高速时钟，在运行和睡眠模式下可用
+• CANCLK：CAN 功能时钟，源自 HFCLK 或 SYSPLL
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“CKM”一章。
+8.5 DMA
+直接存储器存取 (DMA) 控制器支持将数据从一个存储器地址移到另一个存储器地址，而无需 CPU 干预。例如，
+DMA 可用于将数据从 ADC 转换存储器移动到 SRAM。通过使 CPU 保持在低功耗模式，而无需将其唤醒来在外
+设之间移动数据，DMA 降低了系统功耗。
+这些器件中的 DMA 支持以下重要特性：
+• 7 个独立的 DMA 传输通道
+– 3 个全功能通道（DMA0、DMA1 和 DMA2），支持重复传输模式
+– 4 个基本通道（DMA3、DMA4、DMA5 和 DMA6），支持单次传输模式
+• 可配置的 DMA 通道的优先级
+• 字节（8 位）、短字（16 位）、字（32 位）和长字（64 位）或混合字节和字传输能力
+• 传输计数器块大小支持传输高达 64k 的任何类型数据
+• 可配置的 DMA 传输触发器选择
+• 为其他通道提供服务的活动通道中断
+• 乒乓缓冲器架构的提前中断生成
+• 在另一个通道上的活动完成时级联通道
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 55
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 55 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+• 支持数据重组的跨步模式，例如三相计量应用
+表 8-3 列出了使用 DMA 存储器映射寄存器中的 DMATCTL.DMATSEL 控制位配置的可用 DMA 触发。
+表 8-2. DMA 特性
+特性 FULL 基础型
+通道编号 0,1,2 3、4、5.6
+中继器模式 是 -
+表格和填充模式 是 -
+收集模式 - -
+预请求 - -
+自动使能 - -
+超长整型 (128位) 传输 - -
+跨步模式 - -
+级联通道支持 - -
+表 8-3. DMA 触发映射
+触发 0:12 源端 触发 13:24 源端
+0 软件 13 SPI1 发布者 1
+1 通用订阅者 0 (FSUB_0) 14 SPI1 发布者 2
+2 通用订阅者 1 (FSUB_1) 15 UART3 发布者 1
+3 AES 发布者 1 16 UART3 发布者 2
+4 AES 发布者 2 17 UART0 发布者 1
+5 AES 发布者 3 18 UART0 发布者 2
+6 DAC0 发布者 2 19 UART1 发布者 1
+7 I2C0 发布者 1 20 UART1 发布者 2
+8 I2C0 发布者 2 21 UART2 发布者 1
+9 I2C1 发布者 1 22 UART2 发布者 2
+10 I2C1 发布者 2 23 ADC0 发布者 2
+11 SPI0 发布者 1 24 ADC1 发布者 2
+12 SPI0 发布者 2
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“DMA”一章。
+8.6 事件
+事件管理器将数字事件从一个实体（例如外设）传输到另一个实体（例如，另一个外设、DMA 或 CPU）。事件
+管理器通过一组定义的事件发布者（发生器）和订阅者（接收器）实现事件传输，这些事件发布者和订阅者通过
+包含静态路由和可编程路由组合的事件结构进行互连。
+事件管理器传输的事件包括：
+• 作为中断请求 (IRQ) 传输到 CPU 的外设事件（静态事件）
+– 示例：RTC 中断会发送到 CPU
+• 作为 DMA 触发器传输到 DMA 的外设事件（DMA 事件）
+– 示例：传输到 DMA、请求 DMA 传输的 UART 数据接收触发器
+• 传输到另一个外设以直接触发硬件中操作的外设事件（通用事件）
+– 示例：TIMx 计时器外设将周期性事件发布到 ADC 订阅者端口，ADC 使用该事件触发采样开始
+56 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 56 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+有关更多信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“事件”一章。
+表 8-4. 通用事件通道
+通用路由是点对点 (1:1) 路由或一分二 (1:2) 分离器路由，其中发布事件的外设配置为使用多个可用的通用路由通道之一来将事
+件发布到另一个实体（如果是分离器路由，则为多个实体）。在这里，实体可以是另一个外设、通用 DMA 触发事件或通用
+CPU 事件。
+CHANID 通用路由通道选择 通道类型
+0 未选择通用事件通道 不适用
+1 选择了通用事件通道 1 1：1
+2 选择了通用事件通道 2 1：1
+3 选择了通用事件通道 3 1：1
+4 选择了通用事件通道 4 1：1
+5 选择了通用事件通道 5 1：1
+6 选择了通用事件通道 6 1：1
+7 选择了通用事件通道 7 1：1
+8 选择了通用事件通道 8 1：1
+9 选择了通用事件通道 9 1：1
+10 选择了通用事件通道 10 1：1
+11 选择了通用事件通道 11 1：1
+12 选择了通用事件通道 12 1：2（分离器）
+13 选择了通用事件通道 13 1：2（分离器）
+14 选择了通用事件通道 14 1：2（分离器）
+15 选择了通用事件通道 15 1：2（分离器）
+8.7 存储器
+8.7.1 内存组织
+表 8-5 总结了各个器件的存储器映射。有关存储器区域详情的更多信息，请参阅 MSPM0 G 系列 80MHz 微控制
+器技术参考手册 中的平台存储器映射 部分。
+表 8-5. 内存组织
+存储器区域 子区域 MSPM0G3505 MSPM0G3506 MSPM0G3507
+32KB-8B (1) 64KB-8B (1) 128KB-8B (1)
+ECC 已校正 0x0000.0000 至 0x0000.0000 至 0x0000.0000 至
+代码（闪存） 0x0000.7FF8 0x0000.FFF8 0x0001.FFF8
+0x0040.0000 至 0x0040.0000 至 0x0040.0000 至
+ECC 未校正
+0x0040.7FF8 0x0040.FFF8 0x0041.FFF8
+0x2010.0000 至 0x2010.0000 至 0x2010.0000 至
+经过奇偶校验
+0x2010.3FFF 0x2010.7FFF 0x2010.7FFF
+0x2020.0000 至 0x2020.0000 至 0x2020.0000 至
+SRAM (SRAM) 未检验
+0x2020.3FFF 0x2020.7FFF 0x2020.7FFF
+奇偶校验 0x2030.0000 至 0x2030.0000 至 0x2030.0000 至
+代码 0x2030.3FFF 0x2030.7FFF 0x2030.7FFF
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 57
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 57 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+表 8-5. 内存组织 （续）
+存储器区域 子区域 MSPM0G3505 MSPM0G3506 MSPM0G3507
+0x4000.0000 至 0x4000.0000 至 0x4000.0000 至
+外设
+0x40FF.FFFF 0x40FF.FFFF 0x40FF.FFFF
+0x4100.0000 至 0x4100.0000 至 0x4100.0000 至
+闪存 ECC 已校正
+0x4100.8000 0x4101.0000 0x4102.0000
+0x4140.0000 至 0x4140.0000 至 0x4140.0000 至
+闪存 ECC 未校正
+0x4140.8000 0x4141.0000 0x4142.0000
+0x4180.0000 至 0x4180.0000 至 0x4180.0000 至
+闪存 ECC 代码
+0x4180.8000 0x4181.0000 0x4182.0000
+512 字节 512 字节 512 字节
+配置 NVM (NONMAIN)
+0x41C0.0000 至 0x41C0.0000 至 0x41C0.0000 至
+ECC 已校正
+外设 0x41C0.0200 0x41C0.0200 0x41C0.0200
+配置 NVM(NONMAIN) 0x41C1.0000 至 0x41C1.0000 至 0x41C1.0000 至
+ECC 未校正 0x41C1.0200 0x41C1.0200 0x41C1.0200
+配置 NVM (NONMAIN) 0x41C2.0000 至 0x41C2.0000 至 0x41C2.0000 至
+ECC 代码 0x41C2.0200 0x41C2.0200 0x41C2.0200
+0x41C4.0000 至 0x41C4.0000 至 0x41C4.0000 至
+出厂校正
+0x41C4.0080 0x41C4.0080 0x41C4.0080
+0x41C5.0000 至 0x41C5.0000 至 0x41C5.0000 至
+出厂未校正
+0x41C5.0080 0x41C5.0080 0x41C5.0080
+0x41C6.0000 至 0x41C6.0000 至 0x41C6.0000 至
+工厂 ECC 代码
+0x41C6.0080 0x41C6.0080 0x41C6.0080
+0x6000.0000 至 0x6000.0000 至 0x6000.0000 至
+子系统
+0x7FFF.FFFF 0x7FFF.FFFF 0x7FFF.FFFF
+0xE000.0000 至 0xE000.0000 至 0xE000.0000 至
+系统 PPB
+0xE00F.FFFF 0xE00F.FFFF 0xE00F.FFFF
+(1) 第一个 32KB 闪存存储器（地址 0x0000.0000 至 0x0000.8000）具有高达 100000 个编程/擦除周期。
+8.7.2 外设文件映射
+表 8-6 列出了可用的外设和每个外设的寄存器基地址。
+表 8-6. 外设汇总
+外设名称 基址 尺寸
+COMP0 0x40008000 0x2000
+COMP1 0x4000A000 0x2000
+COMP2 0x4000C000 0x2000
+DAC_OUT 0x40018000 0x2000
+OPA0 0x40020000 0x2000
+OPA1 0x40022000 0x2000
+VREF 0x40030000 0x2000
+WWDT0 0x40080000 0x2000
+WWDT1 0x40082000 0x2000
+TIMG0 0x40084000 0x2000
+TIMG8 0x40090000 0x2000
+RTC 0x40094000 0x2000
+GPIO0 0x400A0000 0x2000
+GPIO1 0x400A2000 0x2000
+SYSCTL 0x400AF000 0x3000
+DEBUGSS 0x400C7000 0x2000
+58 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 58 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+表 8-6. 外设汇总 （续）
+外设名称 基址 尺寸
+事件 0x400C9000 0x3000
+NVMNW 0x400CD000 0x2000
+I2C0 0x400F0000 0x2000
+I2C1 0x400F2000 0x2000
+UART1 0x40100000 0x2000
+UART2 0x40102000 0x2000
+UART0 0x40108000 0x2000
+MCPUSS 0x40400000 0x2000
+MATHACL 0x40410000 0x2000
+WUC 0x40424000 0x1000
+IOMUX 0x40428000 0x2000
+DMA 0x4042A000 0x2000
+CRC 0x40440000 0x2000
+AES 0x40442000 0x2000
+TRNG 0x40444000 0x2000
+SPI0 0x40468000 0x2000
+SPI1 0x4046A000 0x2000
+UART3 0x40500000 0x2000
+CAN-FD 0x40508000 0x8000
+ADC0 0x40000000 0x1000
+ADC1 0x40002000 0x1000
+ADC0(1) 0x40556000 0x1000
+ADC1(1) 0x40558000 0x1000
+TIMA0 0x40860000 0x2000
+TIMA1 0x40862000 0x2000
+TIMG6 0x40868000 0x2000
+TIMG7 0x4086A000 0x2000
+TIMG12 0x40870000 0x2000
+(1) ADC0 和 ADC1 存储器映射寄存器的别名区域
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 59
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 59 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+8.7.3 外设中断向量
+表 8-7 显示了此器件中每个外设的 IRQ 编号和中断组号。
+表 8-7. 中断向量编号
+外设名称 NVIC IRQ 组 IIDX
+WWDT0 0 0
+WWDT1 0 1
+DEBUGSS 0 2
+NVMNW 0 3
+事件子端口 0 0 4
+事件子端口 1 0 5
+SYSCTL 0 6
+GPIO0 1 0
+GPIO1 1 1
+COMP0 1 2
+COMP1 1 3
+COMP2 1 4
+TRNG 1 5
+TIMG8 2 -
+UART3 3 -
+ADC0 4 -
+ADC1 5 -
+CAN-FD 6 -
+DAC_OUT 7 -
+SPI0 9 -
+SPI1 10 -
+UART1 13 -
+UART2 14 -
+UART0 15 -
+TIMG0 16 -
+TIMG6 17 -
+TIMA0 18 -
+TIMA1 19 -
+TIMG7 20 -
+TIMG12 21 -
+I2C0 24 -
+I2C1 25 -
+AES 28 -
+RTC 30 -
+DMA 31 -
+8.8 闪存存储器
+该器件提供了单组非易失性闪存存储器来存储可执行程序代码和应用数据。
+该闪存的主要特性包括：
+• 具有 single-bit 错误纠正和双位错误检测功能的硬件 ECC 保护（编码和解码）
+60 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 60 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+• 在整个推荐电源电压范围内支持电路内编程和擦除操作
+• 1KB 小扇区大小（最小擦除分辨率为 1KB）
+• 闪存地址空间选择了多达 32 个应用的扇区，可用作高擦写次数扇区，以实现 EEPROM 模拟应用。这包括主
+数据库和可选数据库中的扇区。在具有数据库的器件中，可以将数据库中的部分扇区和主数据库中的其余扇区
+用作高擦写次数扇区。在闪存 <=32kB 的器件上，整个闪存支持 NWEC(HI_ENDURANCE) 个擦除/编程周期
+有关闪存的完整说明，请参阅该技术参考手册的“NVM”一章。
+8.9 SRAM
+MSPM0Gxx MCU 包含一个低功耗高性能 SRAM 存储器，可在器件支持的 CPU 频率范围内实现零等待状态访
+问。MSPM0Gxx MCU 还提供具有硬件奇偶校验且高达 32KB 的 SRAM。SRAM 存储器可用于存储易失性信息，
+例如调用栈、堆、全局数据和代码。SRAM 存储器内容在运行、睡眠、停止和待机操作模式下完全保留，并在关
+断模式下丢失。该器件提供了写保护机制，使应用能够防止意外修改 SRAM 存储器的内容。在将可执行代码放入
+SRAM 时写保护很有用，因为它可以针对 CPU 或 DMA 无意覆盖代码提供一定程度的保护。将代码放置在 SRAM
+中可以通过实现零等待状态操作和降低功耗来提高关键循环的性能。
+提供了写入/执行互斥机制，以允许应用程序将 SRAM 分区为两个部分：读取/写入 (RW) 分区和读取/执行 (RX) 分
+区。需要配置 SYSCTL 中的 SRAMBOUNDARY 寄存器来设置这些分区。RX 分区占用 SRAM 地址空间的上部。
+在将可执行代码放入 SRAM 时写保护很有用，因为它可以针对 CPU 或 DMA 无意覆盖代码提供一定程度的保
+护。将代码放置在 SRAM 中可以通过实现零等待状态操作和降低功耗来提高关键循环的性能。通过阻止自修改代
+码执行能力，阻止从 RW 分区执行代码功能提高了安全性。
+8.10 GPIO
+通用输入/输出 (GPIO) 外设为用户提供了一种通过器件引脚写入数据和读取数据的方法。通过使用端口 A 和端口
+B GPIO 外设，这些器件支持多达 60 个 GPIO 引脚。
+GPIO 模块的主要特性包括：
+• 从 CPU 访问 MMR 的 0 等待状态
+• 无需在软件中使用“读取、修改、写入”结构，即可设置/清除/切换多个位
+• 采用“具有唤醒功能的标准配置”驱动功能的 GPIO 能够将器件从 SHUTDOWN 模式唤醒
+• “快速唤醒”功能支持通过任意 GPIO 端口从 STOP 和 STANDBY 模式进行低功耗唤醒
+• 用户控制的输入滤波
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“GPIO”一章。
+8.11 IOMUX
+IOMUX 外设支持 IO 焊盘配置并控制进出器件引脚的数字数据流。IOMUX 的主要特性包括：
+• IO 焊盘配置寄存器支持可编程驱动强度、速度、上拉或下拉等
+• 数字引脚多路复用允许将多个外设信号路由到同一个 IO 焊盘
+• 引脚功能和能力由用户使用 PINCM 寄存器进行配置
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“IOMUX”一章。
+8.12 ADC
+这些器件中的 12 位模数转换器 (ADC) 模块（ADC0 和 ADC1）都支持采用单端输入和同步采样操作的快速 12 位
+转换。
+ADC 模块特性包括：
+• 12 位输出分辨率，速率高达 4MSPS 且 ENOB 大于 11.1 位
+• 硬件均值计算可在 250ksps 下实现 14 位有效分辨率
+• 总共多达 17 个具有独立结果存储寄存器的外部输入通道
+• 内部通道用于温度检测、电源监测和模拟信号链（与 OPA、DAC 等的互连）
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 61
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 61 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+• 软件可选基准：
+– 可配置的 1.4V 和 2.5V 内部基准电压（VREF± 引脚上需要去耦电容器）
+– MCU 电源电压 (VDD)
+– 通过 VREF± 引脚为 ADC 提供外部基准
+• 在 RUN、SLEEP 和 STOP 模式下运行
+表 8-8. ADC 通道映射
+信号名称(2) 信号名称(1) (2)
+CHANNEL[0:7] CHANNEL[8:15]
+ADC0 ADC1 ADC0 ADC1
+0 A0_0 A1_0/DAC_OUT(4) 8 A1_7(3) A0_7(3)
+1 A0_1 A1_1 9 - -
+2 A0_2 A1_2 10 - -
+3 A0_3 A1_3 11 温度传感器 -
+4 A0_4 A1_4 12 A0_12 温度传感器
+5 A0_5 A1_5 13 OPA0 输出 OPA1 输出
+6 A0_6 A1_6 14 GPAMP 输出 GPAMP 输出
+7 A0_7 A1_7 15 电源/电池监测器 电源/电池监测器
+(1) 以斜体显示的 信号名称表示 SoC 的纯内部信号。这些信号用于内部外设互连。
+(2) 有关器件模拟连接的更多信息，请参阅节 8.30。
+(3) 请注意，每个 ADC 的每个通道 8 均可由对侧的 ADC 采样。
+(4) 使用 DAC_OUT 时，A1_0 不能用于对外部信号进行采样。使用 DAC_OUT 时，避免在 PA15 引脚上使用外部电路。
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“ADC”一章。
+8.13 温度传感器
+温度传感器提供随器件温度呈线性变化的电压输出。温度传感器输出在内部连接到其中一个 ADC 输入通道，以实
+现温度数字转换。
+出厂常量存储器区域中提供了温度传感器的器件特定单点校准值。该校准值表示与在 12 位模式下使用 3.3V 参考
+VDD 在出厂修整温度 (TS ) 下测量的温度传感器相对应的 ADC 转换结果（采用 ADC 代码格式）。上述测量
+TRIM
+的 ADC 和 VREF 配置如下：RES=0（12 位模式），VRSEL=0h (VDD)，ADC t =12.5µs。此校准值可与温
+Sample
+度传感器温度系数 (TS ) 一起使用，以估算器件温度。有关如何通过出厂修整值估算器件温度的指导，请参阅
+c
+MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“温度传感器”部分。
+8.14 VREF
+这些器件中的共享电压基准 (VREF) 模块包含一个可配置的电压基准缓冲器，让用户能够为板载模拟外设提供一
+个稳定的基准。该模块还支持为需要更高精度的应用提供外部基准。
+VREF 模块特性包括：
+• 用户可选择 1.4V 和 2.5V 内部基准电压
+• 内部基准支持全速运行 ADC
+• 支持在 VREF± 器件引脚上提供外部基准电压
+• 需要在 VREF± 引脚上放置一个去耦电容器才能正常运行。有关更多详细信息，请参阅 VREF 规格部分
+62 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 62 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+Device
+Boundary
+Voltage Reference (VREF)
+CTL0 CTL1 CTL2 VREF to on-board
+analog peripherals
+ADCx
+COMPx
+DACx
+ENABLE0 OPAx
+Bandgap reference
+from PMCU + Internal Ref VREF+
+–
++ Optional
+– External Ref
+BUFCONFIG
+VSS/VREF-
+ENABLE
+图 8-1. VREF 模块
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“VREF”一章。
+8.15 COMP
+器件中的比较器外设会比较两个输入端子上的电压电平，并根据该比较提供数字输出。它支持以下主要特性：
+• 可编程迟滞
+• 可编程基准电压：
+– 外部基准电压 (VREF IO)
+– 内部基准电压（1.4V、2.5V）
+– 集成式 8 位基准 DAC，输出还可以在内部连接到 OPA 输入端子作为输出缓冲器。
+• 可配置工作模式：
+– 高速模式
+– 低功耗模式
+• 可编程输出干扰滤波器延迟
+• 支持 6 个消隐源（请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的 CTL2 寄存器）
+• 除关断模式外，支持大多数低功耗模式下的输出唤醒器件。
+• 输出连接到高级计时器故障处理机制
+• 比较器寄存器中的 IPSEL 和 IMSEL 位可用于从器件引脚或内部模拟模块选择比较器通道输入。
+表 8-9. COMP 消隐源表
+CTL2.BLANKSRC 值 消隐源
+1 TIMA0.CC2
+2 TIMA0.CC3
+3 TIMA1.CC1
+4 TIMG12.CC1
+5 TIMG6.CC1
+6 TIMG7.CC1
+表 8-10. COMP0 输入通道选择
+IPSEL/IMSEL 位 正极端子输入 负极端子输入
+0x0 COMP0_IN0+ COMP0_IN0-
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 63
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 63 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+表 8-10. COMP0 输入通道选择 （续）
+IPSEL/IMSEL 位 正极端子输入 负极端子输入
+0x1 COMP0_IN1+ COMP0_IN1-
+0x2 COMP0_IN2+ COMP0_IN2-
+0x5 DAC_OUT/COMP0_IN3+(1) 温度传感输出
+0x6 OPA1 输出 OPA0 输出
+0x7 COMP1 正极端子信号 GPAMP 输出
+表 8-11. COMP1 输入通道选择
+IPSEL/IMSEL 位 正极端子输入 负极端子输入
+0x0 COMP1_IN0+ COMP1_IN0-
+0x1 COMP1_IN1+ COMP1_IN1-
+0x2 COMP1_IN2+ COMP1_IN2-
+0x5 DAC_OUT/COMP1_IN3+(1) -
+0x7 COMP0 正极端子信号 GPAMP 输出
+表 8-12. COMP2 输入通道选择
+IPSEL/IMSEL 位 正极端子输入 负极端子输入
+0x0 COMP2_IN0+ COMP2_IN0-
+0x1 COMP2_IN1+ COMP2_IN1-
+0x5 DAC_OUT(1) -
+0x7 - GPAMP 输出
+(1) 使用 PA15 引脚连接到 COMP0/1_IN3+ 和 DAC_OUT。在将 DAC_OUT 连接到 COMP0/1_IN3+ 时，避免在 PA15 引脚上使用外部电
+路。
+有关器件模拟连接的更多信息，请参阅节 8.30。
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“COMP”一章。
+8.16 DAC
+这些器件中的 12 位缓冲数模转换器 (DAC) 将数字输入值转换为模拟电压并传输到缓冲输出通道。它支持以下主
+要特性：
+• 高达 1Msps 的输出采样率
+• 8 位或 12 位电压输出分辨率
+• 针对偏移误差校正的自校准选项
+• 直接二进制或二进制补码数据格式
+• 用于生成预定义采样率的集成式采样时间发生器
+• 集成 FIFO 并支持 DMA 操作
+• 来自事件结构的硬件触发用于转换
+• 多个可编程电压基准选项：
+– 电源电压 (VDD)
+– 外部基准电压 (VREF IO)
+– 内部基准电压（1.4V、2.5V）
+有关器件模拟连接的更多信息，请参阅节 8.30。
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“DAC”一章。
+8.17 OPA
+这些器件中的零漂移运算放大器 OPA0 和 OPA1 都是具有轨到轨输入/输出和可编程增益级反馈环路的斩波稳定型
+运算放大器。
+64 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 64 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+OPA 外设支持以下主要特性：
+• 软件可选的零漂移斩波稳定性提高了精度和漂移性能
+• 通过工厂修整可消除失调电压误差
+• 集成烧毁电流源 (BCS) 用于监测传感器运行状况
+• 高达 32 倍的可编程增益放大器 (PGA)
+OPA 具有可配置的输入多路复用器 P-MUX、N-MUX 和 M-MUX，用于支持各种模拟信号链放大器配置，包括通
+用、反相、同相、单位增益、级联、同相级联、差分等。下面的表列出了每个 OPA 的输入通道映射。
+表 8-13. OPA0 输入通道映射
+PSEL P-MUX 输入 NSEL N-MUX 输入 MSEL M-MUX 输入
+0x0 开路 0x0 开路 0x0 开路
+0x1 OPA0_IN0+ 0x1 OPA0_IN0- 0x1 OPA0_IN1-
+0x2 OPA0_IN1+ 0x2 OPA0_IN1- 0x2 GND
+0x3 DAC_OUT / OPA0_IN2+(1) 0x3 OPA1_RBOT 0x3 DAC_OUT / OPA0_IN2+(1)
+0x4 DAC8.0_OUT 0x4 RTAP 0x4 OPA1_RTOP
+0x5 VREF 0x5 RTOP
+0x6 OPA1_RTOP
+0x7 GPAMP 输出
+0x8 接地
+表 8-14. OPA1 输入通道映射
+PSEL P-MUX 输入 NSEL N-MUX 输入 MSEL M-MUX 输入
+0x0 开路 0x0 开路 0x0 开路
+0x1 OPA1_IN0+ 0x1 OPA1_IN0- 0x1 OPA1_IN1-
+0x2 OPA1_IN1+ 0x2 OPA1_IN1- 0x2 GND
+0x3 DAC_OUT / OPA1_IN2+(1) 0x3 OPA0_RBOT 0x3 DAC_OUT / OPA1_IN2+(1)
+0x4 DAC8.1_OUT 0x4 RTAP 0x4 OPA0_RTOP
+0x5 VREF 0x5 RTOP
+0x6 OPA0_RTOP
+0x7 GPAMP 输出
+0x8 接地
+(1) 使用 PA15 引脚连接到 OPA 和 DAC_OUT。在将 DAC_OUT 连接到 OPA 时，避免在 PA15 引脚上使用外部电路。
+有关器件模拟连接的更多信息，请参阅节 8.30。
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“OPA”一章。
+8.18 GPAMP
+通用放大器 (GPAMP) 外设是具有轨到轨输入和输出的斩波稳定型通用运算放大器。
+该 GPAMP 支持以下特性：
+• 软件可选斩波稳定
+• 轨到轨输入和输出
+• 可编程内部单位增益反馈环路
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“ADC”一章。
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 65
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 65 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+8.19 TRNG
+真随机数发生器 (TRNG) 利用内部电路生成 32 位随机数。TRNG 旨在用作确定性随机数发生器 (DRNG) 的源，
+以构建符合 FIPS-140-2 标准的系统。TRNG 的主要特性包括：
+• 生成 32 位随机数
+• 每 32 × 4 = 128 个 TRNG 时钟周期可生成一个新的 32 位数字
+• 内置运行状态测试
+• 在运行和睡眠模式下可用
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“TRNG”一章。
+8.20 AES
+高级加密标准 (AES) 加速器可减轻 CPU 的 AES (FIPS PUB 197) 加密和解密工作量。主要特性包括：
+• 支持 128 位和 256 位加密密钥
+• 动态密钥扩展
+• 用于解密的离线密钥生成
+• 用于存储所有密钥长度的初始密钥的影子寄存器
+• DMA 支持 ECB、CBC、OFB 和 CFB 加密模式
+• AES 就绪中断生成
+• 在运行和睡眠模式下可用
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“AES”一章。
+8.21 CRC
+循环冗余校验 (CRC) 模块为输入数据序列提供签名。CRC 模块的主要特性包括：
+• 支持基于 CRC16-CCITT 的 16 位 CRC
+• 支持基于 CRC32-ISO3309 的 32 位 CRC
+• 支持位反转
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“CRC”一章。
+8.22 MATHACL
+数学加速器 (MATHACL) 是一组硬件加速的 32 位数学函数，用于提高系统计算吞吐量。MATHACL 可减轻 CPU
+执行的数学计算工作量，从而提高效率和 CoreMark 性能。
+MATHACL 中提供了以下硬件功能：
+• 正弦/余弦 (SINCOS)
+• 反正切 (ATAN2)
+• 平方根 (SQRT)
+• 除法 (DIV)
+• 与 32 位结果相乘 (MPY32)
+• 对 32 位结果进行平方 (SQUARE32)
+• 与 64 位结果相乘 (MPY64)
+• 对 64 位结果进行平方 (SQUARE64)
+• 乘法累加 (MAC)
+• 平方累加 (SAC)
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“MATHACL”一章。
+8.23 UART
+UART 外设（UART0、UART1、UART2 和 UART3）提供以下主要特性：
+• 标准的异步通讯位：起始位、停止位、奇偶校验位；
+66 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 66 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+• 完全可编程串行接口
+– 5、6、7 或 8 个数据位
+– 偶校验、奇校验、固定校验或无奇偶校验位生成与检测
+– 可产生1或2个停止位
+– 线路中断检测
+– 输入信号上的干扰滤波器
+– 可编程波特率生成，过采样率为 16、8 或 3
+– 本地互连网络 (LIN) 模式支持
+• 独立的发送和接收 FIFO 支持 DAM 数据传输
+• 支持发送和接收环回模式操作
+• 有关受支持协议的详细信息，请参阅表 8-15。
+表 8-15. UART 特性
+UART 特性 UART0（扩展） UART1 和 UART2（主要） UART3（主要）
+在停止和待机模式下处于运行状态 有 是 -
+独立的发送FIFO和接收FIFO 是 是 有
+支持硬件流控制 有 是 有
+支持 9 位配置 有 是 是
+支持 LIN 模式 是 - -
+支持 DALI 是 - -
+支持 IrDA 是 - -
+支持 ISO7816 Smart Card 是 - -
+支持曼彻斯特编码 是 - -
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“UART”一章。
+8.24 I2C
+这些器件中的内部集成电路接口 (I2C) 外设提供与总线上其他 I2C 器件的双向数据传输，并支持以下主要特性：
+• 具有多个 7 位目标地址的 7 位和 10 位寻址模式
+• 多控制器发送器或接收器模式
+• 具有可配置时钟扩展的目标接收器或发送器模式
+• 支持标准模式 (SM)，比特率高达 100kbit/s
+• 支持快速模式 (FM)，比特率高达 400kbit/s
+• 支持超快速模式 (FM+)，比特率高达 1Mbit/s
+– 仅在开漏 IO (ODIO) 和高驱动 (HDIO) IO 上受支持
+• 独立的发送和接收 FIFO 支持 DMA 数据传输
+• 支持具有 PEC、ARP、超时检测和主机支持的 SMBus 3.0
+• 在地址匹配时从低功耗模式唤醒
+• 支持用于输入信号干扰抑制的模拟和数字干扰滤波器
+• 8 条目发送和接收 FIFO
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“I2C”一章。
+8.25 SPI
+这些器件中的串行外设接口 (SPI) 外设支持以下主要特性：
+• 支持 MCLK/2 比特率，最高可达 32Mbps（在控制器和外设模式下）1
+• 可配置为控制器或外设
+1 仅 HSIO 引脚上的 SPI 信号支持 > 16Mbps 的数据速率；对于 HSIO 引脚，请参阅引脚图 一节。
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 67
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 67 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+• 控制器和外设的可配置芯片选择
+• 可编程时钟预分频器和比特率
+• 可编程数据帧大小从 4 位到 16 位（控制器模式）和 7 位到 16 位（外设模式）
+• 支持 PACKEN 功能，允许将两个 16 位 FIFO 条目打包为一个 32 位值以提高 CPU 性能
+• 发送和接收 FIFO（四个条目，每个条目 16 位），支持 DMA 数据传输
+• 支持 TI 模式、Motorola 模式和 National Microwire 格式
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“SPI”一章。
+8.26 CAN-FD
+控制器局域网 (CAN) 控制器可实现与 CAN2.0A、CAN2.0B 或 CAN-FD 总线的通信，并且符合 ISO
+11898-1:2015 标准，最高支持 5Mbit/s 的比特率。CAN-FD 外设的主要特性包括：
+• 完全支持 64 字节 CAN-FD 帧
+• 具有 ECC 的专用 1KB 消息 SRAM
+• 可配置的发送 FIFO、发送队列和事件 FIFO（最多 32 个元素）
+• 多达 32 个专用发送缓冲器和 64 个专用接收缓冲器
+• 两个可配置的接收 FIFO（每个 FIFO 最多 64 个元素）
+• 多达 128 个滤波器元素
+• 2 条中断线路
+• 断电和唤醒支持
+• 时间戳计数器
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“CAN-FD”一章。
+8.27 WWDT
+窗口化看门狗计时器 (WWDT) 可用于监控器件的运行，特别是代码执行。如果应用软件在一个指定的时间窗口内
+没有成功地复位看门狗，WWDT 可用来生成一个复位或者中断。WWDT 的主要特性包括：
+• 25 位计数器
+• 可编程时钟分频器
+• 八个软件可选看门狗计时器周期
+• 八种软件可选窗口大小
+• 支持在进入睡眠模式时自动停止 WWDT
+• 提供间隔计时器模式，适用于不需要看门狗功能的应用
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“WWDT”一章。
+8.28 RTC
+实时时钟 (RTC) 由 32kHz 输入时钟源（通常为低频晶体）提供，并为应用提供时基以及多个 CPU 中断选项。
+RTC 的主要特性包括：
+• 秒、分钟、小时、星期几、一月中的第几日、月和年的计数器
+• 二进制或 BCD 格式
+• 闰年处理
+• 一个基于分钟、小时、星期几和一月中的第几日的可定制报警中断
+• 用于每分钟、每小时、午夜或中午唤醒的间隔报警中断
+• 以 4096Hz、2048Hz、1024Hz、512Hz、256Hz 或 128Hz 提供定期唤醒的间隔报警中断
+• 以 64Hz、32Hz、16Hz、8Hz、4Hz、2Hz、1Hz 和 0.5Hz 提供定期唤醒的间隔报警中断
+• 晶体偏移误差校准（高达 ± 240ppm）
+• 温度漂移补偿（高达 ± 240ppm）
+• RTC 时钟输出到引脚以进行校准
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“RTC”一章。
+68 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 68 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+8.29 计时器 (TIMx)
+这些器件中的计时器外设支持以下关键特性。有关具体的配置，请参阅表 8-16：
+通用计时器 (TIMGx) 的具体特性包括：
+• 16 位和 32 位递增、递减或递增/递减计数模式计时器，具有重复重新加载模式
+• 可选和可配置的时钟源
+• 用于对计数器时钟频率进行分频的 8 位可编程预分频器
+• 两个独立 CC 通道，用于：
+– 输出比较
+– 输入捕捉
+– PWM 输出
+– 单次触发模式
+• 影子 CC 寄存器在 TIMG6、TIMG7 和 TIMG12 中可用
+• 影子加载寄存器在 TIMG6、TIMG7 中可用
+• 支持用于定位和移动检测的正交编码器接口 (QEI) 在 TIMG8 中可用
+• 支持同一电源域中不同 TIMx 实例之间的同步和交叉触发
+• 支持中断/DMA 触发生成以及跨外设（例如 ADC）触发功能
+• 霍尔传感器输入的交叉触发事件逻辑 (TIMG8)
+高级计时器 (TIMAx) 的具体特性包括：
+• 16 位递增、递减或递增/递减计数模式计时器，具有重复重新加载模式
+• 可选和可配置的时钟源
+• 用于对计数器时钟频率进行分频的 8 位可编程预分频器
+• 重复计数器，仅在计数器的给定周期数之后生成中断或事件
+• 最多四个独立 CC 通道，用于：
+– 输出比较
+– 输入捕捉
+– PWM 输出
+– 单次触发模式
+• 内部第五个和第六个内部 CC 通道用于捕捉/比较事件
+• 用于加载的影子寄存器和 CC 寄存器在 TIMA0 和 TIMA1 都可用
+• 互补输出 PWM
+• 具有可编程死区插入功能的非对称 PWM：
+• 故障处理机制，确保在遇到故障状况时，输出信号处于用户定义的安全状态
+• 支持同一电源域中不同 TIMx 实例之间的同步和交叉触发
+• 支持中断和 DMA 触发生成以及跨外设（例如 ADC）触发功能
+• 两个用于内部事件的额外捕捉/比较通道
+表 8-16. TIMx 配置
+计时器名称 电源域 分辨率 预分频器 重复计数器 捕捉/比较通道 相负载 影子负载 影子 CC 死区 故障 QEI
+TIMG0 PD0 16 位 8 位 – 2 – – – – – –
+TIMG6 PD1 16 位 8 位 – 2 – 是 是 – – –
+TIMG7 PD1 16 位 8 位 – 2 – 是 是 – – –
+TIMG8 PD0 16 位 8 位 – 2 – – – – – 是
+TIMG12 PD1 32 位 – – 2 – – 是 – – –
+TIMA0 PD1 16 位 8 位 8 位 4 是 是 是 是 是 –
+TIMA1 PD1 16 位 8 位 8 位 2 是 是 是 是 是 –
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 69
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 69 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+表 8-17. TIMx 交叉触发器映射 (PD1)
+TSEL.ETSEL 选择 TIMA0 TIMA1 TIMG6 TIMG7 TIMG12
+0 TIMA0.TRIG0 TIMA0.TRIG0 TIMA0.TRIG0 TIMA0.TRIG0 TIMA0.TRIG0
+1 TIMA1.TRIG0 TIMA1.TRIG0 TIMA1.TRIG0 TIMA1.TRIG0 TIMA1.TRIG0
+2 TIMG6.TRIG0 TIMG6.TRIG0 TIMG6.TRIG0 TIMG6.TRIG0 TIMG6.TRIG0
+3 TIMG7.TRIG0 TIMG7.TRIG0 TIMG7.TRIG0 TIMG7.TRIG0 TIMG7.TRIG0
+4 TIMG12.TRIG0 TIMG12.TRIG0 TIMG12.TRIG0 TIMG12.TRIG0 TIMG12.TRIG0
+5 TIMG8.TRIG0 TIMG8.TRIG0 TIMG8.TRIG0 TIMG8.TRIG0 TIMG8.TRIG0
+6 至 15 保留
+16 事件订阅者端口 0 (FSUB0)
+17 事件订阅者端口 1 (FSUB1)
+18-31 保留
+表 8-18. TIMx 交叉触发器映射 (PD0)
+TSEL.ETSEL 选择 TIMG0 TIMG8
+0 TIMG0.TRIG0 TIMG0.TRIG0
+1 TIMG8.TRIG0 TIMG8.TRIG0
+2 至 15 保留
+16 事件订阅者端口 0 (FSUB0)
+17 事件订阅者端口 1 (FSUB1)
+18-31 保留
+有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“TIMx”一章。
+70 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 70 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+8.30 器件模拟连接
+图 8-2 显示了该器件的内部模拟连接。
+Comparators Op-amps
+COMP0_IN0+ 0
+COMP0_IN1+ 1
+COMP0_IN2+ 2 VDDA
+Burnout
+DAC C _O O U M T P / 1 C p O os M O it P i P v 0 A e _ 1 t I e _ N r R 3 m T + i O na P l 7 6 5 CO 0 MP COMP0_OUT O O P P A A 0 0 _ _ I I N N 0 1 + + 2 0 1 c s u o r u r r e c n e t DAC
+DAC_OUT / OPA0_IN2+ 3
+Temp C C C G s O O O O e P M M M P n A A s P P P M o 0 0 0 0 r _ P _ _ _ o R I I I _ N N N u O T t 0 1 2 p O U - - - u P T t 5 6 0 2 1 7 Refe 8 C r - e b O n it M c D e P A G 0 C e R 8 n e . e 0 f rator OPA0+ OPA0_IN1- G D O O P A P P A C A A G M 8 0 1 R . _ P _ V 0 O I R _ _ N R O U T O 0 E O N U U - F P D T T + 0 2 1 7 6 5 4 8 OPA0 OPA0_OUT Buff 1 D e 2 r A e b C d it C C D O O AC M M _ P P O 0 1 U + + T
+OPA1_RBOT 3
+4
+5 Internal signal
+to ADC0 and
+COMP1_IN0+ 0 COMP0
+C C O O M M P P 1 1 _ _ I I N N 1 2 + + 2 1 0 1 RTAP
+2
+DAC_OUT / OPA0_IN2+ 3 RBOT RTOP
+CO D M AC P1 _ _ O I U N T 3+ / 5 CO 1 MP COMP1_OUT OPA1_RTOP 4
+COMP0 positive terminal 7
+C C O O M M P P 1 1 _ _ I I N N 0 1 - - 0 1 COMP1 Ref VDDA GPAMP
+COMP1_IN2- 2 Burnout
+GPAMP_OUT 7 Refe 8 r - e b n it c D e A G C e 8 n . e 1 rator OPA1+ DAC_OUT/O O O P P P A A A 1 1 1 _ _ _ I I I N N N 2 0 1 + + + 2 0 1 3 c s u o r u r r e c n e t GPAMP_IN+ I A O n D P te A C rn 0 0 a , , l a A s n D i d g C n O 1 a , P l A to 1
+DAC8.1_OUT 4 GPAMP GPAMP_OUT
+VREF+ 5 OPA1 OPA1_OUT
+OPA0_RTOP 6
+C C O O M M P P 2 2 _ _ I I N N 1 0 + + 0 1 GPA G M R P O _ U O N U D T 7 8 GPAMP_IN- 0 2 1
+0 3
+OPA1_IN0- 1
+DAC_OUT 5 CO 2 MP COMP2_OUT OPA1_IN1- OPA0_RBOT 2 3 4
+5 Internal signal
+to ADC1 and
+COMP0
+C C O O M M P P 2 2 _ _ I I N N 0 1 - - 0 1 COMP2 Ref 0 1 RTAP
+2
+Refe 8 r - e b n it c D e A G C e 8 n . e 2 rator DAC_OUT / O O P P A A 1 0 _ _ IN R 2 T - OP 4 3 RBOT RTOP
+GPAMP_OUT 7
+图 8-2. 器件模拟连接
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 71
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 71 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+备注
+VRSEL<2:0>
+VDD 0
+REFP ADC
+VREF+ 1
+VREF+ 2
+A0_0:A0_7 0:7
+A1_7 8
+Temp Sense 11
+ADC0
+A0_12 12
+OPA0 RTOP 13
+GPAMP Output 14
+Supply/Battery Monitor 15
+VRSEL<2:0>
+VSS 0
+REFM
+VREF- 1
+VSS 2
+VRSEL<2:0>
+VDD 0
+REFP
+VREF+ 1
+VREF+ 2
+A1_0 / DAC_OUT 0
+A1_1:A1_7 1:7
+A0_7 8
+Temp Sense 12
+ADC1
+OPA1 RTOP 13
+GPAMP Output 14
+Supply/Battery Monitor 15
+VRSEL<2:0>
+VSS 0
+REFM
+VREF- 1
+VSS 2
+图 8-3. 器件模拟连接（ADC0 和 ADC1）
+启用 DAC_OUT 会连接到 PA15，因此在使用 DAC_OUT 时，不建议在 PA15 上使用任何外部信号。
+72 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 72 =====
+8.31 输入/输出图
+IOMUX 用于管理要在数字 IO 上使用的外设函数的选择。它还为输出驱动器、输入路径和从 SHUTDOWN 模式唤
+醒的唤醒逻辑提供控制。有关更多详细信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的
+“IOMUX”一章。
+全功能 IO 引脚的混合信号 IO 引脚切片图如图 8-4 所示。并非所有引脚都具有模拟功能、唤醒逻辑、驱动强度控
+制以及上拉或下拉电阻器。有关特定引脚支持哪些功能的详细信息，请参阅特定于器件的数据表。
+)1(
+PULLUPR
+VDDIO
+IORET
+NWODLLUPR
+Wake to PMCU To analog peripheral(s)
+SHUTDOWN Wakeup
+WAKESTATE
+WUEN D Q
+S Q
+EN
+R
+WCOMP D Q
+Glitch
+EN
+Filter VDDIO
+Input Logic
+HYSTEN
+Unassigned
+INENA
+Peripheral 01
+IO pin
+Peripheral 15
+PF
+Output Logic SHUTDOWN Latches
+Unassigned 0
+Peripheral 01 1
+D Q
+EN D Q
+Peripheral 15 15
+EN VSS VSS
+D Q
+EN
+Z1 D Q
+DRV EN
+PIPU D Q
+PIPD
+EN
+SHUTDOWN D Q
+EN
+)1(
+elbane
+pulluP elbane
+nwodlluP
+INV
+PMOS (1)
+DIN 1
+0
+NMOS
+INV
+1 DOUT
+0
+Unassigned 0
+Peripheral 01 1
+D Q Hi-Z
+EN
+Peripheral 15 15
+xuM
+tupnI
+xuM
+tuptuO
+xuM
+tuptuO
+Z-iH
+Driver
+Logic
+)1( lortnoC
+SOMP
+htgnerts
+evirD
+lortnoC
+SOMN
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+PC
+VDDIO
+PC Clamping
+0 diode (1)
+PC 1
+PC15
+Clamping
+diode
+RSTN
+VSS
+RSTN
+PF != 0
+PC
+S
+(1) The 5V-tolerant open drain IO type does not have the
+RELEASE R Q
+output-high PMOS, pullup resistor, or clamping diode.
+图 8-4. 超集输入/输出图
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 73
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 73 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+8.32 串行线调试接口
+一个串行线调试 (SWD) 两线制接口由一个与 Arm 兼容的串行线调试端口 (SW-DP) 提供，用于访问器件内的多个
+调试功能。有关 MSPM0 器件上提供的调试功能的完整说明，请参阅技术参考手册的调试一章。
+表 8-19. 串行线调试引脚要求和功能
+器件信号 方向 SWD 功能
+SWCLK 输入 来自调试探针的串行线时钟
+SWDIO 输入/输出 双向（共享）串行线数据
+8.33 引导加载程序 (BSL)
+引导加载程序 (BSL) 支持进行器件配置以及通过 UART 或 I2C 串行接口对器件存储器进行编程。通过 BSL 对器
+件存储器和配置的访问受 256 位用户定义的密码保护，如果需要，可以完全禁用器件配置中的 BSL。TI 默认会启
+用 BSL，以支持将 BSL 用于生产编程。
+使用 BSL 至少需要两个引脚：BSLRX 和 BSLTX 信号（用于 UART），或 BSLSCL 和 BSLSDA 信号（用于
+I2C）。此外，可以使用一个或两个额外引脚（BSL_invoke 和 NRST）来通过外部主机对引导加载程序进行受控
+调用。
+如果启用，则可通过以下方式调用（启动）BSL：
+• 如果 BSL_invoke 引脚状态与定义的 BSL_invoke 逻辑电平匹配，则会在引导过程中调用 BSL。如果启用了器
+件快速引导模式，则会跳过此调用检查。外部主机可以通过置位调用条件并向 NRST 引脚施加复位脉冲来触发
+BOOTRST，从而强制器件进入 BSL。之后，器件将在重启过程中验证调用条件，如果调用条件与预期的逻辑
+电平匹配，则启动 BSL。
+• 如果复位矢量和堆栈指针未编程，则在启动过程中会自动调用 BSL。因此，TI 的空白器件将在引导过程中调用
+BSL，而无需在 BSL_invoke 引脚上提供硬件调用条件。这使得只使用串行接口信号即可进行生产编程。
+• 可在运行时通过使用 BSL 进入命令发出 SYSRST 从应用软件调用 BSL。
+表 8-20. BSL 引脚要求和功能
+器件信号 连接 BSL 功能
+BSLRX UART 所需 UART 接收信号 (RXD)，输入
+BSLTX UART 所需 UART 发送信号 (TXD)，输出
+BSLSCL I2C 所需 I2C BSL 时钟信号 (SCL)
+BSLSDA I2C 所需 I2C BSL 数据信号 (SDA)
+BSL_invoke 可选 用于在引导期间启动 BSL 的高电平有效数字输入
+用于触发调用信号复位和后续检查 (BSL_invoke) 的
+NRST 可选
+低电平有效复位引脚
+有关 BSL 功能和命令集的完整说明，请参阅 MSPM0 引导加载程序用户指南。
+8.34 器件出厂常量
+所有器件都包含一个存储器映射出厂区域，该区域提供描述器件功能的只读数据以及任何出厂提供的修整信息，
+供应用软件使用。有关更多信息，请参阅 MSPM0 G 系列 80MHz 微控制器技术参考手册 中的“出厂常量”一
+章。
+表 8-21. DEVICEID
+DEVICEID 地址为 0x41C4.0004，PARTNUM 为位 12 至 27，MANUFACTURER 为位 1 至 11。
+器件 PARTNUM 制造商
+MSPM0G3505 0xBB88 0x17
+MSPM0G3506 0xBB88 0x17
+74 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 74 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+表 8-21. DEVICEID （续）
+DEVICEID 地址为 0x41C4.0004，PARTNUM 为位 12 至 27，MANUFACTURER 为位 1 至 11。
+器件 PARTNUM 制造商
+MSPM0G3507 0xBB88 0x17
+表 8-22. USERID
+USERID 地址为 0x41C4.0008，PART 为位 0 至 15，VARIANT 为位 16 至 23
+器件 器件 型号 器件 器件 型号
+MSPM0G3507SPMR 0xAE2D 0xC7 MSPM0G3506SRHBR 0x151F 0xB5
+MSPM0G3507SRGZR 0xAE2D 0xF7 MSPM0G3506SDGS28R 0x151F 0x8
+MSPM0G3507SPTR 0xAE2D 0x3F MSPM0G3505SPMR 0xC504 0x1D
+MSPM0G3507SRHBR 0xAE2D 0x4C MSPM0G3505SRGZR 0xC504 0xC7
+MSPM0G3507SDGS28R 0xAE2D 0xCA MSPM0G3505SPTR 0xC504 0x93
+MSPM0G3506SPMR 0x151F 0xD4 MSPM0G3505SRHBR 0xC504 0xE7
+MSPM0G3506SRGZR 0x151F 0xFE MSPM0G3505SDGS28R 0xC504 0x8E
+MSPM0G3506SPTR 0x151F 0x39
+8.35 标识
+修订版本和器件标识
+硬件修订版本和器件标识值存储在存储器映射出厂区域中；请参阅“器件出厂常量”部分，该区域提供了描述器
+件功能的只读数据以及任何出厂提供的修整信息，以供应用软件使用。有关更多信息，请参阅 MSPM0 G 系列
+80MHz 微控制器技术参考手册 中的“出厂常量”一章。要识别 ROM（固件）版本，可以访问地址
+32'h01000048。
+器件修订版本和标识信息也包含在器件封装的顶部标记中。特定于器件的勘误表中介绍了这些标记（请参阅节
+10.4）。
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 75
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 75 =====
+9 应用、实施和布局
+9.1 典型应用
+备注
+以下应用部分中的信息不属于TI 器件规格的范围，TI 不担保其准确性和完整性。TI 的客 户应负责确定
+器件是否适用于其应用。客户应验证并测试其设计，以确保系统功能。
+9.1.1 原理图
+TI 建议在 VDD 和 VSS 引脚之间连接 10µF 和 0.1µF 低 ESR 陶瓷去耦电容器的组合，并将这些电容器尽可能靠
+近其去耦的电源引脚放置（几毫米以内），以实现最小的环路面积。对于大多数应用，推荐使用 10µF 大容量去耦
+电容器，但可以根据 PCB 设计和应用要求，在需要时调整该电容。例如，可以使用容量更大的电容器，但会影响
+电源轨斜升时间。
+必须将 NRST 复位引脚上拉至 VDD（电源电平），器件才能解除复位状态，开始引导过程。对于大多数应用，TI
+建议将一个外部 47kΩ 上拉电阻器与一个 10nF 下拉电容器连接，使 NRST 引脚能够由另一个器件或调试探针控
+制。
+SYSOSC 频率校正环路 (FCL) 电路在 ROSC 引脚和 VSS 之间安装了容差为 0.1%、温度系数 (TCR) 为 25ppm/C
+或更好的 100kΩ 外部电阻器。该电阻器可建立基准电流，通过校正环路稳定 SYSOSC 频率。如果使用 FCL 功
+能实现更高的精度，则需要该电阻器；如果未启用 SYSOSC FCL，则不需要该电阻器。如果未使用 FCL 模式，
+PA2 引脚可用作数字输入/输出引脚。
+VCORE 引脚上需要连接一个 0.47μF 的电容器，并且该电容器必须靠近器件放置，与器件接地之间的距离最
+小。请勿将其他电路连接到 VCORE 引脚。
+对于 5V 容限开漏 (ODIO)，需要一个上拉电阻器为 I2C 和 UART 功能输出高电平，因为开漏 IO 仅实现了低侧
+NMOS 驱动器，无高侧 PMOS 驱动器。5V 容限开漏 IO 具有失效防护功能，即使未提供 VDD 也可能有电压。
+0.1
+(cid:1)
+10 F
+(cid:0)
+1.62 - 3.6 V
+ROSC
+100 k
+F
+(cid:2) ±0.1% ±25ppm
+0.47
+NRST
+10nF
+(cid:3)
+MSPM0 MCU
+VDD
+VSS
+VCORE
+F
+NRST
+k
+74
+(cid:4)
+PA0
+PA1
+5V-tolerant open drain pins
+Pull-up resistors are required for output high
+SWDIO
+Debug tool
+SWCLK
+Debug interface
+UP UP
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+1.62 - 5.5 V
+PA2/ROSC
+The NRST pullup
+resistorandcapacitor
+are optional, but
+NRST must be
+pulled high to VDD
+for the device to start.
+图 9-1. 基本应用原理图
+76 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 76 =====
+10 器件和文档支持
+TI 提供大量的开发工具。下面列出了用于评估器件性能、生成代码和开发解决方案的工具和软件。
+10.1 入门和后续步骤
+更多有关 MSP 低功耗微控制器以及开发协助工具和库的信息，请访问德州仪器 (TI) Arm Cortex-M0+ MCU 页
+面。
+10.2 器件命名规则
+为了指出产品开发周期所处的阶段，TI 为所有 MSP MCU 器件和支持工具的器件型号分配了前缀。.每个 MSP
+MCU 商用系列产品都具有以下两个前缀之一：M0 或 X。这些前缀代表了产品开发的发展阶段，即从工程原型 (X)
+直到完全合格的生产器件 (M0)。
+X 或 XMS – 实验器件，不一定代表最终器件的电气规格
+M0 - 完全合格的生产器件
+X 和 XMS - 器件在发货时附带如下免责声明：
+“开发中的产品用于内部评估用途。”MSP 器件的特性已经全部明确，并且器件的质量和可靠性已经完全论证。
+TI 的标准保修证书对该器件适用。预测显示原型器件 (X) 的故障率大于标准生产器件。由于这些器件的预计最终
+使用故障率尚不确定，德州仪器 (TI) 建议不要将它们用于任何生产系统。请仅使用合格的生产器件。
+TI 的器件命名规则还包含具有器件产品系列名称的后缀。此后缀表示温度范围、封装类型和配送形式。图 10-1 提
+供了解读完整器件名称的图例。
+MSP M0 G 350 7 S RHB R
+Processor Family
+MCU Pla
+(cid:1)
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+Distribu(cid:2)on Format
+orm Package Type
+Product Family Temperature range
+Device Subfamily Flash Memory
+图 10-1. 器件命名规则
+表 10-1. 器件命名规则
+MSPM0 = 基于 Arm 的 32 位 M0+
+MCU 平台
+XMSP = 基于 Arm 的实验性器件 32 位 M0+
+产品系列 G = 80MHz 频率
+器件子系列 350 = CAN-FD、2 个 ADC、2 个 OPA、3 个 COMP
+5 = 32KB
+闪存存储器 6 = 64KB
+7 = 128KB
+温度范围 S = -40°C 至 125°C
+封装类型 请参阅器件比较部分和 https://www.ti.com/packaging
+配送形式 R = 大卷带
+如需 MSP 器件不同封装类型的可订购器件型号，请参阅本文的“封装选项附录”，浏览 ti.com，或联系您的 TI
+销售代表。
+10.3 工具与软件
+设计套件与评估模块
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 77
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 77 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+MSPM0 LaunchPad (LP) 支持立即在业内出色的集成式模拟和低成本通用 MSPM0 MCU 系列上开始进行开
+板：LP-MSPM0G3507 发。展示了所有器件引脚和功能；包括一些内置电路、开箱即用软件演示，以及用于
+编程/调试/EnergyTrace 的板载 XDS110 调试探针。
+LP 生态系统包括数十个用于扩展功能的 BoosterPack 可堆叠插件模块。
+嵌入式软件
+MSPM0 软件开发套件 包含软件驱动程序、中间件库、文档、工具和代码示例，可为所有 MSPM0 器件提供
+(SDK) 熟悉且简单的用户体验。
+MSP 软件诊断库 集成功能安全软件，确保客户符合功能安全要求。
+软件开发工具
+TI 开发人员专区 在网络浏览器上开始评估和开发，无需进行任何安装。云工具还具有可下载的离线版
+本。
+TI Resource Explorer TI SDK 的在线门户。可在 CCS IDE 或 TI 云工具中访问。
+SysConfig 直观的 GUI，可用于配置器件和外设、解决系统冲突、生成配置代码，以及自动进行
+引脚多路复用设置。可在 CCS IDE、TI 云工具或独立版本中访问。（离线版）
+MSP Academy 所有开发人员了解 MSPM0 MCU 平台的良好起点，其中包含涵盖各种主题的培训模
+块。TIRex 的一部分。
+GUI Composer 简化评估某些 MSPM0 功能的 GUI，例如无需任何代码即可配置和监测完全集成的模
+拟信号链。
+IDE 和编译器工具链
+Code Composer Studio™ Code Composer Studio 是适用于 TI 微控制器和处理器的集成开发环境 (IDE)。它包
+(CCS) 含一整套用于开发和调试嵌入式应用的工具。CCS 完全免费，可在 Eclipse 和 Theia
+框架上使用。
+IAR Embedded IAR Embedded Workbench for Arm 提供了一个完整的开发工具链，用于为 MSPM0
+Workbench® IDE 构建和调试嵌入式应用。随附的 IAR C/C++ 编译器可为您的应用生成高度优化的代
+码，而 C-SPY 调试器是一个完全集成的调试器，用于源代码级调试和反汇编级调
+试，并支持复杂代码和数据断点。
+Keil® MDK IDE Arm Keil MDK 是一个完整的调试器和 C/C++ 编译器工具链，用于为 MSPM0 构建和
+调试嵌入式应用。Keil MDK 包含一个完全集成的调试器，用于源代码级调试和反汇编
+级调试。MDK 完全符合 CMSIS 标准。
+TI Arm-Clang TI Arm Clang 包含在 Code Composer Studio IDE 中。
+GNU Arm 嵌入式工具链 MSPM0 SDK 支持使用开源 Arm GNU 工具链进行开发。Code Composer Studio IDE
+(CCS) 支持 Arm GCC。
+10.4 文档支持
+要接收文档更新通知，请导航至 ti.com 上的器件产品文件夹。点击通知 进行注册，即可每周接收产品信息更改摘
+要。有关更改的详细信息，请查看任何已修订文档中包含的修订历史记录。
+以下文档介绍了 MSPM0 MCU。www.ti.com.cn 网站上提供了这些文档的副本。
+技术参考手册
+MSPM0 G 系列 本手册介绍了 MSPM0G 系列器件的模块和外设。每个说明都给出了一般意义上的模块或外
+80MHz 微控制器技 设。目前所展示的并没有涵盖器件上所有模块或外围设备的所有特性和功能。此外，模块或
+术参考手册 外设在不同器件上的具体实现可能有所不同。引脚功能、内部信号连接和操作参数都因器件
+不同而各异。有关这些详细信息，请参阅特定于器件的数据表。
+78 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 78 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+10.5 支持资源
+TI E2E™ 中文支持论坛是工程师的重要参考资料，可直接从专家处获得快速、经过验证的解答和设计帮助。搜索
+现有解答或提出自己的问题，获得所需的快速设计帮助。
+链接的内容由各个贡献者“按原样”提供。这些内容并不构成 TI 技术规范，并且不一定反映 TI 的观点；请参阅
+TI 的使用条款。
+10.6 商标
+LaunchPad™, Code Composer Studio™, and TI E2E™ are trademarks of Texas Instruments.
+Arm® and Cortex® are registered trademarks of Arm Limited.
+所有商标均为其各自所有者的财产。
+10.7 静电放电警告
+静电放电 (ESD) 会损坏这个集成电路。德州仪器 (TI) 建议通过适当的预防措施处理所有集成电路。如果不遵守正确的处理
+和安装程序，可能会损坏集成电路。
+ESD 的损坏小至导致微小的性能降级，大至整个器件故障。精密的集成电路可能更容易受到损坏，这是因为非常细微的参
+数更改都可能会导致器件与其发布的规格不相符。
+10.8 术语表
+TI 术语表 本术语表列出并解释了术语、首字母缩略词和定义。
+11 修订历史记录
+注：以前版本的页码可能与当前版本的页码不同
+Changes from OCTOBER 1, 2023 to OCTOBER 3, 2025 (from Revision B (October 2023) to
+Revision C (October 2025)) Page
+• 在高级计时器特性说明中添加了基本输出...........................................................................................................1
+• 在窗口化看门狗计时器特性说明中添加了 WWDT 首字母缩略词.......................................................................1
+• 在封装选项列表中添加了间距和封装标识符详细信息.........................................................................................1
+• 更改了通信功能部分的格式，使之更加清晰.......................................................................................................1
+• 在 5V IO 说明中添加了“开漏”.........................................................................................................................1
+• 向具有内部连接的模拟外设列表中添加了“GPAMP”.......................................................................................1
+• 在灵活的 I/O 特性部分中添加了高速 IO 数量部分..............................................................................................1
+• 更新了优化低功耗模式部分................................................................................................................................1
+• 删除了工业型号数据表中的功能安全品牌化.......................................................................................................1
+• 将 VSSOP 宽度从 3mm 更改为 4.9mm 以对引线进行解释说明.........................................................................6
+• 添加了封装帧宽信息...........................................................................................................................................6
+• 从器件编号中删除了通配符................................................................................................................................6
+• 更新了比较表值..................................................................................................................................................6
+• 向 OPN 添加了“R” 以给分发格式命名............................................................................................................6
+• 将“按 IO 类型划分的数字特性”表移到“引脚属性”部分的开头...................................................................11
+• 在信号说明部分的开头添加了引脚类型信息.....................................................................................................14
+• 在绝对最大额定值部分中添加了针对 PA21 GPIO 引脚上的二极管电流注入限制的脚注..................................25
+• 向“VDD = 1.62V 时较低电流的绝对最大额定值”中添加了缺失的 I_VDD/I_VSS 脚注..................................25
+• 将 LFOSC 启动时间规格从 1.7ms 更新为 1ms................................................................................................25
+• 更新了 HSIO 的数字 IO VOL 规格以正确地参考温度条件，并与此规格的其他 IO 类型匹配...........................25
+• 更新了数字 IO 电气规格和开关规格部分，并“在 DRV=1 驱动强度设置中使用 HDIO 时的串联限流电阻器”
+添加了脚注........................................................................................................................................................25
+• 添加了“DRV = 1 驱动强度设置时 HDIO 运行模式的端口输出频率”的数字 IO 开关规格行项目...................25
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 79
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 79 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+• 添加了“有关 I_comp 规范 HCYCLE 寄存器设置的比较器电气规格部分”的条件..........................................25
+• 更新了上电复位电压电平规格...........................................................................................................................29
+• 更新了“BOR COLD 规格”部分.....................................................................................................................29
+• 将 VBOR0- 下降从 1.56 更改为 1.55................................................................................................................29
+• 添加了 SLEEP0 唤醒时间.................................................................................................................................31
+• 将“tsettle 期间 fSYSOSC 额外下冲精度”的最小值从 -11 更改为 -16...........................................................32
+• 将 SYSPLLCLK0/1 从 1MHz 更改为 2.5MHz...................................................................................................33
+• 将 SYSPLL RMS 周期间抖动从 24ps 更改为 60ps..........................................................................................33
+• 将 SYSPLL 典型启动时间从 14us 更改为 7us，最长启动时间从 24us 更改为 18us.......................................33
+• 将 VDD ≥ 2.7V、DRV = 1、CL = 20pF 规格从 40MHz 更改为 32MHz..........................................................38
+• 32 将 VDD ≥ 2.7V、DRV = 1、CL = 20pF 规格从 40MHz 更改为 32MHz.....................................................38
+• 将 I_VBST 从 0.7uA 更改为 0.8uA...................................................................................................................38
+• 添加了“f_in = 10KHz”测试条件....................................................................................................................39
+• 将 V_SupplyMon 最大值从 1% 更改为 1.5%....................................................................................................39
+• 将偏移误差从 +/-2mV 更改为 +/-3.5mV............................................................................................................40
+• 将增益误差从 +/-3LSB 更改为 +/-4LSB............................................................................................................40
+• 将温度传感器稳定时间从 10us 更改为 12.5us.................................................................................................41
+• 添加低功耗模式下的 COMP +VREF 电流消耗.................................................................................................42
+• 将 COMP 低功耗模式电流消耗从 0.84uA 更改为 0.85uA................................................................................42
+• 将 COMP IDD 从 102uA 更改为 120uA............................................................................................................42
+• 拆分了比较器电流消耗部分的参数部分............................................................................................................42
+• 将 COMP+VREF 低功耗模式 IDD 规格从 2.5uA 更改为 3.5uA........................................................................42
+• 添加了 DAC 代码测试条件...............................................................................................................................43
+• 将 DAC IDD 从 300uA 更改为 400uA...............................................................................................................43
+• 向 VDD-0.3V 测试条件添加了 V_o = 0.3V........................................................................................................43
+• 从输出负载电流中删除了 +/-，仅将其设置为 +4mA。.....................................................................................44
+• 将同相增益误差（增益 = 32）从（–2.6% 至 +2.6%）更改为（–3.2% 至 +2%）.........................................47
+• 将反相增益误差（增益 = -31）从（–2.7% 至 +2.7%）更改为（–3.3% 至 +2.1%）....................................47
+• 使用准确的详细信息更新了表...........................................................................................................................52
+• 使用正确的寄存器配置设置，将温度传感器校准条件从 1.4V 更改为 3.3V......................................................62
+• 更新了计时器特性的说明..................................................................................................................................69
+• 更新了器件模拟连接 图....................................................................................................................................71
+• 更新了超集输入/输出图 ...................................................................................................................................73
+• 更新了器件命名规则的说明..............................................................................................................................77
+80 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 80 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+12 机械、封装和可订购信息
+以下页面包含机械、封装和可订购信息。这些信息是指定器件可用的最新数据。数据如有变更，恕不另行通知，
+且不会对此文档进行修订。有关此数据表的浏览器版本，请查阅左侧的导航栏。
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 81
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 81 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+82 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 82 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 83
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 83 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+84 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 84 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 85
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 85 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+86 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 86 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 87
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 87 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+88 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 88 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 89
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 89 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+90 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 90 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+PACKAGE OUTLINE
+RHB0032E VQFN - 1 mm max height
+SCALE 3.000
+PLASTIC QUAD FLATPACK - NO LEAD
+A 5.1 B
+4.9
+PIN 1 INDEX AREA
+5.1 (0.1)
+4.9
+SIDE WALL DETAIL
+OPTIONAL ME20.000TAL THICKNESS
+C
+1 MAX
+SEATING PLANE
+0.05
+0.00 0.08 C
+2X 3.5
+3.45 0.1 (0.2) TYP
+9 16 EXPOSED
+THERMAL PAD
+28X 0.5
+8
+17 SEE SIDE WALL
+DETAIL
+2X 33 SYMM
+3.5
+0.3
+32X
+0.2
+24 0.1 C A B
+1
+0.05 C
+32 25
+PIN 1 ID SYMM
+(OPTIONAL) 0.5
+32X
+0.3
+4223442/B 08/2019
+NOTES:
+1. All linear dimensions are in millimeters. Any dimensions in parenthesis are for reference only. Dimensioning and tolerancing
+per ASME Y14.5M.
+2. This drawing is subject to change without notice.
+3. The package thermal pad must be soldered to the printed circuit board for thermal and mechanical performance.
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 91
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 91 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+EXAMPLE BOARD LAYOUT
+RHB0032E VQFN - 1 mm max height
+PLASTIC QUAD FLATPACK - NO LEAD
+( 3.45)
+SYMM
+32 25
+32X (0.6)
+1 24
+32X (0.25)
+(1.475)
+28X (0.5)
+33 SYMM
+(4.8)
+( 0.2) TYP
+VIA
+8 17
+(R0.05)
+TYP
+9 16
+(1.475)
+(4.8)
+LAND PATTERN EXAMPLE
+SCALE:18X
+0.07 MAX 0.07 MIN
+ALL AROUND ALL AROUND
+SOLDER MASK
+METAL
+OPENING
+SOLDER MASK METAL UNDER
+OPENING SOLDER MASK
+NON SOLDER MASK
+SOLDER MASK
+DEFINED
+DEFINED
+(PREFERRED)
+SOLDER MASK DETAILS
+4223442/B 08/2019
+NOTES: (continued)
+4. This package is designed to be soldered to a thermal pad on the board. For more information, see Texas Instruments literature
+number SLUA271 (www.ti.com/lit/slua271).
+5. Vias are optional depending on application, refer to device data sheet. If any vias are implemented, refer to their locations shown
+on this view. It is recommended that vias under paste be filled, plugged or tented.
+92 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 92 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+EXAMPLE STENCIL DESIGN
+RHB0032E VQFN - 1 mm max height
+PLASTIC QUAD FLATPACK - NO LEAD
+4X ( 1.49)
+(R0.05) TYP (0.845)
+32 25
+32X (0.6)
+1 24
+32X (0.25)
+28X (0.5)
+(0.845)
+SYMM
+33
+(4.8)
+8 17
+METAL
+TYP
+9 16
+SYMM
+(4.8)
+SOLDER PASTE EXAMPLE
+BASED ON 0.125 mm THICK STENCIL
+EXPOSED PAD 33:
+75% PRINTED SOLDER COVERAGE BY AREA UNDER PACKAGE
+SCALE:20X
+4223442/B 08/2019
+NOTES: (continued)
+6. Laser cutting apertures with trapezoidal walls and rounded corners may offer better paste release. IPC-7525 may have alternate
+design recommendations.
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 93
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 93 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+94 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 94 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+www.ti.com.cn ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025
+Copyright © 2025 Texas Instruments Incorporated 提交文档反馈 95
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 95 =====
+MSPM0G3507, MSPM0G3506, MSPM0G3505
+ZHCSSC4C – FEBRUARY 2023 – REVISED OCTOBER 2025 www.ti.com.cn
+96 提交文档反馈 Copyright © 2025 Texas Instruments Incorporated
+Product Folder Links: MSPM0G3507 MSPM0G3506 MSPM0G3505
+English Data Sheet: SLASEX6
+
+===== PAGE 96 =====
+PACKAGE OPTION ADDENDUM
+www.ti.com 10-Apr-2026
+PACKAGING INFORMATION
+Orderable part number Status Material type Package | Pins Package qty | Carrier RoHS Lead finish/ MSL rating/ Op temp (°C) Part marking
+(1) (2) (3) Ball material Peak reflow (6)
+(4) (5)
+MSPM0G3505SDGS28R Active Production VSSOP (DGS) | 28 5000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 G3505S
+MSPM0G3505SDGS28R.A Active Production VSSOP (DGS) | 28 5000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 G3505S
+MSPM0G3505SDGS28R.B Active Production VSSOP (DGS) | 28 5000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 G3505S
+MSPM0G3505SPMR Active Production LQFP (PM) | 64 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3505S
+MSPM0G3505SPMR.A Active Production LQFP (PM) | 64 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3505S
+MSPM0G3505SPMR.B Active Production LQFP (PM) | 64 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3505S
+MSPM0G3505SPTR Active Production LQFP (PT) | 48 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3505S
+MSPM0G3505SPTR.A Active Production LQFP (PT) | 48 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3505S
+MSPM0G3505SPTR.B Active Production LQFP (PT) | 48 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3505S
+MSPM0G3505SRGZR Active Production VQFN (RGZ) | 48 4000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3505S
+MSPM0G3505SRGZR.A Active Production VQFN (RGZ) | 48 4000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3505S
+MSPM0G3505SRGZR.B Active Production VQFN (RGZ) | 48 4000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3505S
+MSPM0G3505SRHBR Active Production VQFN (RHB) | 32 3000 | LARGE T&R Yes SN Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3505S
+MSPM0G3505SRHBR.A Active Production VQFN (RHB) | 32 3000 | LARGE T&R Yes SN Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3505S
+MSPM0G3505SRHBR.B Active Production VQFN (RHB) | 32 3000 | LARGE T&R Yes SN Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3505S
+MSPM0G3506SDGS28R Active Production VSSOP (DGS) | 28 5000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 G3506S
+MSPM0G3506SDGS28R.A Active Production VSSOP (DGS) | 28 5000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 G3506S
+MSPM0G3506SDGS28R.B Active Production VSSOP (DGS) | 28 5000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 G3506S
+MSPM0G3506SPMR Active Production LQFP (PM) | 64 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3506S
+MSPM0G3506SPMR.A Active Production LQFP (PM) | 64 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3506S
+MSPM0G3506SPMR.B Active Production LQFP (PM) | 64 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3506S
+MSPM0G3506SPTR Active Production LQFP (PT) | 48 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3506S
+MSPM0G3506SPTR.A Active Production LQFP (PT) | 48 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3506S
+MSPM0G3506SPTR.B Active Production LQFP (PT) | 48 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3506S
+Addendum-Page 1
+
+===== PAGE 97 =====
+PACKAGE OPTION ADDENDUM
+www.ti.com 10-Apr-2026
+Orderable part number Status Material type Package | Pins Package qty | Carrier RoHS Lead finish/ MSL rating/ Op temp (°C) Part marking
+(1) (2) (3) Ball material Peak reflow (6)
+(4) (5)
+MSPM0G3506SRGZR Active Production VQFN (RGZ) | 48 4000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3506S
+MSPM0G3506SRGZR.A Active Production VQFN (RGZ) | 48 4000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3506S
+MSPM0G3506SRGZR.B Active Production VQFN (RGZ) | 48 4000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3506S
+MSPM0G3506SRHBR Active Production VQFN (RHB) | 32 3000 | LARGE T&R Yes NIPDAU | SN Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3506S
+MSPM0G3506SRHBR.A Active Production VQFN (RHB) | 32 3000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3506S
+MSPM0G3506SRHBR.B Active Production VQFN (RHB) | 32 3000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3506S
+MSPM0G3507SDGS28R Active Production VSSOP (DGS) | 28 5000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 G3507S
+MSPM0G3507SDGS28R.A Active Production VSSOP (DGS) | 28 5000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 G3507S
+MSPM0G3507SDGS28R.B Active Production VSSOP (DGS) | 28 5000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 G3507S
+MSPM0G3507SPMR Active Production LQFP (PM) | 64 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3507S
+MSPM0G3507SPMR.A Active Production LQFP (PM) | 64 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3507S
+MSPM0G3507SPMR.B Active Production LQFP (PM) | 64 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3507S
+MSPM0G3507SPTR Active Production LQFP (PT) | 48 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3507S
+MSPM0G3507SPTR.A Active Production LQFP (PT) | 48 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3507S
+MSPM0G3507SPTR.B Active Production LQFP (PT) | 48 1000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 M0G3507S
+MSPM0G3507SRGZR Active Production VQFN (RGZ) | 48 4000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3507S
+MSPM0G3507SRGZR.A Active Production VQFN (RGZ) | 48 4000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3507S
+MSPM0G3507SRGZR.B Active Production VQFN (RGZ) | 48 4000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3507S
+MSPM0G3507SRHBR Active Production VQFN (RHB) | 32 3000 | LARGE T&R Yes NIPDAU | SN Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3507S
+MSPM0G3507SRHBR.A Active Production VQFN (RHB) | 32 3000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3507S
+MSPM0G3507SRHBR.B Active Production VQFN (RHB) | 32 3000 | LARGE T&R Yes NIPDAU Level-2-260C-1 YEAR -40 to 125 MSPM0
+G3507S
+Addendum-Page 2
+
+===== PAGE 98 =====
+PACKAGE OPTION ADDENDUM
+www.ti.com 10-Apr-2026
+(1) Status: For more details on status, see our product life cycle.
+(2) Material type: When designated, preproduction parts are prototypes/experimental devices, and are not yet approved or released for full production. Testing and final process, including without limitation quality assurance,
+reliability performance testing, and/or process qualification, may not yet be complete, and this item is subject to further changes or possible discontinuation. If available for ordering, purchases will be subject to an additional
+waiver at checkout, and are intended for early internal evaluation purposes only. These items are sold without warranties of any kind.
+(3) RoHS values: Yes, No, RoHS Exempt. See the TI RoHS Statement for additional information and value definition.
+(4) Lead finish/Ball material: Parts may have multiple material finish options. Finish options are separated by a vertical ruled line. Lead finish/Ball material values may wrap to two lines if the finish value exceeds the maximum
+column width.
+(5) MSL rating/Peak reflow: The moisture sensitivity level ratings and peak solder (reflow) temperatures. In the event that a part has multiple moisture sensitivity ratings, only the lowest level per JEDEC standards is shown.
+Refer to the shipping label for the actual reflow temperature that will be used to mount the part to the printed circuit board.
+(6) Part marking: There may be an additional marking, which relates to the logo, the lot trace code information, or the environmental category of the part.
+Multiple part markings will be inside parentheses. Only one part marking contained in parentheses and separated by a "~" will appear on a part. If a line is indented then it is a continuation of the previous line and the two
+combined represent the entire part marking for that device.
+Important Information and Disclaimer:The information provided on this page represents TI's knowledge and belief as of the date that it is provided. TI bases its knowledge and belief on information provided by third parties, and
+makes no representation or warranty as to the accuracy of such information. Efforts are underway to better integrate information from third parties. TI has taken and continues to take reasonable steps to provide representative
+and accurate information but may not have conducted destructive testing or chemical analysis on incoming materials and chemicals. TI and TI suppliers consider certain information to be proprietary, and thus CAS numbers
+and other limited information may not be available for release.
+In no event shall TI's liability arising out of such information exceed the total purchase price of the TI part(s) at issue in this document sold by TI to Customer on an annual basis.
+OTHER QUALIFIED VERSIONS OF MSPM0G3505, MSPM0G3506, MSPM0G3507 :
+•Automotive : MSPM0G3505-Q1, MSPM0G3506-Q1, MSPM0G3507-Q1
+NOTE: Qualified Version Definitions:
+•Automotive - Q100 devices qualified for high-reliability automotive applications targeting zero defects
+Addendum-Page 3
+
+===== PAGE 99 =====
+PACKAGE MATERIALS INFORMATION
+www.ti.com 29-Apr-2026
+TAPE AND REEL INFORMATION
+REEL DIMENSIONS TAPE DIMENSIONS
+K0 P1
+W
+B0
+Reel
+Diameter
+Cavity A0
+A0 Dimension designed to accommodate the component width
+B0 Dimension designed to accommodate the component length
+K0 Dimension designed to accommodate the component thickness
+W Overall width of the carrier tape
+P1 Pitch between successive cavity centers
+Reel Width (W1)
+QUADRANT ASSIGNMENTS FOR PIN 1 ORIENTATION IN TAPE
+Sprocket Holes
+Q1 Q2 Q1 Q2
+Q3 Q4 Q3 Q4 User Direction of Feed
+Pocket Quadrants
+*All dimensions are nominal
+Device Package Package Pins SPQ Reel Reel A0 B0 K0 P1 W Pin1
+Type Drawing Diameter Width (mm) (mm) (mm) (mm) (mm) Quadrant
+(mm) W1 (mm)
+MSPM0G3505SDGS28R VSSOP DGS 28 5000 330.0 16.4 5.5 7.4 1.45 8.0 16.0 Q1
+MSPM0G3505SPMR LQFP PM 64 1000 330.0 24.4 13.0 13.0 2.1 16.0 24.0 Q2
+MSPM0G3505SPTR LQFP PT 48 1000 330.0 16.4 9.6 9.6 1.9 12.0 16.0 Q2
+MSPM0G3505SRGZR VQFN RGZ 48 4000 330.0 16.4 7.3 7.3 1.1 12.0 16.0 Q2
+MSPM0G3505SRHBR VQFN RHB 32 3000 330.0 12.4 5.3 5.3 1.1 8.0 12.0 Q2
+MSPM0G3506SDGS28R VSSOP DGS 28 5000 330.0 16.4 5.5 7.4 1.45 8.0 16.0 Q1
+MSPM0G3506SPMR LQFP PM 64 1000 330.0 24.4 13.0 13.0 2.1 16.0 24.0 Q2
+MSPM0G3506SPTR LQFP PT 48 1000 330.0 16.4 9.6 9.6 1.9 12.0 16.0 Q2
+MSPM0G3506SRGZR VQFN RGZ 48 4000 330.0 16.4 7.3 7.3 1.1 12.0 16.0 Q2
+MSPM0G3506SRHBR VQFN RHB 32 3000 330.0 12.4 5.3 5.3 1.3 8.0 12.0 Q2
+MSPM0G3507SDGS28R VSSOP DGS 28 5000 330.0 16.4 5.5 7.4 1.45 8.0 16.0 Q1
+MSPM0G3507SPMR LQFP PM 64 1000 330.0 24.4 13.0 13.0 2.1 16.0 24.0 Q2
+MSPM0G3507SPTR LQFP PT 48 1000 330.0 16.4 9.6 9.6 1.9 12.0 16.0 Q2
+MSPM0G3507SRGZR VQFN RGZ 48 4000 330.0 16.4 7.3 7.3 1.3 12.0 16.0 Q2
+MSPM0G3507SRHBR VQFN RHB 32 3000 330.0 12.4 5.3 5.3 1.3 8.0 12.0 Q2
+Pack Materials-Page 1
+
+===== PAGE 100 =====
+PACKAGE MATERIALS INFORMATION
+www.ti.com 29-Apr-2026
+TAPE AND REEL BOX DIMENSIONS
+Width (mm) H
+W L
+*All dimensions are nominal
+Device Package Type Package Drawing Pins SPQ Length (mm) Width (mm) Height (mm)
+MSPM0G3505SDGS28R VSSOP DGS 28 5000 353.0 353.0 32.0
+MSPM0G3505SPMR LQFP PM 64 1000 336.6 336.6 41.3
+MSPM0G3505SPTR LQFP PT 48 1000 336.6 336.6 31.8
+MSPM0G3505SRGZR VQFN RGZ 48 4000 367.0 367.0 35.0
+MSPM0G3505SRHBR VQFN RHB 32 3000 367.0 367.0 35.0
+MSPM0G3506SDGS28R VSSOP DGS 28 5000 353.0 353.0 32.0
+MSPM0G3506SPMR LQFP PM 64 1000 336.6 336.6 41.3
+MSPM0G3506SPTR LQFP PT 48 1000 336.6 336.6 31.8
+MSPM0G3506SRGZR VQFN RGZ 48 4000 367.0 367.0 35.0
+MSPM0G3506SRHBR VQFN RHB 32 3000 356.0 356.0 36.0
+MSPM0G3507SDGS28R VSSOP DGS 28 5000 353.0 353.0 32.0
+MSPM0G3507SPMR LQFP PM 64 1000 336.6 336.6 41.3
+MSPM0G3507SPTR LQFP PT 48 1000 336.6 336.6 31.8
+MSPM0G3507SRGZR VQFN RGZ 48 4000 356.0 356.0 36.0
+MSPM0G3507SRHBR VQFN RHB 32 3000 356.0 356.0 36.0
+Pack Materials-Page 2
+
+===== PAGE 101 =====
+重要通知和免责声明
+TI“按原样”提供技术和可靠性数据（包括数据表）、设计资源（包括参考设计）、应用或其他设计建议、网络工具、安全信息和其他资源，不
+保证没有瑕疵且不做出任何明示或暗示的担保，包括但不限于对适销性、与某特定用途的适用性或不侵犯任何第三方知识产权的暗示担保。
+这些资源可供使用 TI 产品进行设计的熟练开发人员使用。您将自行承担以下全部责任：(1) 针对您的应用选择合适的 TI 产品，(2) 设计、验
+证并测试您的应用，(3) 确保您的应用满足相应标准以及任何其他安全、安保法规或其他要求。
+这些资源如有变更，恕不另行通知。TI 授权您仅可将这些资源用于研发本资源所述的 TI 产品的相关应用。严禁以其他方式对这些资源进行复
+制或展示。您无权使用任何其他 TI 知识产权或任何第三方知识产权。对于因您对这些资源的使用而对 TI 及其代表造成的任何索赔、损害、
+成本、损失和债务，您将全额赔偿，TI 对此概不负责。
+TI 提供的产品受 TI 销售条款)、TI 通用质量指南 或 ti.com 上其他适用条款或 TI 产品随附的其他适用条款的约束。TI 提供这些资源并不会扩
+展或以其他方式更改 TI 针对 TI 产品发布的适用的担保或担保免责声明。 除非德州仪器 (TI) 明确将某产品指定为定制产品或客户特定产品，
+否则其产品均为按确定价格收入目录的标准通用器件。
+TI 反对并拒绝您可能提出的任何其他或不同的条款。
+IMPORTANT NOTICE
+版权所有 © 2026，德州仪器 (TI) 公司
+最后更新日期：2025 年 10 月

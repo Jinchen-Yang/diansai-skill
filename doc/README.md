@@ -24,7 +24,8 @@
 | [02-toolchain-sdk](./mcu-ti/02-toolchain-sdk.md) | MSPM0 SDK/DriverLib(`DL_`)、SysConfig、CCS Theia vs Keil、XDS110/CMSIS-DAP/BSL 烧录 |
 | [03-boards](./mcu-ti/03-boards.md) | LaunchPad/天猛星 TMX/地猛星 DMX/WeAct + 现成开源小车轮子 |
 | [04-peripherals-howto](./mcu-ti/04-peripherals-howto.md) | QEI 测速 / 互补 PWM+死区 / UART 收 K230 / MATHACL 无FPU 优化 / **引脚复用陷阱(IOMUX·PINCMx)** |
-| 📄 [MSPM0G3507-datasheet.pdf](./mcu-ti/MSPM0G3507-datasheet.pdf) | TI 官方数据手册原件（采集交付数据） |
+| [**MSPM0G3507-pinmux**](./mcu-ti/MSPM0G3507-pinmux.md) | **真实逐脚 IOMUX 复用表**（从数据手册表 6-2/6-3 抽取整理）+ 小车视角速查（UART/PWM/QEI/I2C/SPI/CAN/ADC/SWD 候选脚） |
+| 📄 [MSPM0G3507-datasheet.pdf](./mcu-ti/MSPM0G3507-datasheet.pdf) / [.txt](./mcu-ti/MSPM0G3507-datasheet.txt) | TI 官方数据手册原件 + 全文文本抽取（采集交付数据） |
 
 ### 🧠 主控 · STM32 线 — [`mcu-stm32/`](./mcu-stm32/)
 练手 + 备用主控。G431（M4F 有 FPU）是 MSPM0G3507 最平滑替补。
@@ -75,8 +76,9 @@
 
 ## 已知留待人工/多模态终核的点
 
-- **引脚真实复用**：各 MCU 篇的复用说明须以 SysConfig(MSPM0)/CubeMX(STM32) 冲突检测 + 数据手册 IOMUX 表终核；
-  本环境缺 `pdftotext`，MSPM0 数据手册 PDF 已收录但未逐页渲染抽取，参数来自 TI 产品页交叉核对。
+- **引脚真实复用**：MSPM0G3507 已从官方数据手册抽取真实逐脚 IOMUX 表（见 `mcu-ti/MSPM0G3507-pinmux.md`，
+  PDF 文本提取链路已修复：`tools/datasheet_extract.py` 用 pdfplumber，缺失时自动退化 pypdf，依赖见 `requirements.txt`）；
+  STM32 侧复用仍以 CubeMX 冲突检测 + 数据手册终核为准。落到具体板还需对照该封装引出 + SysConfig。
 - **堵转电流 / 价格**：经验值，最终以实测 + 当年配件表为准。
 - **MSPM0 硬件 QEI 通常仅一路**：双电机闭环第二路需输入捕获/GPIO 中断模拟（见 `mcu-ti/04`）。
 - **K230 UART 占用**：UART0/UART3 被系统占，用户仅 UART1/2/4（见 `vision/03`，已据嘉楠官方核对）。

@@ -207,12 +207,24 @@ def extract_sig_py(text):
     return m.group(1) if m else None
 
 
+VALUE_FLAGS = ('--by', '--out-dir')
+
+
+def _opt(argv, key):
+    if key in argv:
+        i = argv.index(key)
+        if i + 1 < len(argv):
+            return argv[i + 1]
+    return None
+
+
 def main():
     argv = sys.argv[1:]
     report = '--report' in argv
-    by = argv[argv.index('--by') + 1] if '--by' in argv else None
+    by = _opt(argv, '--by')
+    out_dir = _opt(argv, '--out-dir')   # 生成到指定目录（pre-commit 校验用，不污染 contracts/）
     pos = [a for i, a in enumerate(argv)
-           if not a.startswith('--') and not (i > 0 and argv[i - 1] == '--by')]
+           if not a.startswith('--') and not (i > 0 and argv[i - 1] in VALUE_FLAGS)]
     src = pos[0] if pos else os.path.join(ROOT, 'contracts', 'protocol.yaml')
     spec = load(src)
 
@@ -226,8 +238,10 @@ def main():
         sys.exit(1)
 
     sig = signature(spec)
-    h_path = os.path.join(ROOT, 'contracts', 'protocol.h')
-    py_path = os.path.join(ROOT, 'contracts', 'protocol.py')
+    outdir = out_dir or os.path.join(ROOT, 'contracts')
+    os.makedirs(outdir, exist_ok=True)
+    h_path = os.path.join(outdir, 'protocol.h')
+    py_path = os.path.join(outdir, 'protocol.py')
     with open(h_path, 'w', encoding='utf-8') as f:
         f.write(gen_h(spec, sig))
     with open(py_path, 'w', encoding='utf-8') as f:

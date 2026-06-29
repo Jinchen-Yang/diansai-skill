@@ -48,6 +48,15 @@ TASKS = {
 LANES = {"lead", "硬件", "控制", "算法", "all"}
 
 
+def flag_val(args, key):
+    """取 --key 的值；缺失或末尾无值时返回 None（不抛 IndexError）。"""
+    if key in args:
+        i = args.index(key)
+        if i + 1 < len(args):
+            return args[i + 1]
+    return None
+
+
 def tpath(tid):
     return os.path.join(BOARD, f"{tid}.yaml")
 
@@ -216,18 +225,16 @@ def main():
     if cmd == "init":
         cmd_init()
     elif cmd == "list":
-        lane = None
-        if "--lane" in args:
-            lane = args[args.index("--lane") + 1]
-        cmd_list(lane)
+        cmd_list(flag_val(args, "--lane"))
     elif cmd == "status":
         cmd_status()
     elif cmd == "done":
         if len(args) < 2:
             print("用法: board.py done <id> [--by LANE] [--force]"); sys.exit(2)
-        by = args[args.index("--by") + 1] if "--by" in args else None
-        cmd_done(args[1], by, force=("--force" in args))
+        cmd_done(args[1], flag_val(args, "--by"), force=("--force" in args))
     elif cmd == "show":
+        if len(args) < 2:
+            print("用法: board.py show <id>"); sys.exit(2)
         cmd_show(args[1])
     else:
         print(__doc__); sys.exit(2)

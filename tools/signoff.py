@@ -18,7 +18,11 @@ import gatelib  # noqa: E402
 
 
 def _opt(args, key):
-    return args[args.index(key) + 1] if key in args else None
+    if key in args:
+        i = args.index(key)
+        if i + 1 < len(args):
+            return args[i + 1]
+    return None
 
 
 def main():

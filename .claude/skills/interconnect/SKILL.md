@@ -1,7 +1,7 @@
 ---
 name: interconnect
 description: 生成模块接线图、引脚映射与接线表（scope-A 核心交付，解放硬件 lane）。当用户要"出接线图/连线图""分配引脚/pinmap""怎么接线""harness/线束"时使用。把 BOM 里各模块的对 MCU 引脚映射到主控可用引脚，产出 contracts/pinmap.yaml（经 pinmux_check 门）+ design/wiring.svg + harness.md，需逐网人工核对。
-lane: any
+lane: lead
 needs: []
 reads:
   - design/bom.csv
@@ -23,7 +23,8 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 
 # interconnect —— 模块接线图（流水线 ⑥）
 
-> 能力声明见 frontmatter。**确定性门** `pinmux`（`pinmux_check.py --report` 写 PASS）；**人工门** signoff `wiring-net-review`（逐网核对后 approve）。两者齐了才放行下游。
+> 能力声明见 frontmatter。lane=lead（产物落 `contracts/`、`design/`，归 lead）；YAML 任何模型都能产，正确性交确定性门。
+> **确定性门** `pinmux`（`pinmux_check.py --report` 写 PASS）；**人工门** signoff `wiring-net-review`（逐网核对后 approve）。两者齐了才放行下游。
 
 这是 scope-A 的心脏：人照它连线。**正确性靠确定性门 + 人工逐网核对，不靠模型"觉得对"。**
 

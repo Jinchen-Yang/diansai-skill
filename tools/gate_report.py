@@ -21,8 +21,16 @@ def main():
     if len(args) < 3 or args[2] not in ('PASS', 'FAIL'):
         print(__doc__); sys.exit(2)
     gate, target, result = args[0], args[1], args[2]
-    by = args[args.index('--by') + 1] if '--by' in args else None
-    details = [args[args.index('--detail') + 1]] if '--detail' in args else None
+
+    def _opt(key):
+        if key in args:
+            i = args.index(key)
+            if i + 1 < len(args):
+                return args[i + 1]
+        return None
+    by = _opt('--by')
+    d = _opt('--detail')
+    details = [d] if d else None
     p = gatelib.write_report(gate, target, result, details=details, by=by)
     print(f"✓ 门报告写入 {os.path.relpath(p, gatelib.ROOT)}  [{gate}]={result}")
     sys.exit(0 if result == 'PASS' else 1)

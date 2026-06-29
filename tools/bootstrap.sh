@@ -2,7 +2,9 @@
 # host 环境一键装：运行 .claude/skills 调用的本地工具所需（无 LLM 依赖）
 set -e
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
-python3 -m pip install --user -r "$HERE/requirements.txt"
+# pip 失败（离线 / PEP668 外部托管环境）不应阻断后续 git hook 安装——否则归属/契约门反而没装上
+python3 -m pip install --user -r "$HERE/requirements.txt" || \
+  echo "⚠ pip 安装失败（离线或外部托管 Python）：请手动装 requirements.txt；继续装 git hooks。"
 echo "checking optional graphviz(dot) ..."
 if command -v dot >/dev/null 2>&1; then
   echo "  dot OK"

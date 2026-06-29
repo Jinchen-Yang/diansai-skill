@@ -36,7 +36,7 @@ def load(path):
 def main():
     argv = sys.argv[1:]
     report = '--report' in argv
-    by = argv[argv.index('--by') + 1] if '--by' in argv else None
+    by = argv[argv.index('--by') + 1] if '--by' in argv and argv.index('--by') + 1 < len(argv) else None
     pos = [a for i, a in enumerate(argv)
            if not a.startswith('--') and not (i > 0 and argv[i - 1] == '--by')]
     if not pos:

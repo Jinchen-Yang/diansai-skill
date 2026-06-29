@@ -10,6 +10,7 @@
 """
 import os
 import datetime
+import hashlib
 import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,6 +23,19 @@ def _now():
     return datetime.datetime.now().isoformat(timespec='seconds')
 
 
+def file_sha(target):
+    """target 内容哈希（相对 ROOT 的文件路径）；非文件/不存在返回 None。
+    用于把门报告绑定到被检物——被检物改了，报告即视为过期。"""
+    p = target if os.path.isabs(target) else os.path.join(ROOT, target)
+    if not os.path.isfile(p):
+        return None
+    h = hashlib.sha256()
+    with open(p, 'rb') as f:
+        for chunk in iter(lambda: f.read(8192), b''):
+            h.update(chunk)
+    return h.hexdigest()[:16]
+
+
 # ---------- 确定性门报告 ----------
 
 def gate_path(gate):
@@ -32,7 +46,7 @@ def write_report(gate, target, result, details=None, by=None):
     """写一份机读门报告。result ∈ {PASS, FAIL}。返回报告路径。"""
     assert result in ('PASS', 'FAIL'), result
     os.makedirs(GATES_DIR, exist_ok=True)
-    rep = dict(gate=gate, target=target, result=result,
+    rep = dict(gate=gate, target=target, target_sha=file_sha(target), result=result,
                checked_at=_now(), by=by or '', details=list(details or []))
     with open(gate_path(gate), 'w', encoding='utf-8') as f:
         yaml.safe_dump(rep, f, allow_unicode=True, sort_keys=False)
@@ -92,6 +106,13 @@ def check_spec(spec):
             problems.append(f"确定性门 [{gate}] 无报告：先跑对应工具并加 --report（见 skill）")
         elif rep.get('result') != 'PASS':
             problems.append(f"确定性门 [{gate}] = {rep.get('result')}（须 PASS）")
+        else:
+            # 报告须绑定被检物：target 改动后旧 PASS 视为过期，须重跑门
+            tgt, old = rep.get('target'), rep.get('target_sha')
+            if tgt and old:
+                cur = file_sha(tgt)
+                if cur and cur != old:
+                    problems.append(f"确定性门 [{gate}] 报告已过期：{tgt} 自上次检查后被改动，请重跑门 --report")
     if signoff:
         st = signoff_status(signoff)
         if st != 'approved':

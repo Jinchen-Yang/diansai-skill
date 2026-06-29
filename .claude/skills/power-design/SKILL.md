@@ -1,7 +1,7 @@
 ---
 name: power-design
 description: 设计多路隔离供电系统并校验余量。当用户要"设计供电/电源""算电流预算""选稳压/DCDC""分电源轨"时使用。按电机堵转电流（不是标称）算每轨负载，产出 design/power.yaml + power.md，并用 tools/power_budget.py 做确定性校验，需人工批准。
-lane: any
+lane: lead
 needs: []
 reads:
   - design/solution.md
@@ -20,7 +20,8 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 
 # power-design —— 供电系统（流水线 ⑤）
 
-> 能力声明见 frontmatter。**确定性门** `power`（`power_budget.py --report` 写 PASS）；**人工门** signoff `power-approval`。两者齐了 `board.py done` 才放行。
+> 能力声明见 frontmatter。lane=lead（产物落 `design/`，归 lead）；电流预算任何模型可算，正确性交 `power_budget.py`。
+> **确定性门** `power`（`power_budget.py --report` 写 PASS）；**人工门** signoff `power-approval`。两者齐了 `board.py done` 才放行。
 
 电源是 1 号翻车点：电机堵转瞬态把 MCU 拉掉电复位。**一切按最坏情况算。**
 

@@ -3,10 +3,14 @@
 校验稳压器余量，标出掉电/欠流风险。PASS->exit 0，FAIL->exit 1。
 
 用法:
-    python tools/power_budget.py design/power.yaml
+    python tools/power_budget.py design/power.yaml [--report [--by LANE]]
+--report 时把结果写入 design/gates/power.yaml（机读门报告，供 board.py done 校验）。
 """
 import sys, os
 import yaml
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import gatelib  # 写机读门报告
 
 HEADROOM = 0.30  # 默认留 30% 余量
 
@@ -29,10 +33,15 @@ def load_current(ld):
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("用法: python tools/power_budget.py <power.yaml>")
+    argv = sys.argv[1:]
+    report = '--report' in argv
+    by = argv[argv.index('--by') + 1] if '--by' in argv else None
+    pos = [a for i, a in enumerate(argv)
+           if not a.startswith('--') and not (i > 0 and argv[i - 1] == '--by')]
+    if not pos:
+        print("用法: python tools/power_budget.py <power.yaml> [--report]")
         sys.exit(2)
-    path = sys.argv[1]
+    path = pos[0]
     pw = load(path)
     headroom = pw.get('headroom', HEADROOM)
 
@@ -82,8 +91,12 @@ def main():
         print(f"\n✗ FAIL —— {len(errors)} 处供电风险:")
         for e in errors:
             print(f"   - {e}")
+        if report:
+            gatelib.write_report('power', os.path.relpath(path, ROOT), 'FAIL', details=errors, by=by)
         sys.exit(1)
     print("\n✓ PASS —— 各稳压轨余量充足（电机已按堵转电流计）。")
+    if report:
+        gatelib.write_report('power', os.path.relpath(path, ROOT), 'PASS', by=by)
     sys.exit(0)
 
 

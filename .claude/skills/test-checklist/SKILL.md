@@ -1,11 +1,22 @@
 ---
 name: test-checklist
 description: 按当年题目功能生成现场调试与验收清单（灰度阈值/PID整定/K230阈值/全流程验收）。当用户要"出测试清单/标定清单/验收checklist/调试计划"时使用。复用知识库 10 的赛中开发 checklist，按 problem.yaml 的要求功能裁剪。产出 design/test_plan.md。
+lane: any
+needs: []
+reads:
+  - design/problem.yaml
+  - kb/10-典型赛题实战Playbook与Checklist.md
+writes:
+  - design/test_plan.md
+  - STATUS.md
+gate: none
+signoff: none
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
 # test-checklist —— 现场标定/验收清单（流水线 ⑨）
 
-**lane**: 任何模型  ·  **needs**: 无
+> 能力声明见 frontmatter。
 
 把"人在真车上不可代替的整定/验收"列成可勾选清单。复用 KB `kb/10-典型赛题实战Playbook与Checklist.md` 的赛中 checklist，按本题功能裁剪。
 

@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+# 提交前本地兜底门（文件归属 + 契约确定性门）。
+# 启用：sh tools/bootstrap.sh（会设 core.hooksPath=.githooks），或手动:
+#   git config core.hooksPath .githooks
+# 越过单次：git commit --no-verify
+set -e
+ROOT="$(git rev-parse --show-toplevel)"
+
+# 1) 目录归属：本机 lane 不得越界写别人目录
+python3 "$ROOT/tools/check_ownership.py" || exit 1
+
+# 2) 若改了 pinmap 契约，必须过 pinmux 门
+if git diff --cached --name-only | grep -q '^contracts/pinmap.yaml$'; then
+  echo "[pre-commit] contracts/pinmap.yaml 改动 → 跑 pinmux_check"
+  python3 "$ROOT/tools/pinmux_check.py" "$ROOT/contracts/pinmap.yaml" || {
+    echo "✗ pinmux 门未过，拒绝提交（修好或 --no-verify）"; exit 1; }
+fi
+
+# 3) 若改了协议契约，校验两端已同源重生成（签名一致）
+if git diff --cached --name-only | grep -q '^contracts/protocol.yaml$'; then
+  echo "[pre-commit] contracts/protocol.yaml 改动 → 校验两端一致性"
+  python3 "$ROOT/tools/gen_protocol.py" "$ROOT/contracts/protocol.yaml" >/dev/null || {
+    echo "✗ 协议两端不一致，拒绝提交（先 python tools/gen_protocol.py 重生成并 git add 两端）"; exit 1; }
+fi
+
+exit 0

@@ -1,7 +1,7 @@
-# ARCHITECTURE — 五层架构 + 双编排形态（设计稿，待 lead 审）
+# ARCHITECTURE — 五层架构 + 双编排形态（已落地）
 
-> 本文是**设计文档**，不改任何现有 skill。目的：把当前"活在散文和约定里"的几层结构化、可机读、可强制。
-> 审核通过后再按 §8 分期落地。owner：lead（治理文档，与 `CLAUDE.md` 同级）。
+> 本文是治理文档。设计稿提出的五层重构 **P1–P5 已全部实装并自测通过**（`sh tools/selftest.sh`，11 步全绿）。
+> 各层落地点见 §8；§9 的开放项决议见文末。owner：lead（与 `CLAUDE.md` 同级）。
 
 ---
 
@@ -191,23 +191,20 @@ skill 跑完执行 ──► tools/<gate>.py --report design/gates/<gate>.yaml
 
 ---
 
-## 8. 分期迁移路径（不破坏现有，可随时停）
+## 8. 落地点（已实装，每层可独立回滚）
 
-每期独立可交付、可回滚：
-
-- **P0（本文）**：架构定稿，审。
-- **P1 能力机读化**：给 11 个 skill 补 frontmatter（`lane/needs/reads/writes/gate/signoff/allowed-tools`），正文里的 lane/needs 散文删除。**纯加字段，行为不变**，风险最低。
-- **P2 门→状态**：`tools/` 门脚本加 `--report` 与退出码；`board.py done` 加 gate/signoff 校验。出 `design/gates/`、`design/signoffs.yaml`。
-- **P3 文件控制强制**：加 CODEOWNERS + `check_ownership.py` + pre-commit。
-- **P4 结构化签字**：人工门 skill 改用 AskUserQuestion 写 signoffs。
-- **P5 形态 B**：新增 `/elec-orchestrate` 子代理编排 skill，复用 P1–P4 的成果。
-- 每期跑 `sh tools/selftest.sh` + `examples/sending-medicine-2023/` 全链路回归。
+- **P1 能力机读化 ✅**：11 个 `SKILL.md` 补 frontmatter（`lane/needs/reads/writes/gate/signoff/allowed-tools`），正文 lane/needs 散文改为指向 frontmatter 的一行。纯加字段，触发行为不变。
+- **P2 门→状态 ✅**：`pinmux_check.py`/`power_budget.py`/`gen_protocol.py` 加 `--report`（写 `design/gates/<gate>.yaml`）；通用记录器 `tools/gate_report.py`（如 `compile`）；共享库 `tools/gatelib.py`；`board.py done` 校验门+签字（未过 exit 3，`--force` 留痕）；`tools/gate_check.py` 与 done 共用 `gatelib.check_spec` 判据。
+- **P3 文件控制强制 ✅**：`.github/CODEOWNERS`（PR 级）+ `tools/check_ownership.py`（按 `.elec-lane` 拦越界）+ `.githooks/pre-commit`（归属 + pinmap/protocol 契约门）；`tools/bootstrap.sh` 设 `core.hooksPath=.githooks`。
+- **P4 结构化签字 ✅**：人工门 skill（plan-solution/select-parts/power-design/interconnect/firmware-scaffold）正文改为 AskUserQuestion 取确认 → `tools/signoff.py approve <signoff>` 写 `design/signoffs.yaml`。
+- **P5 形态 B ✅**：新增 `/elec-orchestrate`（单人单会话子代理 fan-out），与 `/elec-design`（3 机协同）共用同一 DAG/门/签字；形态切换 `.elec-mode`。
+- **回归**：`sh tools/selftest.sh` 扩到 11 步，新增门-状态耦合、`--report`+`gate_check`、归属强制三项，全绿。
 
 ---
 
-## 9. 待你拍板的开放项
+## 9. 开放项决议（实现采用的选择）
 
-1. **frontmatter 新字段名**：用上面的 `reads/writes/gate/signoff` 还是你已有的命名习惯？
-2. **形态 B 编排用 Agent 还是 Workflow**：Workflow 更适合确定性 DAG fan-out（pipeline/parallel + 门），Agent 更轻。我倾向 Workflow，待定。
-3. **pre-commit 接入方式**：用 `pre-commit` 框架，还是仓库内 `tools/bootstrap.sh` 装一个 git hook？
-4. **门-状态校验放哪**：只在 `board.py done`，还是也抽一个 `tools/gate_check.py` 供形态 B 子代理独立调用（建议后者，避免逻辑漂移）。
+1. **frontmatter 字段名**：采用设计稿命名 `reads/writes/gate/signoff`（+ `lane/needs/allowed-tools`）。
+2. **形态 B 编排**：当前用 **Agent 工具**（`/elec-orchestrate` 内 `Task`/`run_in_background` fan-out），轻、与现有 board DAG 直接对接；DAG 已是单一来源，后续若要确定性 pipeline 可平滑换 Workflow。
+3. **pre-commit 接入**：仓库内 `.githooks/` + `bootstrap.sh` 设 `core.hooksPath`（不引入 `pre-commit` 框架依赖，纯 sh，零额外安装）。
+4. **门-状态校验位置**：抽到 `tools/gatelib.py`，`board.py done` 与 `tools/gate_check.py` 共用——避免逻辑漂移（采纳设计稿"后者"建议）。

@@ -3,10 +3,14 @@
 PASS -> exit 0；FAIL -> exit 1（CI/提交前必须通过）。
 
 用法:
-    python tools/pinmux_check.py contracts/pinmap.yaml [contracts/mcu/<MCU>.yaml]
+    python tools/pinmux_check.py contracts/pinmap.yaml [contracts/mcu/<MCU>.yaml] [--report [--by LANE]]
+--report 时把结果写入 design/gates/pinmux.yaml（机读门报告，供 board.py done 校验）。
 """
 import sys, os
 import yaml
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import gatelib  # 写机读门报告
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -30,14 +34,19 @@ def load(path):
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("用法: python tools/pinmux_check.py <pinmap.yaml> [mcu.yaml]")
+    argv = sys.argv[1:]
+    report = '--report' in argv
+    by = argv[argv.index('--by') + 1] if '--by' in argv else None
+    pos = [a for i, a in enumerate(argv)
+           if not a.startswith('--') and not (i > 0 and argv[i - 1] == '--by')]
+    if not pos:
+        print("用法: python tools/pinmux_check.py <pinmap.yaml> [mcu.yaml] [--report]")
         sys.exit(2)
-    pinmap_path = sys.argv[1]
+    pinmap_path = pos[0]
     pm = load(pinmap_path)
 
     mcu = pm.get('mcu')
-    cap_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(ROOT, 'contracts', 'mcu', f'{mcu}.yaml')
+    cap_path = pos[1] if len(pos) > 1 else os.path.join(ROOT, 'contracts', 'mcu', f'{mcu}.yaml')
     if not os.path.exists(cap_path):
         print(f"✗ 找不到 MCU 能力表: {cap_path}")
         sys.exit(2)
@@ -111,10 +120,14 @@ def main():
         print(f"✗ FAIL —— {len(errors)} 处问题:")
         for e in errors:
             print(f"   - {e}")
+        if report:
+            gatelib.write_report('pinmux', os.path.relpath(pinmap_path, ROOT), 'FAIL', details=errors, by=by)
         sys.exit(1)
     used = {**fam_count, **{k: len(v) for k, v in fam_periph.items()}}
     print(f"✓ PASS —— 引脚无冲突、功能合法、数量未超限。占用: "
           + ", ".join(f"{k}={v}/{limits.get(k,'?')}" for k, v in sorted(used.items())))
+    if report:
+        gatelib.write_report('pinmux', os.path.relpath(pinmap_path, ROOT), 'PASS', by=by)
     sys.exit(0)
 
 

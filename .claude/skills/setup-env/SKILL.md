@@ -1,11 +1,28 @@
 ---
 name: setup-env
 description: 生成三个开发 lane（host/控制/算法）的开发环境与工具链清单，含 SDK/IDE/包、版本锁定、下载源、自检步骤、烧录与调试工具。当用户要"配环境""装工具链""出环境清单""锁版本""3 台机器环境一致"时使用。产出 env/manifest.yaml + env/{host,control,vision}.md。
+lane: lead
+needs: []
+reads:
+  - design/solution.md
+  - kb/10-典型赛题实战Playbook与Checklist.md
+  - kb/09-开源资源与备赛经验.md
+  - kb/07-K230视觉与主控通信.md
+  - kb/资源链接总表.md
+writes:
+  - env/manifest.yaml
+  - env/host.md
+  - env/control.md
+  - env/vision.md
+  - STATUS.md
+gate: none
+signoff: none
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
 # setup-env —— 环境/工具链全包（流水线 ③）
 
-**lane**: lead 产出，三 lane 消费  ·  **needs**: 无（读 solution + KB）
+> 能力声明见 frontmatter。lead 产出，三 lane 消费。
 
 目标：每个 lane 拿到一份"装什么 / 哪个版本 / 哪下 / 怎么验证"的清单，**3 台机器照同一份 manifest，环境可复现**，避免"我这能编译你那不行"。
 

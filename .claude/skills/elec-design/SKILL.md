@@ -1,11 +1,24 @@
 ---
 name: elec-design
 description: 电控设计流水线的顶层编排入口。当用户想"开始/推进小车电控设计"、问"现在该做哪一步"、要协调硬件/控制/算法三人并行、或不确定该调哪个子 skill 时使用。读 STATUS.md 与 design/ 现状，判断当前阶段，派发下一步并安排三 lane 并行。
+lane: lead
+needs: []
+reads:
+  - STATUS.md
+  - design/
+  - env/
+  - board/
+writes:
+  - STATUS.md
+gate: none
+signoff: none
+allowed-tools: Read, Bash, Glob, Grep, Task, AskUserQuestion
 ---
 
-# elec-design —— 顶层编排
+# elec-design —— 顶层编排（团队/git 协同形态）
 
-**lane**: lead（编排建议在 lead/Claude 会话跑）  ·  **needs**: 无（只读状态 + 调度）
+> 能力声明见 frontmatter。本 skill 是**3 机 git 协同形态**的人工编排入口（派活靠提示用户敲命令 + `/board`）。
+> **单人一机**想让一个会话用子代理自动 fan-out 跑链路，用 `/elec-orchestrate`（两形态共用同一 DAG、同一门/签字）。
 
 你是这支 3 人电赛小车队的电控设计编排者。**不要自己埋头跑完整条流水线**；你的职责是：判断现在在哪一步、派发下一步、让三个人并行别空等、把守人工门。重活交给对应子 skill（必要时 `run_in_background` 起子代理）。
 

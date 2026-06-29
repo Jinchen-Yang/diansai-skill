@@ -26,8 +26,9 @@ OWN = {
     'lib/':       set(),
     '.claude/':   set(),
 }
-# 任何 lane 都可写（协同状态）：
-SHARED = ('board/', 'STATUS.md', '.elec-lane', '.elec-mode')
+# 任何 lane 都可写（协同/审计状态，由跑门或派活的那个 lane 产出）：
+SHARED = ('board/', 'STATUS.md', 'design/gates/', 'design/signoffs.yaml',
+          '.elec-lane', '.elec-mode')
 
 
 def lane():

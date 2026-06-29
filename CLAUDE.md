@@ -18,10 +18,10 @@
 | 目录 | 谁可写 |
 |---|---|
 | `contracts/`、`env/`、`.claude/`、`tools/`、`lib/`、`.github/`、`.githooks/`、`CLAUDE.md`、`ARCHITECTURE.md` | 只 lead |
-| `design/`（含 `design/gates/`、`design/signoffs.yaml`） | 硬件 lane（+ lead 跑设计 skill 时） |
+| `design/`（除 gates/signoffs） | 硬件 lane（+ lead 跑设计 skill 时） |
 | `firmware/` | 控制 lane |
 | `vision/` | 算法 lane |
-| `board/`、`STATUS.md` | 任何 lane（协同状态） |
+| `board/`、`STATUS.md`、`design/gates/`、`design/signoffs.yaml` | 任何 lane（协同/审计状态，谁跑门/签字谁写） |
 | `kb/`（知识库 00~10 + 资源链接总表）、`README.md` | 人工维护，**skill 只读不改** |
 
 - 全员在 `main`，**小步频繁提交**；干活前先 `git pull`。

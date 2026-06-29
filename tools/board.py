@@ -96,12 +96,25 @@ def cmd_init():
     cmd_list(None)
 
 
+def iter_tasks():
+    """只产出"长得像任务"的 board yaml（dict 且 id 在 DAG 内），
+    防止任何杂 yaml（如误落的 signoffs.yaml）让看板崩溃。"""
+    out = {}
+    for p in sorted(glob.glob(os.path.join(BOARD, "*.yaml"))):
+        try:
+            t = yaml.safe_load(open(p, encoding='utf-8'))
+        except Exception:
+            continue
+        if isinstance(t, dict) and t.get("id") in TASKS and "status" in t:
+            out[t["id"]] = t
+    return out
+
+
 def cmd_list(lane):
     if lane and lane not in LANES:
         print(f"未知 lane: {lane}（{', '.join(sorted(LANES))}）"); sys.exit(2)
     rows = []
-    for p in sorted(glob.glob(os.path.join(BOARD, "*.yaml"))):
-        t = yaml.safe_load(open(p, encoding='utf-8'))
+    for t in iter_tasks().values():
         if not ready(t):
             continue
         if lane and t["owner"] != lane and t["owner"] != "all":
@@ -125,15 +138,22 @@ def cmd_list(lane):
 
 
 def cmd_status():
-    created = {os.path.splitext(os.path.basename(p))[0]: yaml.safe_load(open(p, encoding='utf-8'))
-               for p in glob.glob(os.path.join(BOARD, "*.yaml"))}
+    created = iter_tasks()
     done = [k for k, t in created.items() if t["status"] == "done"]
     todo_ready = [k for k, t in created.items() if ready(t)]
     todo_block = [k for k, t in created.items() if t["status"] == "todo" and not deps_done(t)]
     locked = [k for k in TASKS if k not in created]
     print(f"看板：完成 {len(done)} · 就绪 {len(todo_ready)} · 阻塞 {len(todo_block)} · 未解锁 {len(locked)} / 共 {len(TASKS)}")
+    def req_tag(k):
+        spec = TASKS[k]
+        r = []
+        if spec.get("gate"):
+            r.append(f"门:{spec['gate']}")
+        if spec.get("signoff"):
+            r.append(f"签:{spec['signoff']}")
+        return ("[完成需 " + " ".join(r) + "]") if r else ""
     if done:       print("  ✓ 完成:   " + ", ".join(done))
-    if todo_ready: print("  ▶ 就绪:   " + ", ".join(f"{k}({created[k]['owner']})" for k in todo_ready))
+    if todo_ready: print("  ▶ 就绪:   " + ", ".join(f"{k}({created[k]['owner']}){req_tag(k)}" for k in todo_ready))
     if todo_block: print("  ⏳ 阻塞:   " + ", ".join(f"{k}<-{created[k]['deps']}" for k in todo_block))
     if locked:     print("  🔒 未解锁: " + ", ".join(locked))
 

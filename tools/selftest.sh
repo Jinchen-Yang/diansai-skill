@@ -88,15 +88,17 @@ unset ELEC_DESIGN_DIR; rm -rf "$TD" "$TD2"
 step "11) 目录归属强制（check_ownership）"
 [ -f .elec-lane ] && mv .elec-lane .elec-lane.bak
 echo 控制 > .elec-lane
-viol=1; ok2=1
+viol=1; ok2=1; ok3=1
 python3 tools/check_ownership.py --files contracts/x.yaml >/dev/null 2>&1 && viol=0   # 应越界->exit1
 python3 tools/check_ownership.py --files firmware/x.c board/y.yaml STATUS.md >/dev/null 2>&1 || ok2=0
+# gates/signoffs 是共享协同状态：控制 lane 写自己的 compile 门报告应放行
+python3 tools/check_ownership.py --files design/gates/compile.yaml design/signoffs.yaml >/dev/null 2>&1 || ok3=0
 rm -f .elec-lane
 [ -f .elec-lane.bak ] && mv .elec-lane.bak .elec-lane
-if [ "$viol" = 1 ] && [ "$ok2" = 1 ]; then
-  echo "  ✓ 越界写(contracts/)被拒、合规写(firmware/+board/)放行"
+if [ "$viol" = 1 ] && [ "$ok2" = 1 ] && [ "$ok3" = 1 ]; then
+  echo "  ✓ 越界写(contracts/)被拒；合规写(firmware/+board/)与共享门(design/gates/)放行"
 else
-  echo "  ✗ 归属强制异常 (viol=$viol ok2=$ok2)"; fail=1
+  echo "  ✗ 归属强制异常 (viol=$viol ok2=$ok2 ok3=$ok3)"; fail=1
 fi
 
 printf "\n"

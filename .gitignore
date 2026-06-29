@@ -21,5 +21,6 @@ firmware/**/Release/
 # Obsidian 本地配置（KB 内容进库，工作区配置不进）
 .obsidian/workspace*.json
 
-# 每台机器自己的 lane 标识（不入库）
+# 每台机器自己的 lane 标识 / 编排形态（不入库）
 .elec-lane
+.elec-mode

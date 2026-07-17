@@ -21,8 +21,9 @@ DISPLAY_HEIGHT = 480
 
 # 更高会减少候选圆，假圆多时提高；真实圆漏检时再降低。
 CIRCLE_THRESHOLD = 3500
-MIN_RADIUS = 18
-MAX_RADIUS = 110
+# 初学调试阶段故意放宽半径范围，先确认底层能不能找到圆，再针对题目收紧。
+MIN_RADIUS = 5
+MAX_RADIUS = 200
 
 # 同一目标在相邻帧可允许的中心位移和半径变化。
 TRACK_CENTER_DELTA = 18
@@ -38,15 +39,15 @@ def circle_values(circle):
 
 
 def select_main_circle(circles):
-    """过滤不符合半径范围的候选，并返回最大圆。"""
+    """过滤不符合半径范围的候选，返回主圆与过滤后候选列表。"""
     candidates = []
     for circle in circles:
         x, y, radius = circle_values(circle)
         if MIN_RADIUS <= radius <= MAX_RADIUS:
             candidates.append((x, y, radius))
     if not candidates:
-        return None
-    return max(candidates, key=lambda item: item[2])
+        return None, candidates
+    return max(candidates, key=lambda item: item[2]), candidates
 
 
 def same_circle(previous, current):
@@ -76,6 +77,13 @@ def draw_circle_result(image, circle, stable_count):
     )
 
 
+def draw_raw_candidates(image, circles):
+    """用灰色细圈标出底层 find_circles 的所有结果，便于诊断筛选问题。"""
+    for circle in circles:
+        x, y, radius = circle_values(circle)
+        image.draw_circle(x, y, radius, color=(100, 100, 100), thickness=1)
+
+
 def main():
     """初始化相机，检测最大候选圆并用帧间一致性确认主目标。"""
     sensor = None
@@ -103,16 +111,20 @@ def main():
             image = sensor.snapshot()
             frame_count += 1
 
-            current_circle = select_main_circle(image.find_circles(threshold=CIRCLE_THRESHOLD))
+            raw_circles = image.find_circles(threshold=CIRCLE_THRESHOLD)
+            current_circle, candidates = select_main_circle(raw_circles)
+            draw_raw_candidates(image, raw_circles)
             if current_circle is None:
                 previous_circle = None
                 stable_count = 0
-                result_text = "no circle"
+                result_text = "raw=%d filtered=0" % len(raw_circles)
             else:
                 stable_count = stable_count + 1 if same_circle(previous_circle, current_circle) else 1
                 previous_circle = current_circle
                 draw_circle_result(image, current_circle, stable_count)
-                result_text = "center=(%d,%d) r=%d stable=%d" % (
+                result_text = "raw=%d valid=%d center=(%d,%d) r=%d stable=%d" % (
+                    len(raw_circles),
+                    len(candidates),
                     current_circle[0],
                     current_circle[1],
                     current_circle[2],
@@ -120,6 +132,13 @@ def main():
                 )
 
             image.draw_string_advanced(0, 0, 16, "FPS: %.1f" % clock.fps(), color=(255, 255, 255))
+            image.draw_string_advanced(
+                0,
+                18,
+                14,
+                "raw=%d valid=%d threshold=%d" % (len(raw_circles), len(candidates), CIRCLE_THRESHOLD),
+                color=(255, 255, 0),
+            )
             Display.show_image(image, x=display_x, y=display_y)
             if frame_count % PRINT_PERIOD_FRAMES == 0:
                 print("frame=%d %s" % (frame_count, result_text))

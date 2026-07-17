@@ -15,7 +15,7 @@
 vision/
   core/             相机显示、UART 链路、公共配置
   docs/             学习顺序、接线与调参说明
-  demos/            每项能力的独立示例（后续加入）
+  demos/            每项能力的独立示例，可直接由 CanMV IDE 运行
   models/           KPU/YOLO 模型与类别清单（后续加入）
   tasks/            按赛题组合的任务程序（后续加入）
   protocol.py       从 ../contracts/protocol.yaml 自动生成，勿手改

@@ -1,0 +1,59 @@
+# MSPM0G3507 引脚能力表 —— 供 tools/pinmux_check.py 校验 pinmap
+#
+# ⚠⚠ verified: false —— 下面的逐脚复用为「代表性结构占位」，计数来自 KB 03-主控选型。
+#    真实可用引脚/复用必须用 TI SysConfig 或数据手册核实后改 verified: true。
+#    （核实 = lead/多模态任务：读数据手册。pinmux_check 在 verified:false 时只保证"逻辑自洽"。）
+mcu: MSPM0G3507
+verified: false
+source: "计数: KB kb/03-主控选型-MSPM0与STM32.md；逐脚复用待 SysConfig 核实"
+
+# 外设实例/通道数量上限（数量门）
+limits:
+  PWM_CHANNEL: 12   # TIMA0/1 互补PWM，带死区
+  QEI: 2            # TIMG 多路支持正交编码（取保守 2）
+  ADC_CHANNEL: 17   # 2×12bit SAR，最多 17 路复用
+  UART: 4
+  SPI: 2
+  I2C: 2
+  CAN: 1
+
+# 每个引脚支持的功能（function 取值见 pinmap.schema.yaml）
+pins:
+  PA0:  [GPIO, PWM, UART_TX]
+  PA1:  [GPIO, PWM, UART_RX]
+  PA2:  [GPIO, PWM]
+  PA3:  [GPIO, PWM]
+  PA4:  [GPIO]
+  PA5:  [GPIO]
+  PA6:  [GPIO]
+  PA7:  [GPIO]
+  PA8:  [GPIO, QEI_A]
+  PA9:  [GPIO, QEI_B]
+  PA10: [GPIO, QEI_A]
+  PA11: [GPIO, QEI_B]
+  PA12: [GPIO, UART_TX]
+  PA13: [GPIO, UART_RX]
+  PA14: [GPIO, UART_TX, SPI_SCLK]
+  PA15: [GPIO, UART_RX, SPI_MOSI]
+  PA16: [GPIO, SPI_MISO]
+  PA17: [GPIO, SPI_CS]
+  PA18: [GPIO, CAN_TX]
+  PA19: [GPIO, CAN_RX]
+  PA20: [GPIO, SWD_IO]
+  PA21: [GPIO, SWD_CLK]
+  PB0:  [GPIO, I2C_SDA]
+  PB1:  [GPIO, I2C_SCL]
+  PB2:  [GPIO, ADC]
+  PB3:  [GPIO, ADC]
+  PB4:  [GPIO, ADC]
+  PB5:  [GPIO, ADC]
+  PB6:  [GPIO, ADC]
+  PB7:  [GPIO, ADC]
+  PB8:  [GPIO, ADC]
+  PB9:  [GPIO, ADC]
+  PB10: [GPIO, ADC]
+  PB11: [GPIO, I2C_SDA]
+  PB12: [GPIO, I2C_SCL]
+  PB13: [GPIO]
+  PB14: [GPIO]
+  PB15: [GPIO]

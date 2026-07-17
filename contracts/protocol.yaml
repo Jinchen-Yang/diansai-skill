@@ -1,0 +1,50 @@
+# K230 <-> 主控 UART 帧协议 —— 单一来源（Single Source of Truth）
+# 改这里之后必须跑：python tools/gen_protocol.py  （重新生成 protocol.h / protocol.py）
+# 复用知识库 kb/07-K230视觉与主控通信.md 已约定的帧格式。
+version: "0.1"
+
+link:
+  baud: 115200          # 数据量大可上 230400/460800（两端一致）
+  data_bits: 8
+  parity: none
+  stop_bits: 1
+  level: "3.3V TTL"     # K230 与 MSPM0/STM32 均 3.3V，可直连；TX<->RX 交叉，必须共地
+
+framing:
+  header: [0xAA, 0x55]  # 双帧头，降低误同步
+  tail: 0x0D            # 帧尾，辅助定界+重同步
+  length_field: true    # LEN = DATA 字节数（不含头/尾/校验）
+  checksum: sum8         # (LEN+FUNC+DATA) 累加取低 8 位
+  max_data: 32
+
+# 功能码与数据负载（小端）。FUNC 唯一，name 唯一。
+frames:
+  - func: 0x01
+    name: blob_xy
+    desc: 色块/光点中心坐标
+    fields:
+      - {name: cx, type: int16}
+      - {name: cy, type: int16}
+  - func: 0x02
+    name: line_error
+    desc: 巡线中线偏差（喂给 PID）
+    fields:
+      - {name: error, type: int16}
+  - func: 0x03
+    name: target_class
+    desc: 目标类别 + 置信度
+    fields:
+      - {name: class_id, type: uint8}
+      - {name: confidence, type: uint8}
+  - func: 0x04
+    name: handshake
+    desc: 上电握手 / ACK
+    fields:
+      - {name: token, type: uint8}
+  - func: 0x05
+    name: aim_offset
+    desc: 末端瞄准像素偏差；found=0 表示链路在线但当前未找到目标
+    fields:
+      - {name: dx, type: int16}
+      - {name: dy, type: int16}
+      - {name: found, type: uint8}

@@ -1,0 +1,9 @@
+module: servo
+type: actuator
+desc: 舵机（转向/云台）；SG90 轻负载 / MG996R 中扭矩
+specs: {pwm: "50Hz/20ms, 0.5~2.5ms(中位1.5ms)", v: "4.8~6V"}
+connector:
+  - {pin: SIG, dir: in, iface: PWM, to_mcu: true}
+  - {pin: VCC, dir: power, rail: servo, note: "★独立 5~6V 高电流轨，勿挂 3.3V 逻辑"}
+  - {pin: GND, dir: power}
+power_draw: {rail: servo, stall: true, stall_current_a: 1.0, note: "MG996R 堵转>1A；按堵转算"}

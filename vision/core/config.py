@@ -1,0 +1,16 @@
+"""全库默认配置。
+
+现场标定值必须集中放在这里或对应任务的 config.py，算法文件不直接写死阈值。
+"""
+
+FRAME_WIDTH = 640
+FRAME_HEIGHT = 480
+PIXEL_FORMAT = "RGB565"
+
+UART_BAUD = 115200
+HANDSHAKE_TOKEN = 0x23
+HANDSHAKE_PERIOD_FRAMES = 30
+AIM_STATUS_PERIOD_FRAMES = 3
+
+SHOW_TO_IDE = True
+SHOW_FPS = True

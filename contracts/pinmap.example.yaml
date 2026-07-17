@@ -1,0 +1,45 @@
+# 引脚映射样例 —— 智能送药小车（2 电机差速 + 灰度循迹 + K230 + IMU/OLED + 舵机）
+# 仅作 pinmux_check.py 演示 / interconnect 模板；实际 pinmap 由 /interconnect 按当年 BOM 生成。
+mcu: MSPM0G3507
+assignments:
+  # —— 电机驱动 TB6612#1（左右轮差速）——
+  - {signal: motorL_pwm,  pin: PA0,  function: PWM,    peripheral: TIMA0, module: TB6612#1, net: PWMA}
+  - {signal: motorL_in1,  pin: PA4,  function: GPIO,   module: TB6612#1, net: AIN1}
+  - {signal: motorL_in2,  pin: PA5,  function: GPIO,   module: TB6612#1, net: AIN2}
+  - {signal: motorR_pwm,  pin: PA1,  function: PWM,    peripheral: TIMA0, module: TB6612#1, net: PWMB}
+  - {signal: motorR_in1,  pin: PA6,  function: GPIO,   module: TB6612#1, net: BIN1}
+  - {signal: motorR_in2,  pin: PA7,  function: GPIO,   module: TB6612#1, net: BIN2}
+  - {signal: motor_stby,  pin: PB13, function: GPIO,   module: TB6612#1, net: STBY}
+  # —— 舵机（云台/转向）——
+  - {signal: servo_pan,   pin: PA2,  function: PWM,    peripheral: TIMA1, module: servo, net: SIG, note: "50Hz, 独立5-6V供电"}
+  # —— 编码器（两路 QEI）——
+  - {signal: encL_a,      pin: PA8,  function: QEI_A,  peripheral: TIMG0, module: encoderL, net: A}
+  - {signal: encL_b,      pin: PA9,  function: QEI_B,  peripheral: TIMG0, module: encoderL, net: B}
+  - {signal: encR_a,      pin: PA10, function: QEI_A,  peripheral: TIMG1, module: encoderR, net: A}
+  - {signal: encR_b,      pin: PA11, function: QEI_B,  peripheral: TIMG1, module: encoderR, net: B}
+  # —— K230 视觉串口（MCU_TX<->K230_RXD 交叉，共地）——
+  - {signal: k230_tx,     pin: PA12, function: UART_TX, peripheral: UART1, module: K230, net: RXD}
+  - {signal: k230_rx,     pin: PA13, function: UART_RX, peripheral: UART1, module: K230, net: TXD}
+  # —— 调试/VOFA 上位机串口 ——
+  - {signal: log_tx,      pin: PA14, function: UART_TX, peripheral: UART0, module: USB-TTL, net: RXD, note: VOFA+ JustFloat}
+  # —— I2C 总线（OLED + IMU 共享，不同地址）——
+  - {signal: i2c_sda,     pin: PB0,  function: I2C_SDA, peripheral: I2C0, module: "OLED+IMU", net: SDA}
+  - {signal: i2c_scl,     pin: PB1,  function: I2C_SCL, peripheral: I2C0, module: "OLED+IMU", net: SCL}
+  # —— 8 路灰度（模拟量 -> ADC）——
+  - {signal: gray0, pin: PB2, function: ADC, peripheral: ADC0, module: 8ch-grayscale, net: CH0}
+  - {signal: gray1, pin: PB3, function: ADC, peripheral: ADC0, module: 8ch-grayscale, net: CH1}
+  - {signal: gray2, pin: PB4, function: ADC, peripheral: ADC0, module: 8ch-grayscale, net: CH2}
+  - {signal: gray3, pin: PB5, function: ADC, peripheral: ADC0, module: 8ch-grayscale, net: CH3}
+  - {signal: gray4, pin: PB6, function: ADC, peripheral: ADC0, module: 8ch-grayscale, net: CH4}
+  - {signal: gray5, pin: PB7, function: ADC, peripheral: ADC0, module: 8ch-grayscale, net: CH5}
+  - {signal: gray6, pin: PB8, function: ADC, peripheral: ADC0, module: 8ch-grayscale, net: CH6}
+  - {signal: gray7, pin: PB9, function: ADC, peripheral: ADC0, module: 8ch-grayscale, net: CH7}
+  # —— 电池电压监测 ——
+  - {signal: vbat_sense,  pin: PB10, function: ADC, peripheral: ADC0, module: divider, note: 低电量监测}
+  # —— 人机 ——
+  - {signal: button_start, pin: PB14, function: GPIO, module: button, net: START}
+  - {signal: button_mode,  pin: PB15, function: GPIO, module: button, net: MODE}
+  - {signal: buzzer,       pin: PA17, function: GPIO, module: buzzer, net: SIG}
+  # —— 调试口 ——
+  - {signal: swd_io,  pin: PA20, function: SWD_IO,  module: debugger, net: SWDIO}
+  - {signal: swd_clk, pin: PA21, function: SWD_CLK, module: debugger, net: SWCLK}

@@ -1,0 +1,13 @@
+module: K230
+type: vision-soc
+desc: 嘉楠 K230 视觉协处理器（CanMV）；摄像头走 MIPI-CSI 接 K230，不接 MCU
+specs: {npu: "~6TOPS", cam: "GC2093 MIPI-CSI", link_to_mcu: "UART TTL 3.3V"}
+connector:                      # 仅列与 MCU 相连的脚；摄像头/电源在 K230 自身
+  - {pin: TXD, dir: out, iface: UART_TX, to_mcu: true, note: "→ MCU RXD（交叉）"}
+  - {pin: RXD, dir: in,  iface: UART_RX, to_mcu: true, note: "← MCU TXD（交叉）"}
+  - {pin: GND, dir: power, note: "★必须与 MCU 共地"}
+power: {self_powered: true, rail: "K230 独立 5V/Type-C", note: "耗流远大于 MCU，独立供电"}
+protocol: contracts/protocol.py
+notes:
+  - 收发帧只用 contracts/protocol.py（与 protocol.h 同源）
+  - K230 与 MCU 同为 3.3V TTL，可直连；切勿接 5V/RS232

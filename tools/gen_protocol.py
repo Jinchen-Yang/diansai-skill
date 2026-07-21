@@ -5,10 +5,14 @@
 两个生成文件都嵌入同一个 PROTOCOL_SIG（帧定义的规范化哈希），生成后回读比对，三者一致才算通过。
 
 用法:
-    python tools/gen_protocol.py [contracts/protocol.yaml]
+    python tools/gen_protocol.py [contracts/protocol.yaml] [--report [--by LANE]]
+--report 时把两端一致性结果写入 design/gates/protocol.yaml（机读门报告）。
 """
 import sys, os, json, hashlib, re
 import yaml
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import gatelib  # 写机读门报告
 
 C_TYPE     = {'int8':'int8_t','uint8':'uint8_t','int16':'int16_t','uint16':'uint16_t','int32':'int32_t','uint32':'uint32_t'}
 TYPE_SIZE  = {'int8':1,'uint8':1,'int16':2,'uint16':2,'int32':4,'uint32':4}
@@ -203,8 +207,25 @@ def extract_sig_py(text):
     return m.group(1) if m else None
 
 
+VALUE_FLAGS = ('--by', '--out-dir')
+
+
+def _opt(argv, key):
+    if key in argv:
+        i = argv.index(key)
+        if i + 1 < len(argv):
+            return argv[i + 1]
+    return None
+
+
 def main():
-    src = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'contracts', 'protocol.yaml')
+    argv = sys.argv[1:]
+    report = '--report' in argv
+    by = _opt(argv, '--by')
+    out_dir = _opt(argv, '--out-dir')   # 生成到指定目录（pre-commit 校验用，不污染 contracts/）
+    pos = [a for i, a in enumerate(argv)
+           if not a.startswith('--') and not (i > 0 and argv[i - 1] in VALUE_FLAGS)]
+    src = pos[0] if pos else os.path.join(ROOT, 'contracts', 'protocol.yaml')
     spec = load(src)
 
     errs = validate(spec)
@@ -212,11 +233,15 @@ def main():
         print("✗ protocol.yaml 校验失败:")
         for e in errs:
             print("   -", e)
+        if report:
+            gatelib.write_report('protocol', os.path.relpath(src, ROOT), 'FAIL', details=errs, by=by)
         sys.exit(1)
 
     sig = signature(spec)
-    h_path = os.path.join(ROOT, 'contracts', 'protocol.h')
-    py_path = os.path.join(ROOT, 'contracts', 'protocol.py')
+    outdir = out_dir or os.path.join(ROOT, 'contracts')
+    os.makedirs(outdir, exist_ok=True)
+    h_path = os.path.join(outdir, 'protocol.h')
+    py_path = os.path.join(outdir, 'protocol.py')
     with open(h_path, 'w', encoding='utf-8') as f:
         f.write(gen_h(spec, sig))
     with open(py_path, 'w', encoding='utf-8') as f:
@@ -230,9 +255,14 @@ def main():
         print(f"✓ 生成成功，两端一致。共 {len(spec['frames'])} 帧。")
         print(f"  -> {os.path.relpath(h_path, ROOT)}")
         print(f"  -> {os.path.relpath(py_path, ROOT)}")
+        if report:
+            gatelib.write_report('protocol', os.path.relpath(src, ROOT), 'PASS', by=by)
         sys.exit(0)
     else:
         print("✗ 两端签名不一致——生成有问题，请检查 gen_protocol.py")
+        if report:
+            gatelib.write_report('protocol', os.path.relpath(src, ROOT), 'FAIL',
+                                 details=[f"yaml={sig} h={sig_h} py={sig_py}"], by=by)
         sys.exit(2)
 
 

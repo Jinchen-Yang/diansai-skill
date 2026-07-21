@@ -1,11 +1,25 @@
 ---
 name: firmware-scaffold
 description: 生成控制 lane 的固件工程骨架（4 层架构 + 时间片调度 + FSM + PID + VOFA + K230 协议）。当用户要"生成固件/工程骨架""搭固件框架""出 MSPM0/STM32 工程"时使用。复用知识库 08 的分层与调度，引脚据 contracts/pinmap.yaml，K230 收帧用 contracts/protocol.h。控制参数=占位待整定，外设 init 需人工核对。
+lane: 控制
+needs: []
+reads:
+  - design/solution.md
+  - contracts/pinmap.yaml
+  - contracts/protocol.h
+  - kb/08-软件架构与调试工程化.md
+writes:
+  - firmware/
+  - design/gates/compile.yaml
+  - STATUS.md
+gate: compile
+signoff: peripheral-init-review
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 ---
 
 # firmware-scaffold —— 固件骨架（流水线 ⑦，控制 lane）
 
-**lane**: 控制（DeepSeek/GLM 擅长代码）  ·  **门**: 编译 + 外设 init 人工核对
+> 能力声明见 frontmatter。**确定性门** `compile`（host_test 编译过后 `tools/gate_report.py compile firmware PASS --by 控制`）；**人工门** signoff `peripheral-init-review`（外设 init 逐项核对后 approve）。
 
 复用 KB `kb/08-软件架构与调试工程化.md` 的 **4 层架构 + 裸机时间片调度 + FSM + VOFA**，**别另发明**。控制参数(PID/阈值)一律占位待整定。
 
@@ -32,8 +46,16 @@ firmware/
 3. **应用层**：`app_mission.c` 用 KB08 的 FSM 模板（状态/事件分离），`app_track.c` 外环 PID。
 4. **bsp/pinmap.md**：把 `contracts/pinmap.yaml` 转成"引脚-功能-外设"表，供用户在 SysConfig 里照配（**生成 .syscfg 需在 CCS 内做**，这里出配置清单）。
 5. **协议**：复制 `contracts/protocol.h` 到 `firmware/contracts/`（或软链），K230 收帧只用它。
-6. **主机自测**：`tests/host_test.c` 编译运行，验 PID 阶跃、调度器节拍、protocol 往返。
-7. **门**：`README` 写清编译/烧录（指 env/control.md）；提醒用户**逐项核对外设 init**（时钟树/PWM 频率/ADC 采样/中断优先级）对照参考手册；**所有 PID 增益/阈值是占位，须在真车整定**。
+6. **主机自测（确定性门 `compile`）**：`tests/host_test.c` 编译运行，验 PID 阶跃、调度器节拍、protocol 往返。编译+跑通后记门报告：
+   ```
+   python tools/gate_report.py compile firmware PASS --by 控制
+   ```
+   （编译/链接失败则记 FAIL 并修。）
+7. **人工门（结构化签字）**：`README` 写清编译/烧录（指 env/control.md）；用 **AskUserQuestion** 让用户**逐项核对外设 init**（时钟树/PWM 频率/ADC 采样/中断优先级）对照参考手册，核对后落签：
+   ```
+   python tools/signoff.py approve peripheral-init-review --by 控制 --note "外设 init 已核"
+   ```
+   **所有 PID 增益/阈值是占位，须在真车整定**。`board.py done firmware-scaffold` 需 `compile` 门 PASS + 该签字齐才放行。
 
 ## 异构模型友好
 中间件/驱动是纯代码活，DeepSeek/GLM lane 可跑；正确性交**编译 + host_test**。控制环时序与电机安全逻辑(限流/急停)建议人写人审。

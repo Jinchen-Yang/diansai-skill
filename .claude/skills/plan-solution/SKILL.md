@@ -1,11 +1,25 @@
 ---
 name: plan-solution
 description: 据已解析的题目（design/problem.yaml）定技术方案并推导系统需求。当用户要"定方案""选主控/视觉路线""出需求表""根据题目决定怎么做"时使用。产出 design/solution.md（技术方案 + 签字需求表 + 子系统清单），需用户签字确认后才进选材。
+lane: lead
+needs: []
+reads:
+  - design/problem.yaml
+  - kb/10-典型赛题实战Playbook与Checklist.md
+  - kb/09-开源资源与备赛经验.md
+  - kb/06-PID及衍生控制算法.md
+  - kb/08-软件架构与调试工程化.md
+writes:
+  - design/solution.md
+  - STATUS.md
+gate: none
+signoff: solution-signoff
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 ---
 
 # plan-solution —— 方案 + 需求（流水线 ②）
 
-**lane**: lead（推理重，建议 Claude）  ·  **needs**: 无  ·  **门**: 人工签字需求表
+> 能力声明见 frontmatter。**门**：人工签字需求表 → signoff `solution-signoff`（用 AskUserQuestion 取确认后写 `tools/signoff.py approve solution-signoff`）。
 
 把题目变成"怎么做 + 要满足哪些硬指标"。**借鉴金奖经验，别凭空设计。**
 
@@ -28,7 +42,11 @@ description: 据已解析的题目（design/problem.yaml）定技术方案并推
    - 接口清单与**数量**：要几路 PWM/UART/I2C/SPI/ADC/QEI（对照 MCU 能力表 `contracts/mcu/`）。
    - 每个外设及其接口、对端连接器。
 4. 写 `design/solution.md`（模板见下）。
-5. **人工门**：把"签字需求表"摊给用户逐项确认；用户没确认的硬指标**不要默认**，标 TODO。确认后更新 `STATUS.md` → ③/④，并提示可并行：lead 跑 `/setup-env`，随后 `/select-parts`。
+5. **人工门（结构化签字）**：把"签字需求表"摊给用户，用 **AskUserQuestion** 取得逐项确认；用户没确认的硬指标**不要默认**，标 TODO。全部确认后落签：
+   ```
+   python tools/signoff.py approve solution-signoff --by lead --note "需求表已逐项确认"
+   ```
+   未签字时 `board.py done plan-solution` 会被拒。确认后更新 `STATUS.md` → ③/④，并提示可并行：lead 跑 `/setup-env`，随后 `/select-parts`。
 
 ## design/solution.md 模板
 ```markdown

@@ -1,0 +1,21 @@
+# 目录归属（与 CLAUDE.md 铁律一致）——PR 审查级兜底。
+# 本地兜底见 .githooks/pre-commit + tools/check_ownership.py。
+# 注：把下面的 @点位 换成各 lane 实际 GitHub 账号后才会真正请求审查。
+
+# 只 lead 维护
+/contracts/   @lead
+/env/         @lead
+/tools/       @lead
+/lib/         @lead
+/.claude/     @lead
+/CLAUDE.md    @lead
+/ARCHITECTURE.md @lead
+
+# 各 lane 产物目录
+/design/      @hw-lane
+/firmware/    @control-lane
+/vision/      @vision-lane
+
+# 知识库 / README：人工维护（skill 只读不改）
+/kb/          @lead
+/README.md    @lead

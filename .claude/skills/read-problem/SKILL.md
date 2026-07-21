@@ -1,11 +1,24 @@
 ---
 name: read-problem
 description: 解析当年比赛题目（读题/审题）。当用户把官方题目 PDF/文本放进 inputs/problem/ 并要"读题""审题""解析题目""提取题目要求/限制条款"时使用。产出结构化 design/problem.yaml（限制条款、要求功能、评分、场地、计时），作为后续方案/选材的唯一需求来源。
+lane: lead
+needs: [multimodal]
+reads:
+  - inputs/problem/
+  - kb/01-赛事概况与赛制流程.md
+  - kb/02-历年小车与控制类赛题.md
+writes:
+  - design/problem.yaml
+  - STATUS.md
+gate: none
+signoff: none
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 ---
 
 # read-problem —— 读题/审题（流水线入口 ①）
 
-**lane**: lead  ·  **needs: multimodal**（解析 PDF/图片 → **只在 lead/Claude 会话跑**；队友 lane 直接用产出的 problem.yaml）
+> 能力声明见上方 frontmatter（`lane/needs/gate/signoff`，编排器据此机读路由）。
+> **needs: multimodal** —— 解析 PDF/图片只在 lead/Claude 会话跑；队友 lane 直接用产出的 problem.yaml。
 
 这是整条流水线的**真正入口**。每年题目规定都不同，一切从读懂当年题目开始——**尤其先看「限制条款」**（如允不允许用摄像头，直接决定 K230 上不上）。
 

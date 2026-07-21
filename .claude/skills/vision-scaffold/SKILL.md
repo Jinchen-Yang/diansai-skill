@@ -1,11 +1,22 @@
 ---
 name: vision-scaffold
 description: 生成算法 lane 的 K230 CanMV 视觉工程骨架（巡线提取/色块/数字识别 + 用 protocol.py 发帧给主控）。当用户要"搭K230视觉/CanMV工程""视觉骨架""巡线/识别脚手架"时使用。收发帧只用 contracts/protocol.py（与主控 protocol.h 同源）。阈值=占位待现场标定。
+lane: 算法
+needs: []
+reads:
+  - design/solution.md
+  - contracts/protocol.py
+writes:
+  - vision/
+  - STATUS.md
+gate: none
+signoff: none
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
 # vision-scaffold —— K230 视觉骨架（流水线 ⑧，算法 lane）
 
-**lane**: 算法（DeepSeek/GLM 擅长代码）  ·  **门**: 语法检查 + 现场标阈值
+> 能力声明见 frontmatter。无确定性契约门（语法检查为软门）；阈值现场标定见 test-checklist。
 
 K230 是独立板，可桌面独立开发。**发帧只用 `contracts/protocol.py`**（与主控 `protocol.h` 同源同签名，杜绝漂移）。
 

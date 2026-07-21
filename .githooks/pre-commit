@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+# 提交前本地兜底门（文件归属 + 契约确定性门）。
+# 启用：sh tools/bootstrap.sh（会设 core.hooksPath=.githooks），或手动:
+#   git config core.hooksPath .githooks
+# 越过单次：git commit --no-verify
+set -e
+ROOT="$(git rev-parse --show-toplevel)"
+
+# 1) 目录归属：本机 lane 不得越界写别人目录
+python3 "$ROOT/tools/check_ownership.py" || exit 1
+
+# 2) 若改了 pinmap 契约，必须过 pinmux 门
+if git diff --cached --name-only | grep -q '^contracts/pinmap.yaml$'; then
+  echo "[pre-commit] contracts/pinmap.yaml 改动 → 跑 pinmux_check"
+  python3 "$ROOT/tools/pinmux_check.py" "$ROOT/contracts/pinmap.yaml" || {
+    echo "✗ pinmux 门未过，拒绝提交（修好或 --no-verify）"; exit 1; }
+fi
+
+# 3) 若改了协议契约，校验暂存的 .h/.py 与 protocol.yaml 同源（不改工作区，比对暂存 blob）
+if git diff --cached --name-only | grep -q '^contracts/protocol.yaml$'; then
+  echo "[pre-commit] contracts/protocol.yaml 改动 → 校验两端已同源重生成"
+  tmp="$(mktemp -d)"
+  trap 'rm -rf "$tmp"' EXIT
+  # 生成规范 .h/.py 到临时目录（不碰工作区文件）
+  python3 "$ROOT/tools/gen_protocol.py" "$ROOT/contracts/protocol.yaml" --out-dir "$tmp" >/dev/null || {
+    echo "✗ protocol.yaml 自身校验失败，拒绝提交"; exit 1; }
+  for f in protocol.h protocol.py; do
+    # 与暂存区 blob 比对（不是工作区）：暂存的生成产物必须等于规范输出
+    if ! git show ":contracts/$f" 2>/dev/null | diff -q - "$tmp/$f" >/dev/null 2>&1; then
+      echo "✗ contracts/$f 与 protocol.yaml 不同步。"
+      echo "  请先 python tools/gen_protocol.py 重生成，再 git add contracts/protocol.h contracts/protocol.py 后提交。"
+      exit 1
+    fi
+  done
+fi
+
+exit 0

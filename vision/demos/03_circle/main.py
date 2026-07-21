@@ -1,48 +1,51 @@
-"""第 3 模块：亚博 K230 单文件圆形检测示例。
-
-使用 CanMV 图像对象的 find_circles() 查找圆形边缘。此阶段独立运行，
-不依赖主控串口；连续帧判断会确认检测到的是同一个圆而不是任意候选。
+"""第 3 模块：亚博 K230 CV Lite 灰度霍夫圆检测。
+本文件是后续集成时要复用的圆形算法核。独立运行，暂不依赖主控串口。
 """
 
 import gc
 import os
 import time
 
+import cv_lite
+import ulab.numpy as np
 from media.sensor import Sensor
 from media.display import Display
 from media.media import MediaManager
 
 
-# ============================= 现场标定配置区 =============================
-FRAME_WIDTH = 400
-FRAME_HEIGHT = 240
+# ============================= 现场标定区 =============================
+FRAME_WIDTH = 640
+FRAME_HEIGHT = 480
 DISPLAY_WIDTH = 640
 DISPLAY_HEIGHT = 480
 
-# 更高会减少候选圆，假圆多时提高；真实圆漏检时再降低。
-CIRCLE_THRESHOLD = 3500
-# 初学调试阶段故意放宽半径范围，先确认底层能不能找到圆，再针对题目收紧。
-MIN_RADIUS = 5
-MAX_RADIUS = 200
+# 参数顺序与亚博 06.cv_lite/4.rgb888_find_circles.py 保持一致。
+CIRCLE_IMAGE_SHAPE = [FRAME_HEIGHT, FRAME_WIDTH]
+HOUGH_DP = 1
+MIN_CENTER_DISTANCE = 30
+CANNY_HIGH_THRESHOLD = 90
+ACCUMULATOR_THRESHOLD = 30
+MIN_RADIUS = 10
+MAX_RADIUS = 80
 
-# 同一目标在相邻帧可允许的中心位移和半径变化。
 TRACK_CENTER_DELTA = 18
 TRACK_RADIUS_DELTA = 10
 STABLE_FRAMES = 3
 PRINT_PERIOD_FRAMES = 15
 
 
-def circle_values(circle):
-    """将 CanMV 圆对象统一转换为 x、y、r 三个整数。"""
-    x, y, radius = circle.circle()
-    return int(x), int(y), int(radius)
+def circle_tuples(raw_values):
+    """将 CV Lite 返回的 [x, y, r, ...] 数组转为圆元组列表。"""
+    circles = []
+    for index in range(0, len(raw_values) - 2, 3):
+        circles.append((int(raw_values[index]), int(raw_values[index + 1]), int(raw_values[index + 2])))
+    return circles
 
 
 def select_main_circle(circles):
-    """过滤不符合半径范围的候选，返回主圆与过滤后候选列表。"""
+    """保留半径合法的候选圆，以最大圆作为主目标。"""
     candidates = []
-    for circle in circles:
-        x, y, radius = circle_values(circle)
+    for x, y, radius in circles:
         if MIN_RADIUS <= radius <= MAX_RADIUS:
             candidates.append((x, y, radius))
     if not candidates:
@@ -51,7 +54,7 @@ def select_main_circle(circles):
 
 
 def same_circle(previous, current):
-    """判断两帧主圆是否属于同一目标，防止稳定计数被候选圆跳变污染。"""
+    """判断相邻帧的两个圆是否属于同一个目标。"""
     if previous is None or current is None:
         return False
     dx = previous[0] - current[0]
@@ -62,8 +65,14 @@ def same_circle(previous, current):
     )
 
 
-def draw_circle_result(image, circle, stable_count):
-    """画圆、圆心与稳定状态，调试时应观察圆是否贴合真实边缘。"""
+def draw_raw_candidates(image, circles):
+    """用灰色细圈显示 CV Lite 的所有候选圆，便于现场排查。"""
+    for x, y, radius in circles:
+        image.draw_circle(x, y, radius, color=(100, 100, 100), thickness=1)
+
+
+def draw_main_circle(image, circle, stable_count):
+    """显示筛选后的主圆和连续帧稳定状态。"""
     x, y, radius = circle
     state = "STABLE" if stable_count >= STABLE_FRAMES else "CHECK"
     image.draw_circle(x, y, radius, color=(40, 167, 225), thickness=3)
@@ -77,43 +86,51 @@ def draw_circle_result(image, circle, stable_count):
     )
 
 
-def draw_raw_candidates(image, circles):
-    """用灰色细圈标出底层 find_circles 的所有结果，便于诊断筛选问题。"""
-    for circle in circles:
-        x, y, radius = circle_values(circle)
-        image.draw_circle(x, y, radius, color=(100, 100, 100), thickness=1)
-
-
 def main():
-    """初始化相机，检测最大候选圆并用帧间一致性确认主目标。"""
+    """运行 CV Lite 圆检测并保留稳定的主目标。"""
     sensor = None
     previous_circle = None
     stable_count = 0
+    frame_count = 0
 
     try:
-        sensor = Sensor(id=2)
+        # 对齐亚博已验证的 CV Lite 相机链路，避免预览画面比例异常。
+        sensor = Sensor(id=2, width=1280, height=960, fps=90)
         sensor.reset()
         sensor.set_framesize(width=FRAME_WIDTH, height=FRAME_HEIGHT)
-        sensor.set_pixformat(Sensor.RGB565)
+        sensor.set_pixformat(Sensor.RGB888)
 
-        Display.init(Display.ST7701, width=DISPLAY_WIDTH, height=DISPLAY_HEIGHT, to_ide=True)
+        Display.init(
+            Display.ST7701,
+            width=DISPLAY_WIDTH,
+            height=DISPLAY_HEIGHT,
+            to_ide=True,
+            quality=100,
+        )
         MediaManager.init()
         sensor.run()
 
         clock = time.clock()
-        frame_count = 0
-        display_x = (DISPLAY_WIDTH - FRAME_WIDTH) // 2
-        display_y = (DISPLAY_HEIGHT - FRAME_HEIGHT) // 2
-
         while True:
             clock.tick()
             os.exitpoint()
             image = sensor.snapshot()
             frame_count += 1
 
-            raw_circles = image.find_circles(threshold=CIRCLE_THRESHOLD)
+            raw_values = cv_lite.rgb888_find_circles(
+                CIRCLE_IMAGE_SHAPE,
+                image.to_numpy_ref(),
+                HOUGH_DP,
+                MIN_CENTER_DISTANCE,
+                CANNY_HIGH_THRESHOLD,
+                ACCUMULATOR_THRESHOLD,
+                MIN_RADIUS,
+                MAX_RADIUS,
+            )
+            raw_circles = circle_tuples(raw_values)
             current_circle, candidates = select_main_circle(raw_circles)
             draw_raw_candidates(image, raw_circles)
+
             if current_circle is None:
                 previous_circle = None
                 stable_count = 0
@@ -121,7 +138,7 @@ def main():
             else:
                 stable_count = stable_count + 1 if same_circle(previous_circle, current_circle) else 1
                 previous_circle = current_circle
-                draw_circle_result(image, current_circle, stable_count)
+                draw_main_circle(image, current_circle, stable_count)
                 result_text = "raw=%d valid=%d center=(%d,%d) r=%d stable=%d" % (
                     len(raw_circles),
                     len(candidates),
@@ -136,10 +153,11 @@ def main():
                 0,
                 18,
                 14,
-                "raw=%d valid=%d threshold=%d" % (len(raw_circles), len(candidates), CIRCLE_THRESHOLD),
+                "raw=%d valid=%d p2=%d" % (len(raw_circles), len(candidates), ACCUMULATOR_THRESHOLD),
                 color=(255, 255, 0),
             )
-            Display.show_image(image, x=display_x, y=display_y)
+            Display.show_image(image)
+
             if frame_count % PRINT_PERIOD_FRAMES == 0:
                 print("frame=%d %s" % (frame_count, result_text))
             gc.collect()
